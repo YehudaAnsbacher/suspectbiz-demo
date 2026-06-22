@@ -8,728 +8,638 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#f8f9fb;--surface:#fff;--border:#e5e7eb;--text:#111827;--muted:#6b7280;
-  --accent:#1a56a0;--accent-bg:#eff3fb;--danger:#dc2626;--warning:#d97706;--success:#16a34a;
-  --jlm:#1a56a0;--jlm-gold:#c9a227;
+  --jlm:#1a3c78;--gold:#c9a227;
+  --danger:#dc2626;--warning:#d97706;--success:#16a34a;
 }
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Arial Hebrew',Arial,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;direction:rtl}
-button{cursor:pointer;font-family:inherit;transition:opacity .15s,background .15s,border-color .15s}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Arial Hebrew",Arial,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;direction:rtl}
+button{cursor:pointer;font-family:inherit}
 input,select,textarea{font-family:inherit;font-size:14px;direction:rtl}
-a{text-decoration:none}
-
+.hidden{display:none!important}
 .page{display:none;min-height:100vh}
 .page.active{display:block}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
-.badge{display:inline-flex;align-items:center;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:500;white-space:nowrap}
-.score-pill{display:inline-flex;align-items:center;gap:5px;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:600}
-.score-dot{width:6px;height:6px;border-radius:50%;display:inline-block}
-.score-high{background:#fef2f2;color:#dc2626}.score-high .score-dot{background:#dc2626}
-.score-med{background:#fffbeb;color:#d97706}.score-med .score-dot{background:#d97706}
-.score-low{background:#f0fdf4;color:#16a34a}.score-low .score-dot{background:#16a34a}
 
 /* Topbar */
-.topbar{background:var(--jlm);padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:62px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.18)}
-.topbar-brand{display:flex;align-items:center;gap:10px}
-.topbar-title{color:#fff;font-weight:700;font-size:15px}
-.topbar-sub{color:rgba(255,255,255,.7);font-size:12px;margin-top:1px}
+.topbar{background:var(--jlm);padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.topbar-brand{display:flex;align-items:center;gap:12px}
+.topbar-text .title{color:#fff;font-weight:700;font-size:15px;line-height:1.2}
+.topbar-text .sub{color:rgba(255,255,255,.65);font-size:11px}
 .topbar-right{display:flex;align-items:center;gap:10px}
-.btn-topbar-out{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:5px 12px;font-size:13px;color:#fff}
-.btn-topbar-out:hover{background:rgba(255,255,255,.25)}
-.avatar{border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;flex-shrink:0;font-size:11px}
-.btn-back{background:none;border:none;color:var(--accent);font-size:13px;font-weight:600;display:flex;align-items:center;gap:4px;padding:0;margin-bottom:20px}
+.btn-out{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:6px 14px;font-size:13px;color:#fff}
+.btn-out:hover{background:rgba(255,255,255,.25)}
+.btn-back{background:none;border:none;color:var(--jlm);font-size:13px;font-weight:600;padding:0;margin-bottom:18px;display:inline-flex;align-items:center;gap:4px}
 
-/* Jerusalem emblem SVG */
-.jlm-emblem{flex-shrink:0}
+/* Badges */
+.badge{display:inline-flex;align-items:center;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:500;white-space:nowrap}
+.pill{display:inline-flex;align-items:center;gap:5px;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:600}
+.pill-dot{width:6px;height:6px;border-radius:50%;display:inline-block}
+.pill-red{background:#fef2f2;color:#dc2626}.pill-red .pill-dot{background:#dc2626}
+.pill-yel{background:#fffbeb;color:#d97706}.pill-yel .pill-dot{background:#d97706}
+.pill-grn{background:#f0fdf4;color:#16a34a}.pill-grn .pill-dot{background:#16a34a}
 
 /* Login */
-#login-page{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(160deg,#1a3a6e 0%,#1a56a0 50%,#2563c0 100%);padding:24px}
+#login-page{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px;background:linear-gradient(160deg,#0f2557 0%,#1a3c78 55%,#1e4d9b 100%)}
 .login-box{width:100%;max-width:400px}
-.login-header{text-align:center;margin-bottom:28px}
-.login-system-name{color:#fff;font-size:22px;font-weight:800;margin-top:12px}
-.login-municipality{color:rgba(255,255,255,.8);font-size:14px;margin-top:3px}
-.login-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;box-shadow:0 8px 32px rgba(0,0,0,.25)}
-.label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px}
-.input-field{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;outline:none;background:var(--surface)}
-.input-field:focus{border-color:var(--accent)}
-.role-btns{display:flex;gap:8px;margin-bottom:20px}
-.role-btn{flex:1;padding:10px 6px;border:2px solid var(--border);border-radius:10px;background:var(--surface);color:var(--muted);font-weight:600;font-size:13px}
-.role-btn.active{border-color:var(--accent);background:var(--accent-bg);color:var(--accent)}
+.login-top{text-align:center;margin-bottom:24px}
+.login-sys{color:#fff;font-size:20px;font-weight:800;margin-top:10px}
+.login-muni{color:rgba(255,255,255,.7);font-size:13px;margin-top:3px}
+.login-card{background:#fff;border-radius:16px;padding:28px;box-shadow:0 8px 40px rgba(0,0,0,.3)}
+.lbl{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px}
+.ifield{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;outline:none}
+.ifield:focus{border-color:var(--jlm)}
+.role-wrap{display:flex;gap:8px;margin-bottom:20px}
+.role-btn{flex:1;padding:10px;border:2px solid var(--border);border-radius:10px;background:#fff;color:var(--muted);font-weight:600;font-size:13px}
+.role-btn.on{border-color:var(--jlm);background:#eff3fb;color:var(--jlm)}
 .btn-primary{width:100%;padding:13px;background:var(--jlm);color:#fff;border:none;border-radius:10px;font-weight:700;font-size:15px}
 .btn-primary:hover{opacity:.9}
-.login-footer{text-align:center;color:rgba(255,255,255,.6);font-size:12px;margin-top:16px}
 
 /* Admin */
-.admin-content{padding:24px;max-width:1200px}
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:24px}
-.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 20px}
-.stat-value{font-size:26px;font-weight:800}
-.stat-label{font-size:12px;color:var(--muted);margin-top:2px}
-.controls{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
-.search-input{flex:1 1 200px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--surface);outline:none}
-.search-input:focus{border-color:var(--accent)}
-.filter-select{padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--surface);outline:none}
-.btn-export{padding:9px 16px;background:#f3f4f6;border:1px solid var(--border);border-radius:8px;font-size:13px;font-weight:500;color:var(--muted)}
+.wrap{padding:24px;max-width:1200px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:22px}
+.scard{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 20px}
+.sval{font-size:26px;font-weight:800}
+.slbl{font-size:12px;color:var(--muted);margin-top:2px}
+.ctrls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.sinput{flex:1 1 180px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;outline:none;background:#fff}
+.sinput:focus{border-color:var(--jlm)}
+.sselect{padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:#fff;outline:none}
+.btn-csv{padding:9px 14px;background:#f3f4f6;border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--muted)}
 table{width:100%;border-collapse:collapse}
-th{padding:11px 16px;text-align:right;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.3px;text-transform:uppercase;white-space:nowrap;border-bottom:1px solid var(--border)}
-td{padding:12px 16px;border-bottom:1px solid var(--border);vertical-align:middle}
+th{padding:10px 14px;text-align:right;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;border-bottom:1px solid var(--border)}
+td{padding:11px 14px;border-bottom:1px solid var(--border);vertical-align:middle}
 tr:last-child td{border-bottom:none}
 tr:hover td{background:#f9fafb}
-.addr-en{font-weight:500;font-size:13px}
-.addr-he{font-size:12px;color:var(--muted);margin-top:1px}
-.btn-view{padding:5px 14px;border:1.5px solid var(--accent);border-radius:7px;background:var(--accent-bg);font-size:12px;font-weight:600;color:var(--accent)}
-.btn-view:hover{background:var(--accent);color:#fff}
+.btn-view{padding:5px 14px;border:1.5px solid var(--jlm);border-radius:7px;background:#eff3fb;font-size:12px;font-weight:600;color:var(--jlm)}
+.btn-view:hover{background:var(--jlm);color:#fff}
 
 /* Detail */
-.detail-content{padding:24px;max-width:860px;margin:0 auto}
-.tab-bar{display:flex;gap:2px;margin-bottom:16px;background:var(--surface);border-radius:10px;padding:4px;border:1px solid var(--border)}
-.tab-btn{flex:1;padding:8px 0;border:none;border-radius:8px;background:transparent;color:var(--muted);font-weight:600;font-size:13px}
-.tab-btn.active{background:var(--jlm);color:#fff}
-.tab-panel{display:none}
-.tab-panel.active{display:block}
-.biz-name{font-weight:700;font-size:15px}
-.biz-cat{font-size:12px;color:var(--muted);margin-top:2px}
-.reasoning{font-size:13px;color:#374151;background:#f9fafb;border-radius:8px;padding:10px 14px;margin-bottom:12px;line-height:1.65}
-.sources{display:flex;flex-wrap:wrap;gap:6px}
-.source-link{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:6px;border:1px solid var(--border);font-size:12px;color:var(--accent);background:var(--accent-bg)}
-.pipeline-step{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
-.step-icon{width:24px;height:24px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;margin-top:1px}
-.step-name{font-weight:600;font-size:13px}
-.step-detail{color:var(--muted);font-size:12px}
-.empty-state{padding:32px;text-align:center;color:var(--muted);font-style:italic}
+.detail-wrap{padding:24px;max-width:860px;margin:0 auto}
+.tabs{display:flex;gap:2px;margin-bottom:14px;background:#fff;border-radius:10px;padding:4px;border:1px solid var(--border)}
+.tab{flex:1;padding:8px 0;border:none;border-radius:8px;background:transparent;color:var(--muted);font-weight:600;font-size:13px}
+.tab.on{background:var(--jlm);color:#fff}
+.tp{display:none}.tp.on{display:block}
+.rstep{display:flex;gap:10px;margin-bottom:10px}
+.sico{width:24px;height:24px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800}
 
 /* Surveyor */
-#surveyor-page{max-width:480px;margin:0 auto;min-height:100vh;background:var(--bg)}
-.surveyor-list{padding:16px}
-.addr-card-btn{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:right;width:100%;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:10px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
-.addr-card-btn:hover{border-color:var(--accent);background:#f5f8ff}
-.validate-btn{width:100%;margin-top:16px;padding:15px;background:var(--jlm);color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700;box-shadow:0 4px 14px rgba(26,86,160,.3)}
-.validate-btn:hover{opacity:.9}
-.already-validated{padding:14px;margin-top:12px;border:1px solid #bbf7d0;background:#f0fdf4;border-radius:12px}
-
-/* Form */
-.option-btn{display:flex;width:100%;padding:13px 16px;border:2px solid var(--border);border-radius:12px;background:var(--surface);text-align:right;gap:12px;align-items:center;margin-bottom:8px}
-.option-btn.sel-red{border-color:#dc2626;background:#fef2f2}
-.option-btn.sel-yellow{border-color:#d97706;background:#fffbeb}
-.option-btn.sel-green{border-color:#16a34a;background:#f0fdf4}
-.option-label{font-weight:700;font-size:14px}
-.option-desc{font-size:12px;color:var(--muted);margin-top:1px}
-textarea.notes{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:13px;resize:none;outline:none;background:var(--surface)}
-textarea.notes:focus{border-color:var(--accent)}
-.photo-zone{padding:16px;border:2px dashed var(--border);border-radius:12px;text-align:center;color:var(--muted);font-size:13px;margin-bottom:16px}
-.submit-btn{width:100%;padding:15px;border:none;border-radius:14px;font-size:15px;font-weight:700}
-.submit-btn.ready{background:var(--jlm);color:#fff}
-.submit-btn.disabled{background:#e5e7eb;color:#9ca3af}
-
-/* Success */
-.success-screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center}
-
-@media(max-width:640px){
-  .admin-content{padding:12px}
-  th,td{padding:8px 10px}
-  .topbar{padding:0 12px}
-}
+#surveyor-page .inner{max-width:480px;margin:0 auto}
+.acard{background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px;text-align:right;width:100%;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:10px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.acard:hover{border-color:var(--jlm)}
+.vbtn{width:100%;margin-top:14px;padding:15px;background:var(--jlm);color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700}
+.vbtn:hover{opacity:.9}
+.optbtn{display:flex;width:100%;padding:13px 16px;border:2px solid var(--border);border-radius:12px;background:#fff;text-align:right;margin-bottom:8px}
+.optbtn.sr{border-color:#dc2626;background:#fef2f2}
+.optbtn.sy{border-color:#d97706;background:#fffbeb}
+.optbtn.sg{border-color:#16a34a;background:#f0fdf4}
+.notes{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:13px;resize:none;outline:none}
+.notes:focus{border-color:var(--jlm)}
+.sbtn{width:100%;padding:15px;border:none;border-radius:14px;font-size:15px;font-weight:700}
+.sbtn.on{background:var(--jlm);color:#fff}
+.sbtn.off{background:#e5e7eb;color:#9ca3af}
+.success-wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px}
 </style>
 </head>
 <body>
 
 <!-- LOGIN -->
 <div id="login-page" class="page active">
-  <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(160deg,#1a3a6e 0%,#1a56a0 50%,#2563c0 100%);padding:24px">
+  <div id="login-page" style="display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px;background:linear-gradient(160deg,#0f2557 0%,#1a3c78 55%,#1e4d9b 100%)">
     <div style="width:100%;max-width:400px">
-      <div style="text-align:center;margin-bottom:28px">
-        <div style="display:flex;justify-content:center;margin-bottom:10px">
-          <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="36" cy="36" r="36" fill="#c9a227"/>
-            <circle cx="36" cy="36" r="32" fill="#1a56a0"/>
-            <!-- Lion body -->
-            <g fill="#c9a227">
-              <!-- Body -->
-              <ellipse cx="36" cy="42" rx="12" ry="9"/>
-              <!-- Head -->
-              <circle cx="44" cy="32" r="8"/>
-              <!-- Mane -->
-              <circle cx="44" cy="32" r="10" fill="#c9a227" opacity=".5"/>
-              <!-- Ear -->
-              <polygon points="50,24 53,18 56,24"/>
-              <!-- Eye -->
-              <circle cx="47" cy="30" r="1.5" fill="#1a56a0"/>
-              <!-- Nose -->
-              <ellipse cx="50" cy="34" rx="1.5" ry="1" fill="#b08000"/>
-              <!-- Front legs -->
-              <rect x="26" y="44" width="5" height="10" rx="2.5"/>
-              <rect x="33" y="44" width="5" height="10" rx="2.5"/>
-              <!-- Back legs -->
-              <rect x="39" y="44" width="5" height="10" rx="2.5"/>
-              <rect x="46" y="43" width="5" height="10" rx="2.5"/>
-              <!-- Tail -->
-              <path d="M24 40 Q16 35 18 28 Q20 24 24 28" stroke="#c9a227" stroke-width="3" fill="none" stroke-linecap="round"/>
-              <circle cx="18" cy="27" r="3"/>
-            </g>
-            <!-- Crown -->
-            <g fill="#c9a227">
-              <rect x="30" y="16" width="16" height="6" rx="1"/>
-              <polygon points="30,16 32,10 35,16"/>
-              <polygon points="36,16 38,9 40,16"/>
-              <polygon points="43,16 45,10 46,16"/>
-            </g>
+      <div style="text-align:center;margin-bottom:24px">
+        <!-- Jerusalem Emblem -->
+        <div style="display:flex;justify-content:center">
+          <svg width="80" height="80" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="49" fill="white"/>
+            <circle cx="50" cy="50" r="49" fill="none" stroke="#1a3c78" stroke-width="3"/>
+            <!-- shield outline -->
+            <path d="M22 20 L78 20 L78 65 Q78 82 50 90 Q22 82 22 65 Z" fill="#f0f4ff" stroke="#1a3c78" stroke-width="2"/>
+            <!-- crown -->
+            <rect x="35" y="18" width="30" height="7" rx="1" fill="#c9a227"/>
+            <polygon points="35,18 38,10 41,18" fill="#c9a227"/>
+            <polygon points="47,18 50,9 53,18" fill="#c9a227"/>
+            <polygon points="59,18 62,10 65,18" fill="#c9a227"/>
+            <!-- lion body -->
+            <ellipse cx="50" cy="62" rx="16" ry="11" fill="#1a3c78"/>
+            <!-- lion head -->
+            <circle cx="60" cy="48" r="10" fill="#1a3c78"/>
+            <!-- mane ring -->
+            <circle cx="60" cy="48" r="13" fill="none" stroke="#1a3c78" stroke-width="5" opacity=".35"/>
+            <!-- eye -->
+            <circle cx="64" cy="46" r="2" fill="white"/>
+            <!-- mouth -->
+            <path d="M62 52 Q65 54 68 52" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            <!-- tongue -->
+            <ellipse cx="65" cy="54" rx="2" ry="3" fill="#dc2626"/>
+            <!-- front legs -->
+            <rect x="36" y="64" width="7" height="12" rx="3.5" fill="#1a3c78"/>
+            <rect x="46" y="64" width="7" height="12" rx="3.5" fill="#1a3c78"/>
+            <!-- back legs -->
+            <rect x="56" y="63" width="7" height="12" rx="3.5" fill="#1a3c78"/>
+            <!-- tail curling up -->
+            <path d="M34 58 Q24 52 26 42 Q28 36 34 42" stroke="#1a3c78" stroke-width="4" fill="none" stroke-linecap="round"/>
+            <circle cx="26" cy="41" r="4" fill="#1a3c78"/>
+            <!-- text -->
+            <text x="50" y="97" text-anchor="middle" font-size="9" font-family="Arial Hebrew, Arial" fill="#1a3c78" font-weight="700">ירושלים</text>
           </svg>
         </div>
-        <div style="color:#fff;font-size:22px;font-weight:800">מערכת זיהוי עסקים חשודים</div>
-        <div style="color:rgba(255,255,255,.75);font-size:14px;margin-top:4px">עיריית ירושלים</div>
+        <div style="color:#fff;font-size:20px;font-weight:800;margin-top:10px">מערכת זיהוי עסקים חשודים</div>
+        <div style="color:rgba(255,255,255,.7);font-size:13px;margin-top:3px">עיריית ירושלים</div>
       </div>
       <div class="login-card">
-        <div class="label" style="margin-bottom:10px">כניסה בתפקיד</div>
-        <div class="role-btns">
-          <button class="role-btn active" id="role-admin" onclick="selectRole('admin')">🖥️ מנהל מערכת</button>
-          <button class="role-btn" id="role-surveyor" onclick="selectRole('surveyor')">📱 סוקר שטח</button>
+        <div class="lbl" style="margin-bottom:10px">כניסה בתפקיד</div>
+        <div class="role-wrap">
+          <button class="role-btn on" id="rb-admin">🖥️ מנהל מערכת</button>
+          <button class="role-btn" id="rb-surv">📱 סוקר שטח</button>
         </div>
         <div style="margin-bottom:14px">
-          <label class="label">דוא"ל</label>
-          <input id="login-email" class="input-field" value="admin@jerusalem.muni.il"/>
+          <label class="lbl">דוא"ל</label>
+          <input class="ifield" id="email-field" value="admin@jerusalem.muni.il"/>
         </div>
         <div style="margin-bottom:22px">
-          <label class="label">סיסמה</label>
-          <input class="input-field" type="password" value="••••••••"/>
+          <label class="lbl">סיסמה</label>
+          <input class="ifield" type="password" value="••••••••"/>
         </div>
-        <button class="btn-primary" id="login-btn" onclick="doLogin()">התחבר</button>
+        <button class="btn-primary" id="login-btn">התחבר למערכת</button>
       </div>
-      <div style="text-align:center;color:rgba(255,255,255,.55);font-size:12px;margin-top:16px">מערכת הדגמה · LangGraph + Tavily + Supabase</div>
+      <div style="text-align:center;color:rgba(255,255,255,.5);font-size:12px;margin-top:14px">מערכת הדגמה · LangGraph + Tavily + Supabase</div>
     </div>
   </div>
 </div>
 
-<!-- ADMIN PAGE -->
+<!-- ADMIN -->
 <div id="admin-page" class="page">
   <div class="topbar">
     <div class="topbar-brand">
-      <svg width="40" height="40" viewBox="0 0 72 72" fill="none" class="jlm-emblem">
-        <circle cx="36" cy="36" r="34" fill="#c9a227"/>
-        <circle cx="36" cy="36" r="30" fill="#1a56a0"/>
-        <g fill="#c9a227">
-          <ellipse cx="36" cy="42" rx="12" ry="9"/>
-          <circle cx="44" cy="32" r="8"/>
-          <circle cx="44" cy="32" r="10" fill="#c9a227" opacity=".4"/>
-          <polygon points="50,24 53,18 56,24"/>
-          <circle cx="47" cy="30" r="1.5" fill="#1a3a6e"/>
-          <rect x="26" y="44" width="5" height="9" rx="2.5"/>
-          <rect x="33" y="44" width="5" height="9" rx="2.5"/>
-          <rect x="39" y="44" width="5" height="9" rx="2.5"/>
-          <rect x="46" y="43" width="5" height="9" rx="2.5"/>
-          <path d="M24 40 Q16 35 18 28 Q20 24 24 28" stroke="#c9a227" stroke-width="3" fill="none" stroke-linecap="round"/>
-          <circle cx="18" cy="27" r="3"/>
-          <rect x="30" y="16" width="16" height="5" rx="1"/>
-          <polygon points="30,16 32,10 35,16"/>
-          <polygon points="36,16 38,9 40,16"/>
-          <polygon points="43,16 45,10 46,16"/>
-        </g>
+      <svg width="44" height="44" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="49" fill="white"/>
+        <path d="M22 20 L78 20 L78 65 Q78 82 50 90 Q22 82 22 65 Z" fill="#f0f4ff" stroke="#1a3c78" stroke-width="2"/>
+        <rect x="35" y="18" width="30" height="7" rx="1" fill="#c9a227"/>
+        <polygon points="35,18 38,10 41,18" fill="#c9a227"/>
+        <polygon points="47,18 50,9 53,18" fill="#c9a227"/>
+        <polygon points="59,18 62,10 65,18" fill="#c9a227"/>
+        <ellipse cx="50" cy="62" rx="16" ry="11" fill="#1a3c78"/>
+        <circle cx="60" cy="48" r="10" fill="#1a3c78"/>
+        <circle cx="64" cy="46" r="2" fill="white"/>
+        <path d="M62 52 Q65 54 68 52" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <ellipse cx="65" cy="54" rx="2" ry="3" fill="#dc2626"/>
+        <rect x="36" y="64" width="7" height="12" rx="3.5" fill="#1a3c78"/>
+        <rect x="46" y="64" width="7" height="12" rx="3.5" fill="#1a3c78"/>
+        <rect x="56" y="63" width="7" height="12" rx="3.5" fill="#1a3c78"/>
+        <path d="M34 58 Q24 52 26 42 Q28 36 34 42" stroke="#1a3c78" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <circle cx="26" cy="41" r="4" fill="#1a3c78"/>
+        <text x="50" y="97" text-anchor="middle" font-size="9" font-family="Arial Hebrew, Arial" fill="#1a3c78" font-weight="700">ירושלים</text>
       </svg>
-      <div>
-        <div class="topbar-title">מערכת זיהוי עסקים חשודים</div>
-        <div class="topbar-sub">פורטל מנהל · עיריית ירושלים</div>
+      <div class="topbar-text">
+        <div class="title">מערכת זיהוי עסקים חשודים</div>
+        <div class="sub">פורטל מנהל · עיריית ירושלים</div>
       </div>
     </div>
     <div class="topbar-right">
-      <div class="avatar" style="width:34px;height:34px;background:rgba(255,255,255,.2);font-size:11px;border:1.5px solid rgba(255,255,255,.4)">מנ</div>
-      <button class="btn-topbar-out" onclick="logout()">יציאה</button>
+      <button class="btn-out" id="admin-logout">יציאה</button>
     </div>
   </div>
-  <div class="admin-content">
-    <div class="stats-grid" id="stats-grid"></div>
-    <div class="controls">
-      <input class="search-input" id="search-input" placeholder="חיפוש לפי כתובת..." oninput="renderTable()"/>
-      <select class="filter-select" id="filter-select" onchange="renderTable()">
-        <option value="all">כל הסטטוסים</option>
+  <div class="wrap">
+    <div class="stats" id="stats-grid"></div>
+    <div class="ctrls">
+      <input class="sinput" id="search-input" placeholder="חיפוש לפי כתובת..."/>
+      <select class="sselect" id="filter-sel">
+        <option value="">כל הסטטוסים</option>
         <option value="verified">מאומת</option>
         <option value="pending">ממתין לבדיקה</option>
         <option value="investigating">בחקירה</option>
         <option value="no_business">אין עסק</option>
       </select>
-      <button class="btn-export">⬇ ייצוא CSV</button>
+      <button class="btn-csv">⬇ ייצוא CSV</button>
     </div>
     <div class="card" style="overflow:hidden">
       <div style="overflow-x:auto">
-        <table>
-          <thead>
-            <tr>
-              <th>כתובת</th><th>סטטוס</th><th>עסקים</th><th>ציון חשד</th><th>סוקר אחראי</th><th>עדכון אחרון</th><th></th>
-            </tr>
-          </thead>
-          <tbody id="addr-table-body"></tbody>
-        </table>
+        <table><thead><tr>
+          <th>כתובת</th><th>סטטוס</th><th>עסקים</th><th>ציון חשד</th><th>סוקר</th><th>עדכון</th><th></th>
+        </tr></thead><tbody id="tbl-body"></tbody></table>
       </div>
     </div>
   </div>
 </div>
 
-<!-- DETAIL PAGE -->
+<!-- DETAIL -->
 <div id="detail-page" class="page">
   <div class="topbar">
     <div class="topbar-brand">
-      <svg width="40" height="40" viewBox="0 0 72 72" fill="none" class="jlm-emblem">
-        <circle cx="36" cy="36" r="34" fill="#c9a227"/>
-        <circle cx="36" cy="36" r="30" fill="#1a56a0"/>
-        <g fill="#c9a227">
-          <ellipse cx="36" cy="42" rx="12" ry="9"/>
-          <circle cx="44" cy="32" r="8"/>
-          <circle cx="44" cy="32" r="10" fill="#c9a227" opacity=".4"/>
-          <polygon points="50,24 53,18 56,24"/>
-          <circle cx="47" cy="30" r="1.5" fill="#1a3a6e"/>
-          <rect x="26" y="44" width="5" height="9" rx="2.5"/>
-          <rect x="33" y="44" width="5" height="9" rx="2.5"/>
-          <rect x="39" y="44" width="5" height="9" rx="2.5"/>
-          <rect x="46" y="43" width="5" height="9" rx="2.5"/>
-          <path d="M24 40 Q16 35 18 28 Q20 24 24 28" stroke="#c9a227" stroke-width="3" fill="none" stroke-linecap="round"/>
-          <circle cx="18" cy="27" r="3"/>
-          <rect x="30" y="16" width="16" height="5" rx="1"/>
-          <polygon points="30,16 32,10 35,16"/>
-          <polygon points="36,16 38,9 40,16"/>
-          <polygon points="43,16 45,10 46,16"/>
-        </g>
+      <svg width="44" height="44" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="49" fill="white"/>
+        <path d="M22 20 L78 20 L78 65 Q78 82 50 90 Q22 82 22 65 Z" fill="#f0f4ff" stroke="#1a3c78" stroke-width="2"/>
+        <rect x="35" y="18" width="30" height="7" rx="1" fill="#c9a227"/>
+        <polygon points="35,18 38,10 41,18" fill="#c9a227"/>
+        <polygon points="47,18 50,9 53,18" fill="#c9a227"/>
+        <polygon points="59,18 62,10 65,18" fill="#c9a227"/>
+        <ellipse cx="50" cy="62" rx="16" ry="11" fill="#1a3c78"/>
+        <circle cx="60" cy="48" r="10" fill="#1a3c78"/>
+        <circle cx="64" cy="46" r="2" fill="white"/>
+        <rect x="36" y="64" width="7" height="12" rx="3.5" fill="#1a3c78"/>
+        <rect x="46" y="64" width="7" height="12" rx="3.5" fill="#1a3c78"/>
+        <rect x="56" y="63" width="7" height="12" rx="3.5" fill="#1a3c78"/>
+        <path d="M34 58 Q24 52 26 42 Q28 36 34 42" stroke="#1a3c78" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <circle cx="26" cy="41" r="4" fill="#1a3c78"/>
+        <text x="50" y="97" text-anchor="middle" font-size="9" font-family="Arial Hebrew, Arial" fill="#1a3c78" font-weight="700">ירושלים</text>
       </svg>
-      <div>
-        <div class="topbar-title">מערכת זיהוי עסקים חשודים</div>
-        <div class="topbar-sub">פרטי כתובת</div>
+      <div class="topbar-text">
+        <div class="title">פרטי כתובת</div>
+        <div class="sub">עיריית ירושלים</div>
       </div>
     </div>
     <div class="topbar-right">
-      <button class="btn-topbar-out" onclick="logout()">יציאה</button>
+      <button class="btn-out" id="detail-logout">יציאה</button>
     </div>
   </div>
-  <div class="detail-content" id="detail-content"></div>
+  <div class="detail-wrap" id="detail-body"></div>
 </div>
 
-<!-- SURVEYOR PAGE -->
+<!-- SURVEYOR -->
 <div id="surveyor-page" class="page">
   <div class="topbar">
     <div class="topbar-brand">
-      <svg width="40" height="40" viewBox="0 0 72 72" fill="none" class="jlm-emblem">
-        <circle cx="36" cy="36" r="34" fill="#c9a227"/>
-        <circle cx="36" cy="36" r="30" fill="#1a56a0"/>
-        <g fill="#c9a227">
-          <ellipse cx="36" cy="42" rx="12" ry="9"/>
-          <circle cx="44" cy="32" r="8"/>
-          <circle cx="44" cy="32" r="10" fill="#c9a227" opacity=".4"/>
-          <polygon points="50,24 53,18 56,24"/>
-          <circle cx="47" cy="30" r="1.5" fill="#1a3a6e"/>
-          <rect x="26" y="44" width="5" height="9" rx="2.5"/>
-          <rect x="33" y="44" width="5" height="9" rx="2.5"/>
-          <rect x="39" y="44" width="5" height="9" rx="2.5"/>
-          <rect x="46" y="43" width="5" height="9" rx="2.5"/>
-          <path d="M24 40 Q16 35 18 28 Q20 24 24 28" stroke="#c9a227" stroke-width="3" fill="none" stroke-linecap="round"/>
-          <circle cx="18" cy="27" r="3"/>
-          <rect x="30" y="16" width="16" height="5" rx="1"/>
-          <polygon points="30,16 32,10 35,16"/>
-          <polygon points="36,16 38,9 40,16"/>
-          <polygon points="43,16 45,10 46,16"/>
-        </g>
+      <svg width="44" height="44" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="49" fill="white"/>
+        <path d="M22 20 L78 20 L78 65 Q78 82 50 90 Q22 82 22 65 Z" fill="#f0f4ff" stroke="#1a3c78" stroke-width="2"/>
+        <rect x="35" y="18" width="30" height="7" rx="1" fill="#c9a227"/>
+        <polygon points="35,18 38,10 41,18" fill="#c9a227"/>
+        <polygon points="47,18 50,9 53,18" fill="#c9a227"/>
+        <polygon points="59,18 62,10 65,18" fill="#c9a227"/>
+        <ellipse cx="50" cy="62" rx="16" ry="11" fill="#1a3c78"/>
+        <circle cx="60" cy="48" r="10" fill="#1a3c78"/>
+        <circle cx="64" cy="46" r="2" fill="white"/>
+        <rect x="36" y="64" width="7" height="12" rx="3.5" fill="#1a3c78"/>
+        <rect x="46" y="64" width="7" height="12" rx="3.5" fill="#1a3c78"/>
+        <rect x="56" y="63" width="7" height="12" rx="3.5" fill="#1a3c78"/>
+        <path d="M34 58 Q24 52 26 42 Q28 36 34 42" stroke="#1a3c78" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <circle cx="26" cy="41" r="4" fill="#1a3c78"/>
+        <text x="50" y="97" text-anchor="middle" font-size="9" font-family="Arial Hebrew, Arial" fill="#1a3c78" font-weight="700">ירושלים</text>
       </svg>
-      <div>
-        <div class="topbar-title" id="surveyor-topbar-title">המשימות שלי</div>
-        <div class="topbar-sub">סוקר שטח · עיריית ירושלים</div>
+      <div class="topbar-text">
+        <div class="title" id="surv-title">המשימות שלי</div>
+        <div class="sub">סוקר שטח · עיריית ירושלים</div>
       </div>
     </div>
     <div class="topbar-right">
-      <div class="avatar" style="width:32px;height:32px;background:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.4);font-size:11px">יכ</div>
-      <button class="btn-topbar-out" onclick="logout()">יציאה</button>
+      <button class="btn-out" id="surv-logout">יציאה</button>
     </div>
   </div>
-  <div id="surveyor-inner" style="max-width:480px;margin:0 auto"></div>
+  <div class="inner" style="max-width:480px;margin:0 auto" id="surv-body"></div>
 </div>
 
 <!-- SUCCESS -->
 <div id="success-page" class="page">
   <div class="topbar">
     <div class="topbar-brand">
-      <svg width="40" height="40" viewBox="0 0 72 72" fill="none">
-        <circle cx="36" cy="36" r="34" fill="#c9a227"/>
-        <circle cx="36" cy="36" r="30" fill="#1a56a0"/>
-        <g fill="#c9a227">
-          <ellipse cx="36" cy="42" rx="12" ry="9"/>
-          <circle cx="44" cy="32" r="8"/>
-          <circle cx="44" cy="32" r="10" fill="#c9a227" opacity=".4"/>
-          <polygon points="50,24 53,18 56,24"/>
-          <circle cx="47" cy="30" r="1.5" fill="#1a3a6e"/>
-          <rect x="26" y="44" width="5" height="9" rx="2.5"/>
-          <rect x="33" y="44" width="5" height="9" rx="2.5"/>
-          <rect x="39" y="44" width="5" height="9" rx="2.5"/>
-          <rect x="46" y="43" width="5" height="9" rx="2.5"/>
-          <path d="M24 40 Q16 35 18 28 Q20 24 24 28" stroke="#c9a227" stroke-width="3" fill="none" stroke-linecap="round"/>
-          <circle cx="18" cy="27" r="3"/>
-          <rect x="30" y="16" width="16" height="5" rx="1"/>
-          <polygon points="30,16 32,10 35,16"/>
-          <polygon points="36,16 38,9 40,16"/>
-          <polygon points="43,16 45,10 46,16"/>
-        </g>
+      <svg width="44" height="44" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="49" fill="white"/>
+        <path d="M22 20 L78 20 L78 65 Q78 82 50 90 Q22 82 22 65 Z" fill="#f0f4ff" stroke="#1a3c78" stroke-width="2"/>
+        <rect x="35" y="18" width="30" height="7" rx="1" fill="#c9a227"/>
+        <polygon points="47,18 50,9 53,18" fill="#c9a227"/>
+        <ellipse cx="50" cy="62" rx="16" ry="11" fill="#1a3c78"/>
+        <circle cx="60" cy="48" r="10" fill="#1a3c78"/>
+        <rect x="36" y="64" width="7" height="12" rx="3.5" fill="#1a3c78"/>
+        <rect x="46" y="64" width="7" height="12" rx="3.5" fill="#1a3c78"/>
+        <text x="50" y="97" text-anchor="middle" font-size="9" font-family="Arial Hebrew, Arial" fill="#1a3c78" font-weight="700">ירושלים</text>
       </svg>
-      <div class="topbar-title">מערכת זיהוי עסקים חשודים</div>
+      <div class="topbar-text"><div class="title">עיריית ירושלים</div></div>
     </div>
   </div>
-  <div class="success-screen">
-    <div style="font-size:56px;margin-bottom:16px">✅</div>
-    <div style="font-size:20px;font-weight:700">הדיווח נשלח בהצלחה!</div>
+  <div class="success-wrap">
+    <div style="font-size:60px;margin-bottom:16px">✅</div>
+    <div style="font-size:20px;font-weight:800">הדיווח נשלח בהצלחה!</div>
     <div style="color:var(--muted);font-size:14px;margin-top:8px">חוזר לרשימת המשימות...</div>
   </div>
 </div>
 
 <script>
-// ── נתונים ────────────────────────────────────────────────────────────────────
-const SURVEYORS = {
-  surveyor1: { name:"יוסף כהן", initials:"יכ" },
-  surveyor2: { name:"מרים לוי", initials:"מל" },
+// ─── Data ────────────────────────────────────────────────────────────────────
+var SURV = {
+  s1:{name:"יוסף כהן",ini:"יכ"},
+  s2:{name:"מרים לוי",ini:"מל"}
 };
-
-const ADDRESSES = [
-  {
-    id:"a1", addr:"רחוב יפו 42, דירה 3, ירושלים",
-    status:"verified", score:0.91, assignedTo:"surveyor1", updated:"15.01.2024", validated:"business_found",
-    businesses:[
-      { name:"שירותי משפט טוב בע\"מ", cat:"שירותים משפטיים", active:true, score:0.91,
-        reasoning:"שלושה מקורות עצמאיים ואיכותיים מאשרים פעילות עסקית בכתובת זו. האתר הרשמי מציין מספר חדר התואם לדירה 3. הביקורת האחרונה לפני 3 חודשים מצביעה על פעילות שוטפת.",
-        sources:[{icon:"📋",title:"מדריך עסקי B2B"},{icon:"🗺️",title:"Google Maps"},{icon:"🌐",title:"אתר רשמי"}] },
-      { name:"ייעוץ שחר", cat:"ייעוץ עסקי", active:false, score:0.55,
-        reasoning:"נמצא במאגר חברות LinkedIn אך אין אתר או פעילות עדכנית. ייתכן שהעסק לא פעיל. הכתובת תואמת את הקלט.",
-        sources:[{icon:"💬",title:"LinkedIn – ייעוץ שחר"}] },
-    ],
-    pipeline:[
-      {step:"בונה שאילתות",status:"done",detail:"הופקו 5 שאילתות בעברית לגילוי עסקים"},
-      {step:"חיפוש Tavily",status:"done",detail:"אוחזרו 28 תוצאות על פני 5 שאילתות"},
-      {step:"חילוץ מידע",status:"done",detail:"חולצו 3 מועמדי עסק מהתוצאות"},
-      {step:"חוקר עסקים",status:"done",detail:"אומתו 2/3 עסקים; 1 הוסר (אי-התאמה)"},
-      {step:"ניקוד סופי",status:"done",detail:"2 עסקים עברו את הסף → פלט מוכן"},
-    ]
-  },
-  {
-    id:"a2", addr:"רחוב בן יהודה 18, דירה 7, ירושלים",
-    status:"pending", score:0.74, assignedTo:"surveyor2", updated:"14.01.2024", validated:null,
-    businesses:[
-      { name:"יועצי מס ירושלים", cat:"שירותים פיננסיים", active:true, score:0.74,
-        reasoning:"מרשם מקצועי רשם רישיון פעיל בכתובת זו. עמוד Facebook פעיל עם פוסטים מהחודש שעבר. האמינות מופחתת מעט כי לא נמצא אתר רשמי.",
-        sources:[{icon:"📋",title:"מרשם מקצועי – יועצי מס"},{icon:"💬",title:"עמוד עסקי Facebook"}] },
-    ],
-    pipeline:[
-      {step:"בונה שאילתות",status:"done",detail:"הופקו 4 שאילתות בעברית"},
-      {step:"חיפוש Tavily",status:"done",detail:"אוחזרו 19 תוצאות"},
-      {step:"חילוץ מידע",status:"done",detail:"חולץ מועמד עסק אחד"},
-      {step:"חוקר עסקים",status:"done",detail:"אומת 1/1 עסק"},
-      {step:"ניקוד סופי",status:"done",detail:"עסק 1 עבר את הסף"},
-    ]
-  },
-  {
-    id:"a3", addr:"רחוב הנביאים 55, דירה 12, ירושלים",
-    status:"investigating", score:0.62, assignedTo:null, updated:"15.01.2024", validated:null,
-    businesses:[],
-    pipeline:[
-      {step:"בונה שאילתות",status:"done",detail:"הופקו 6 שאילתות בעברית"},
-      {step:"חיפוש Tavily",status:"done",detail:"אוחזרו 31 תוצאות"},
-      {step:"חילוץ מידע",status:"done",detail:"חולצו 2 מועמדים"},
-      {step:"חוקר עסקים",status:"running",detail:"בודק 2 מועמדים..."},
-      {step:"ניקוד סופי",status:"pending",detail:"ממתין לחוקר"},
-    ]
-  },
-  {
-    id:"a4", addr:"רחוב קינג ג'ורג' 31, דירה 2, ירושלים",
-    status:"no_business", score:0.18, assignedTo:"surveyor1", updated:"13.01.2024", validated:"no_business",
-    businesses:[],
-    pipeline:[
-      {step:"בונה שאילתות",status:"done",detail:"הופקו 4 שאילתות"},
-      {step:"חיפוש Tavily",status:"done",detail:"אוחזרו 11 תוצאות"},
-      {step:"חילוץ מידע",status:"done",detail:"לא נמצאו מועמדי עסק"},
-      {step:"חוקר עסקים",status:"skipped",detail:"אין מועמדים לחקירה"},
-      {step:"ניקוד סופי",status:"done",detail:"אין עסקים → ציון 0.18 (נמוך)"},
-    ]
-  },
-  {
-    id:"a5", addr:"רחוב אגריפס 8, דירה 5, ירושלים",
-    status:"pending", score:0.85, assignedTo:"surveyor2", updated:"15.01.2024", validated:null,
-    businesses:[
-      { name:"מחנה יהודה יבוא ויצוא", cat:"יבוא / יצוא", active:true, score:0.88,
-        reasoning:"רשם החברות מציג חברה פעילה הרשומה בכתובת זו. תאריך רישום 2019, דוח שנתי אחרון הוגש ב-2023.",
-        sources:[{icon:"🏛️",title:"רשם החברות – משרד המשפטים"}] },
-      { name:"מסעדת גן התבלינים", cat:"מזון ואירוח", active:true, score:0.82,
-        reasoning:"רשומה במדריך מסעדות ובגוגל מפות, שניהם מאשרים את הכתובת. 47 ביקורות, ביקורת אחרונה לפני שבועיים. ככל הנראה מטבח רזה מהבית.",
-        sources:[{icon:"📋",title:"Rest.co.il – גן התבלינים"},{icon:"🗺️",title:"Google Maps"}] },
-      { name:"פתרונות IT רונן", cat:"טכנולוגיה", active:true, score:0.76,
-        reasoning:"אתר ו-LinkedIn שניהם מציינים כתובת מגורים. קבלן IT עצמאי, ככל הנראה עובד מהבית.",
-        sources:[{icon:"💬",title:"LinkedIn – פתרונות IT רונן"},{icon:"🌐",title:"אתר רשמי"}] },
-    ],
-    pipeline:[
-      {step:"בונה שאילתות",status:"done",detail:"הופקו 6 שאילתות בעברית"},
-      {step:"חיפוש Tavily",status:"done",detail:"אוחזרו 44 תוצאות"},
-      {step:"חילוץ מידע",status:"done",detail:"חולצו 4 מועמדים"},
-      {step:"חוקר עסקים",status:"done",detail:"אומתו 3/4; 1 תוצאה שגויה הוסרה"},
-      {step:"ניקוד סופי",status:"done",detail:"3 עסקים אושרו כחשודים"},
-    ]
-  },
+var DATA = [
+  {id:"a1",addr:"רחוב יפו 42, דירה 3, ירושלים",status:"verified",score:.91,surv:"s1",date:"15.01.2024",val:"found",
+   biz:[
+     {name:'שירותי משפט טוב בע"מ',cat:"שירותים משפטיים",active:true,score:.91,
+      why:"שלושה מקורות עצמאיים מאשרים פעילות בכתובת זו. האתר הרשמי מציין מספר חדר התואם לדירה 3. הביקורת האחרונה לפני 3 חודשים מצביעה על פעילות שוטפת.",
+      src:[{i:"📋",t:"מדריך B2B"},{i:"🗺️",t:"Google Maps"},{i:"🌐",t:"אתר רשמי"}]},
+     {name:"ייעוץ שחר",cat:"ייעוץ עסקי",active:false,score:.55,
+      why:"נמצא ב-LinkedIn אך ללא אתר או פעילות עדכנית. ייתכן שהעסק לא פעיל. הכתובת תואמת.",
+      src:[{i:"💬",t:"LinkedIn – ייעוץ שחר"}]}
+   ],
+   pipe:[
+     {s:"done",n:"בונה שאילתות",d:"הופקו 5 שאילתות בעברית"},
+     {s:"done",n:"חיפוש Tavily",d:"28 תוצאות על פני 5 שאילתות"},
+     {s:"done",n:"חילוץ מידע",d:"חולצו 3 מועמדי עסק"},
+     {s:"done",n:"חוקר עסקים",d:"אומתו 2/3 עסקים"},
+     {s:"done",n:"ניקוד סופי",d:"2 עסקים עברו את הסף"}
+   ]},
+  {id:"a2",addr:"רחוב בן יהודה 18, דירה 7, ירושלים",status:"pending",score:.74,surv:"s2",date:"14.01.2024",val:null,
+   biz:[
+     {name:"יועצי מס ירושלים",cat:"שירותים פיננסיים",active:true,score:.74,
+      why:"מרשם מקצועי רשם רישיון פעיל בכתובת זו. עמוד Facebook פעיל עם פוסטים מהחודש שעבר.",
+      src:[{i:"📋",t:"מרשם מקצועי"},{i:"💬",t:"Facebook עסקי"}]}
+   ],
+   pipe:[
+     {s:"done",n:"בונה שאילתות",d:"4 שאילתות בעברית"},
+     {s:"done",n:"חיפוש Tavily",d:"19 תוצאות"},
+     {s:"done",n:"חילוץ מידע",d:"מועמד עסק אחד"},
+     {s:"done",n:"חוקר עסקים",d:"אומת 1/1"},
+     {s:"done",n:"ניקוד סופי",d:"עבר את הסף"}
+   ]},
+  {id:"a3",addr:"רחוב הנביאים 55, דירה 12, ירושלים",status:"investigating",score:.62,surv:null,date:"15.01.2024",val:null,
+   biz:[],
+   pipe:[
+     {s:"done",n:"בונה שאילתות",d:"6 שאילתות בעברית"},
+     {s:"done",n:"חיפוש Tavily",d:"31 תוצאות"},
+     {s:"done",n:"חילוץ מידע",d:"2 מועמדים"},
+     {s:"run",n:"חוקר עסקים",d:"בודק 2 מועמדים..."},
+     {s:"wait",n:"ניקוד סופי",d:"ממתין לחוקר"}
+   ]},
+  {id:"a4",addr:"רחוב קינג ג'ורג' 31, דירה 2, ירושלים",status:"no_business",score:.18,surv:"s1",date:"13.01.2024",val:"none",
+   biz:[],
+   pipe:[
+     {s:"done",n:"בונה שאילתות",d:"4 שאילתות"},
+     {s:"done",n:"חיפוש Tavily",d:"11 תוצאות"},
+     {s:"done",n:"חילוץ מידע",d:"אין מועמדים"},
+     {s:"skip",n:"חוקר עסקים",d:"אין מועמדים לחקירה"},
+     {s:"done",n:"ניקוד סופי",d:"ציון 0.18 — נמוך"}
+   ]},
+  {id:"a5",addr:"רחוב אגריפס 8, דירה 5, ירושלים",status:"pending",score:.85,surv:"s2",date:"15.01.2024",val:null,
+   biz:[
+     {name:"מחנה יהודה יבוא ויצוא",cat:"יבוא/יצוא",active:true,score:.88,
+      why:"רשם החברות מציג חברה פעילה הרשומה בכתובת זו. תאריך רישום 2019, דוח שנתי אחרון הוגש ב-2023.",
+      src:[{i:"🏛️",t:"רשם החברות"}]},
+     {name:"מסעדת גן התבלינים",cat:"מזון ואירוח",active:true,score:.82,
+      why:"רשומה במדריך מסעדות וב-Google Maps. 47 ביקורות, אחרונה לפני שבועיים.",
+      src:[{i:"📋",t:"Rest.co.il"},{i:"🗺️",t:"Google Maps"}]},
+     {name:"פתרונות IT רונן",cat:"טכנולוגיה",active:true,score:.76,
+      why:"אתר ו-LinkedIn שניהם מציינים כתובת מגורים. קבלן עצמאי, ככל הנראה עובד מהבית.",
+      src:[{i:"💬",t:"LinkedIn"},{i:"🌐",t:"אתר רשמי"}]}
+   ],
+   pipe:[
+     {s:"done",n:"בונה שאילתות",d:"6 שאילתות בעברית"},
+     {s:"done",n:"חיפוש Tavily",d:"44 תוצאות"},
+     {s:"done",n:"חילוץ מידע",d:"4 מועמדים"},
+     {s:"done",n:"חוקר עסקים",d:"3/4 אומתו"},
+     {s:"done",n:"ניקוד סופי",d:"3 עסקים חשודים"}
+   ]}
 ];
 
-// ── עזרים ─────────────────────────────────────────────────────────────────────
-function scorePill(s){
-  const c=s>=0.8?"score-high":s>=0.5?"score-med":"score-low";
-  return`<span class="score-pill ${c}"><span class="score-dot"></span>${Math.round(s*100)}%</span>`;
-}
-function badge(lbl,col,bg){
-  return`<span class="badge" style="color:${col};background:${bg}">${lbl}</span>`;
-}
-const STATUS={
-  verified:{label:"מאומת",color:"#dc2626"},
-  pending:{label:"ממתין לבדיקה",color:"#d97706"},
-  investigating:{label:"בחקירה",color:"#1a56a0"},
-  no_business:{label:"אין עסק",color:"#16a34a"},
+var STATUS_MAP = {
+  verified:{lbl:"מאומת",c:"#dc2626"},
+  pending:{lbl:"ממתין לבדיקה",c:"#d97706"},
+  investigating:{lbl:"בחקירה",c:"#1a3c78"},
+  no_business:{lbl:"אין עסק",c:"#16a34a"}
 };
-function statusBadge(s){const st=STATUS[s];return badge(st.label,st.color,st.color+"22");}
 
-// ── ניווט ──────────────────────────────────────────────────────────────────────
-function showPage(id){
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+function pill(s){
+  var cls = s>=.8?"pill-red":s>=.5?"pill-yel":"pill-grn";
+  return '<span class="pill '+cls+'"><span class="pill-dot"></span>'+Math.round(s*100)+'%</span>';
+}
+function badge(t,c,bg){
+  return '<span class="badge" style="color:'+c+';background:'+bg+'">'+t+'</span>';
+}
+function stBadge(st){
+  var m=STATUS_MAP[st];
+  return badge(m.lbl,m.c,m.c+'22');
+}
+
+// ─── Navigation ───────────────────────────────────────────────────────────────
+function go(id){
+  document.querySelectorAll(".page").forEach(function(p){p.classList.remove("active");});
   document.getElementById(id).classList.add("active");
+  window.scrollTo(0,0);
 }
 
-// ── כניסה ──────────────────────────────────────────────────────────────────────
-let currentRole="admin";
-let selectedValidation=null;
+// ─── State ────────────────────────────────────────────────────────────────────
+var role="admin";
+var selOpt=null;
+var fromPage="admin-page";
 
-function selectRole(r){
-  currentRole=r;
-  document.getElementById("role-admin").classList.toggle("active",r==="admin");
-  document.getElementById("role-surveyor").classList.toggle("active",r==="surveyor");
-  document.getElementById("login-email").value=r==="admin"?"admin@jerusalem.muni.il":"yosef@jerusalem.muni.il";
-}
-
-function doLogin(){
-  if(currentRole==="admin"){
-    renderAdminDashboard();
-    showPage("admin-page");
+// ─── Login ────────────────────────────────────────────────────────────────────
+document.getElementById("rb-admin").addEventListener("click",function(){
+  role="admin";
+  document.getElementById("rb-admin").classList.add("on");
+  document.getElementById("rb-surv").classList.remove("on");
+  document.getElementById("email-field").value="admin@jerusalem.muni.il";
+});
+document.getElementById("rb-surv").addEventListener("click",function(){
+  role="surv";
+  document.getElementById("rb-surv").classList.add("on");
+  document.getElementById("rb-admin").classList.remove("on");
+  document.getElementById("email-field").value="yosef@jerusalem.muni.il";
+});
+document.getElementById("login-btn").addEventListener("click",function(){
+  if(role==="admin"){
+    buildAdmin();
+    go("admin-page");
   } else {
-    renderSurveyorList();
-    showPage("surveyor-page");
+    buildSurvList();
+    go("surveyor-page");
   }
-}
+});
+document.getElementById("admin-logout").addEventListener("click",function(){go("login-page");});
+document.getElementById("detail-logout").addEventListener("click",function(){go("login-page");});
+document.getElementById("surv-logout").addEventListener("click",function(){go("login-page");});
 
-function logout(){
-  showPage("login-page");
-}
-
-// ── לוח בקרה מנהל ────────────────────────────────────────────────────────────
-function renderAdminDashboard(){
-  const sg=document.getElementById("stats-grid");
+// ─── Admin ────────────────────────────────────────────────────────────────────
+function buildAdmin(){
+  var sg=document.getElementById("stats-grid");
+  var total=DATA.length;
+  var ver=DATA.filter(function(a){return a.status==="verified";}).length;
+  var pend=DATA.filter(function(a){return a.status==="pending";}).length;
+  var biz=DATA.reduce(function(s,a){return s+a.biz.length;},0);
   sg.innerHTML=[
-    {label:"סה\"כ כתובות",value:ADDRESSES.length,color:"#1a56a0"},
-    {label:"מאושרות כחשודות",value:ADDRESSES.filter(a=>a.status==="verified").length,color:"#dc2626"},
-    {label:"ממתינות לבדיקה",value:ADDRESSES.filter(a=>a.status==="pending").length,color:"#d97706"},
-    {label:"עסקים שנמצאו",value:ADDRESSES.reduce((s,a)=>s+a.businesses.length,0),color:"#7c3aed"},
-  ].map(s=>`<div class="stat-card"><div class="stat-value" style="color:${s.color}">${s.value}</div><div class="stat-label">${s.label}</div></div>`).join("");
+    {lbl:'סה"כ כתובות',v:total,c:"#1a3c78"},
+    {lbl:"מאושרות חשודות",v:ver,c:"#dc2626"},
+    {lbl:"ממתינות לבדיקה",v:pend,c:"#d97706"},
+    {lbl:"עסקים שנמצאו",v:biz,c:"#7c3aed"}
+  ].map(function(s){
+    return '<div class="scard"><div class="sval" style="color:'+s.c+'">'+s.v+'</div><div class="slbl">'+s.lbl+'</div></div>';
+  }).join("");
   renderTable();
+  document.getElementById("search-input").oninput=renderTable;
+  document.getElementById("filter-sel").onchange=renderTable;
 }
 
 function renderTable(){
-  const search=(document.getElementById("search-input")||{value:""}).value;
-  const filter=(document.getElementById("filter-select")||{value:"all"}).value;
-  const tbody=document.getElementById("addr-table-body");
-  if(!tbody)return;
-  const filtered=ADDRESSES.filter(a=>{
-    const ms=a.addr.includes(search);
-    const mf=filter==="all"||a.status===filter;
-    return ms&&mf;
+  var q=(document.getElementById("search-input").value||"");
+  var f=(document.getElementById("filter-sel").value||"");
+  var rows=DATA.filter(function(a){
+    return a.addr.indexOf(q)>=0 && (!f||a.status===f);
   });
-  tbody.innerHTML=filtered.map(a=>{
-    const sv=a.assignedTo?SURVEYORS[a.assignedTo]:null;
-    const svHtml=sv
-      ?`<div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="width:26px;height:26px;background:#7c3aed;font-size:10px">${sv.initials}</div><span style="font-size:13px">${sv.name}</span></div>`
-      :`<span style="color:var(--muted);font-size:13px">לא שויך</span>`;
-    return`<tr>
-      <td><div class="addr-en">${a.addr}</div></td>
-      <td>${statusBadge(a.status)}</td>
-      <td style="text-align:center;font-weight:700">${a.businesses.length||"—"}</td>
-      <td>${scorePill(a.score)}</td>
-      <td>${svHtml}</td>
-      <td style="color:var(--muted);font-size:12px">${a.updated}</td>
-      <td><button class="btn-view" onclick="showDetail('${a.id}','admin-page')">פרטים ←</button></td>
-    </tr>`;
+  var body=document.getElementById("tbl-body");
+  body.innerHTML=rows.map(function(a){
+    var sv=a.surv?SURV[a.surv]:null;
+    var svHtml=sv
+      ?'<div style="display:flex;align-items:center;gap:8px"><div style="width:26px;height:26px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;">'+sv.ini+'</div><span>'+sv.name+'</span></div>'
+      :'<span style="color:var(--muted)">לא שויך</span>';
+    return '<tr><td><div style="font-weight:600">'+a.addr+'</div></td>'
+      +'<td>'+stBadge(a.status)+'</td>'
+      +'<td style="text-align:center;font-weight:700">'+(a.biz.length||"—")+'</td>'
+      +'<td>'+pill(a.score)+'</td>'
+      +'<td>'+svHtml+'</td>'
+      +'<td style="color:var(--muted);font-size:12px">'+a.date+'</td>'
+      +'<td><button class="btn-view" data-id="'+a.id+'">פרטים ←</button></td></tr>';
   }).join("");
-}
-
-// ── פרטי כתובת ────────────────────────────────────────────────────────────────
-function showDetail(id,fromPage){
-  const a=ADDRESSES.find(x=>x.id===id);
-  if(!a)return;
-  const stepIcon={done:"✓",running:"↻",pending:"○",skipped:"—"};
-  const stepColor={done:"#16a34a",running:"#1a56a0",pending:"#9ca3af",skipped:"#d1d5db"};
-  const bizHtml=a.businesses.length===0
-    ?`<div class="card empty-state">לא נמצאו עסקים בכתובת זו.</div>`
-    :a.businesses.map(b=>`
-      <div class="card" style="padding:20px;margin-bottom:12px">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px;flex-wrap:wrap">
-          <div><div class="biz-name">${b.name}</div><div class="biz-cat">${b.cat}</div></div>
-          <div style="display:flex;gap:6px;flex-wrap:wrap">
-            ${badge(b.active?"פעיל":"לא פעיל",b.active?"#16a34a":"#9ca3af",b.active?"#f0fdf4":"#f9fafb")}
-            ${scorePill(b.score)}
-          </div>
-        </div>
-        <div class="reasoning"><strong>נימוק AI: </strong>${b.reasoning}</div>
-        <div class="sources">${b.sources.map(s=>`<a href="#" class="source-link">${s.icon} ${s.title}</a>`).join("")}</div>
-      </div>`).join("");
-  const pipeHtml=a.pipeline.map(s=>`
-    <div class="pipeline-step">
-      <div class="step-icon" style="background:${stepColor[s.status]}22;color:${stepColor[s.status]}">${stepIcon[s.status]}</div>
-      <div><div class="step-name">${s.step}</div><div class="step-detail">${s.detail}</div></div>
-    </div>`).join("");
-  const valHtml=a.validated
-    ?`${badge(a.validated==="business_found"?"✓ עסק נמצא בשטח":"✗ לא נמצא עסק",a.validated==="business_found"?"#dc2626":"#16a34a",a.validated==="business_found"?"#fef2f2":"#f0fdf4")}
-     <div style="margin-top:12px;font-size:13px;color:var(--muted)">אומת ב-${a.updated} · ${a.validated==="business_found"?"תואם לתחזית ה-AI":"סותר את תחזית ה-AI — משוב נשלח לצינור ה-ML"}</div>`
-    :`<div style="color:var(--muted);font-size:13px;font-style:italic">טרם אומת על ידי סוקר שטח.</div>`;
-
-  document.getElementById("detail-content").innerHTML=`
-    <button class="btn-back" onclick="showPage('${fromPage||"admin-page"}')">→ חזרה לרשימה</button>
-    <div class="card" style="padding:24px;margin-bottom:16px">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px">
-        <div>
-          <div style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px">כתובת חשודה</div>
-          <div style="font-size:18px;font-weight:700">${a.addr}</div>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px">
-          ${statusBadge(a.status)}
-          <div style="text-align:center">
-            <div style="font-size:11px;color:var(--muted);margin-bottom:2px">ציון חשד</div>
-            ${scorePill(a.score)}
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="tab-bar">
-      <button class="tab-btn active" onclick="switchTab(this,'tab-biz')">עסקים</button>
-      <button class="tab-btn" onclick="switchTab(this,'tab-pipe')">צינור LangGraph</button>
-      <button class="tab-btn" onclick="switchTab(this,'tab-val')">אימות שטח</button>
-    </div>
-    <div id="tab-biz" class="tab-panel active">${bizHtml}</div>
-    <div id="tab-pipe" class="tab-panel">
-      <div class="card" style="padding:24px">
-        <div style="font-weight:700;margin-bottom:16px">ביצוע צינור LangGraph</div>
-        ${pipeHtml}
-      </div>
-    </div>
-    <div id="tab-val" class="tab-panel">
-      <div class="card" style="padding:24px">
-        <div style="font-weight:700;margin-bottom:4px">אימות שטח</div>
-        <div style="color:var(--muted);font-size:13px;margin-bottom:16px">נשלח על ידי סוקר שטח לאחר ביקור פיזי.</div>
-        ${valHtml}
-      </div>
-    </div>`;
-  showPage("detail-page");
-}
-
-function switchTab(btn,tabId){
-  btn.closest(".tab-bar").querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
-  btn.classList.add("active");
-  let next=btn.closest(".tab-bar").nextElementSibling;
-  while(next&&next.classList.contains("tab-panel")){next.classList.remove("active");next=next.nextElementSibling;}
-  document.getElementById(tabId).classList.add("active");
-}
-
-// ── סוקר שטח ─────────────────────────────────────────────────────────────────
-function renderSurveyorList(){
-  document.getElementById("surveyor-topbar-title").textContent="המשימות שלי";
-  const myAddrs=ADDRESSES.filter(a=>a.assignedTo==="surveyor1");
-  document.getElementById("surveyor-inner").innerHTML=`
-    <div class="surveyor-list">
-      <div style="font-size:13px;color:var(--muted);margin-bottom:12px">${myAddrs.length} כתובות מוקצות · לחץ לפרטים</div>
-      ${myAddrs.map(a=>`
-        <button class="addr-card-btn" onclick="renderSurveyorDetail('${a.id}')">
-          <div style="text-align:right;flex:1">
-            <div style="font-weight:600;font-size:14px">${a.addr}</div>
-            <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
-              ${statusBadge(a.status)}
-              ${a.validated?badge("מאומת","#16a34a","#f0fdf4"):""}
-            </div>
-          </div>
-          <div style="text-align:center;flex-shrink:0">
-            ${scorePill(a.score)}
-            <div style="font-size:11px;color:var(--muted);margin-top:4px">${a.businesses.length} עסקים</div>
-          </div>
-        </button>`).join("")}
-    </div>`;
-}
-
-function renderSurveyorDetail(id){
-  const a=ADDRESSES.find(x=>x.id===id);
-  if(!a)return;
-  document.getElementById("surveyor-topbar-title").textContent="פרטי כתובת";
-  const bizHtml=a.businesses.length===0
-    ?`<div class="card empty-state" style="padding:14px">לא צוינו עסקים ספציפיים. בדוק פעילות מסחרית כלשהי.</div>`
-    :a.businesses.map(b=>`
-      <div class="card" style="padding:14px;margin-bottom:8px">
-        <div style="font-weight:600;font-size:14px">${b.name}</div>
-        <div style="font-size:12px;color:var(--muted)">${b.cat}</div>
-        <div style="margin-top:6px">${scorePill(b.score)}</div>
-      </div>`).join("");
-  const footerHtml=a.validated
-    ?`<div class="already-validated"><div style="font-size:13px;color:#16a34a;font-weight:700">✓ כבר אומת</div><div style="font-size:12px;color:var(--muted);margin-top:2px">תוצאה: ${a.validated==="business_found"?"עסק נמצא בשטח":"לא נמצא עסק"}</div></div>`
-    :`<button class="validate-btn" onclick="renderValidationForm('${a.id}')">← שלח דיווח שטח</button>`;
-  document.getElementById("surveyor-inner").innerHTML=`
-    <div style="padding:16px">
-      <button class="btn-back" onclick="renderSurveyorList()">→ חזרה לרשימה</button>
-      <div class="card" style="padding:16px;margin-bottom:12px">
-        <div style="font-size:12px;color:var(--muted);margin-bottom:4px">כתובת חשודה</div>
-        <div style="font-weight:700;font-size:15px">${a.addr}</div>
-        <div style="margin-top:10px;display:flex;gap:8px;align-items:center">
-          ${scorePill(a.score)}
-          <span style="font-size:12px;color:var(--muted)">ציון חשד AI</span>
-        </div>
-      </div>
-      <div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">עסקים לאימות</div>
-      ${bizHtml}
-      ${footerHtml}
-    </div>`;
-}
-
-function renderValidationForm(id){
-  const a=ADDRESSES.find(x=>x.id===id);
-  if(!a)return;
-  document.getElementById("surveyor-topbar-title").textContent="שלח דיווח שטח";
-  selectedValidation=null;
-  document.getElementById("surveyor-inner").innerHTML=`
-    <form style="padding:16px" onsubmit="submitValidation(event,'${id}')">
-      <div style="padding:14px 16px;border:2px solid #fcd34d;background:#fffbeb;border-radius:12px;margin-bottom:16px">
-        <div style="font-size:13px;font-weight:600">⚠️ אתה בשטח ב: ${a.addr}</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:2px">נא למלא את הטופס בזמן הימצאות פיזית בכתובת.</div>
-      </div>
-      <div style="margin-bottom:16px">
-        <label style="font-weight:700;font-size:13px;display:block;margin-bottom:10px">מה מצאת? *</label>
-        <button type="button" class="option-btn" id="opt-found" onclick="selectOpt('found')">
-          <div><div class="option-label" style="color:#dc2626">✓ עסק אושר</div><div class="option-desc">לפחות עסק אחד פועל כאן בבירור</div></div>
-        </button>
-        <button type="button" class="option-btn" id="opt-possible" onclick="selectOpt('possible')">
-          <div><div class="option-label" style="color:#d97706">⚠ פעילות אפשרית</div><div class="option-desc">סימנים לפעילות עסקית אך לא ודאי</div></div>
-        </button>
-        <button type="button" class="option-btn" id="opt-none" onclick="selectOpt('none')">
-          <div><div class="option-label" style="color:#16a34a">✗ אין עסק</div><div class="option-desc">מגורים בלבד — לא נמצאה פעילות מסחרית</div></div>
-        </button>
-      </div>
-      <div style="margin-bottom:14px">
-        <label style="font-weight:700;font-size:13px;display:block;margin-bottom:6px">הערות</label>
-        <textarea class="notes" rows="4" placeholder="תאר מה ראית (שלטים, אנשים, ציוד וכד')"></textarea>
-      </div>
-      <div class="photo-zone">
-        📷 לחץ להוספת תמונות
-        <div class="photo-sub" style="font-size:11px;margin-top:4px">העלאת תמונות זמינה בגרסת הייצור</div>
-      </div>
-      <button type="submit" class="submit-btn disabled" id="submit-btn">שלח דיווח</button>
-    </form>`;
-}
-
-function selectOpt(val){
-  selectedValidation=val;
-  const map={found:"sel-red",possible:"sel-yellow",none:"sel-green"};
-  ["found","possible","none"].forEach(k=>{
-    const el=document.getElementById("opt-"+k);
-    el.className="option-btn"+(k===val?" "+map[k]:"");
+  body.querySelectorAll(".btn-view").forEach(function(btn){
+    btn.addEventListener("click",function(){
+      fromPage="admin-page";
+      showDetail(this.dataset.id);
+    });
   });
-  document.getElementById("submit-btn").className="submit-btn ready";
 }
 
-function submitValidation(e,id){
-  e.preventDefault();
-  if(!selectedValidation)return;
-  showPage("success-page");
-  setTimeout(()=>{renderSurveyorList();showPage("surveyor-page");},2200);
+// ─── Detail ───────────────────────────────────────────────────────────────────
+function showDetail(id){
+  var a=DATA.find(function(x){return x.id===id;});
+  if(!a)return;
+  var SC={done:"#16a34a",run:"#1a3c78",wait:"#9ca3af",skip:"#d1d5db"};
+  var SI={done:"✓",run:"↻",wait:"○",skip:"—"};
+  var bizH=a.biz.length===0
+    ?'<div class="card" style="padding:24px;text-align:center;color:var(--muted);font-style:italic">לא נמצאו עסקים בכתובת זו.</div>'
+    :a.biz.map(function(b){
+      return '<div class="card" style="padding:20px;margin-bottom:12px">'
+        +'<div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px">'
+        +'<div><div style="font-weight:700;font-size:15px">'+b.name+'</div><div style="font-size:12px;color:var(--muted)">'+b.cat+'</div></div>'
+        +'<div style="display:flex;gap:6px">'+badge(b.active?"פעיל":"לא פעיל",b.active?"#16a34a":"#9ca3af",b.active?"#f0fdf4":"#f9fafb")+pill(b.score)+'</div></div>'
+        +'<div style="font-size:13px;background:#f9fafb;border-radius:8px;padding:10px 14px;margin-bottom:12px;line-height:1.65"><strong>נימוק AI: </strong>'+b.why+'</div>'
+        +'<div style="display:flex;flex-wrap:wrap;gap:6px">'+b.src.map(function(s){return '<span style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:6px;border:1px solid var(--border);font-size:12px;color:var(--jlm);background:#eff3fb">'+s.i+' '+s.t+'</span>';}).join("")+'</div>'
+        +'</div>';
+    }).join("");
+  var pipeH=a.pipe.map(function(s){
+    return '<div class="rstep"><div class="sico" style="background:'+SC[s.s]+'22;color:'+SC[s.s]+'">'+SI[s.s]+'</div>'
+      +'<div><div style="font-weight:600;font-size:13px">'+s.n+'</div><div style="color:var(--muted);font-size:12px">'+s.d+'</div></div></div>';
+  }).join("");
+  var valH=a.val
+    ?badge(a.val==="found"?"✓ עסק נמצא בשטח":"✗ לא נמצא עסק",a.val==="found"?"#dc2626":"#16a34a",a.val==="found"?"#fef2f2":"#f0fdf4")
+      +'<div style="margin-top:10px;font-size:13px;color:var(--muted)">אומת ב-'+a.date+' · '+(a.val==="found"?"תואם לתחזית ה-AI":"סותר את תחזית ה-AI")+'</div>'
+    :'<div style="color:var(--muted);font-size:13px;font-style:italic">טרם אומת על ידי סוקר שטח.</div>';
+
+  document.getElementById("detail-body").innerHTML=
+    '<button class="btn-back" id="detail-back">→ חזרה</button>'
+    +'<div class="card" style="padding:24px;margin-bottom:14px">'
+    +'<div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px">'
+    +'<div><div style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.5px;margin-bottom:4px">כתובת חשודה</div><div style="font-size:17px;font-weight:700">'+a.addr+'</div></div>'
+    +'<div style="display:flex;gap:10px;align-items:center">'+stBadge(a.status)+'<div style="text-align:center"><div style="font-size:11px;color:var(--muted);margin-bottom:2px">ציון חשד</div>'+pill(a.score)+'</div></div>'
+    +'</div></div>'
+    +'<div class="tabs">'
+    +'<button class="tab on" data-t="tb-biz">עסקים</button>'
+    +'<button class="tab" data-t="tb-pipe">צינור LangGraph</button>'
+    +'<button class="tab" data-t="tb-val">אימות שטח</button>'
+    +'</div>'
+    +'<div id="tb-biz" class="tp on">'+bizH+'</div>'
+    +'<div id="tb-pipe" class="tp"><div class="card" style="padding:24px"><div style="font-weight:700;margin-bottom:14px">ביצוע צינור LangGraph</div>'+pipeH+'</div></div>'
+    +'<div id="tb-val" class="tp"><div class="card" style="padding:24px"><div style="font-weight:700;margin-bottom:4px">אימות שטח</div><div style="color:var(--muted);font-size:13px;margin-bottom:14px">נשלח לאחר ביקור פיזי.</div>'+valH+'</div></div>';
+
+  document.getElementById("detail-back").addEventListener("click",function(){go(fromPage);});
+  document.querySelectorAll(".tab").forEach(function(btn){
+    btn.addEventListener("click",function(){
+      document.querySelectorAll(".tab").forEach(function(b){b.classList.remove("on");});
+      btn.classList.add("on");
+      document.querySelectorAll(".tp").forEach(function(p){p.classList.remove("on");});
+      document.getElementById(btn.dataset.t).classList.add("on");
+    });
+  });
+  go("detail-page");
+}
+
+// ─── Surveyor ─────────────────────────────────────────────────────────────────
+function buildSurvList(){
+  document.getElementById("surv-title").textContent="המשימות שלי";
+  var my=DATA.filter(function(a){return a.surv==="s1";});
+  document.getElementById("surv-body").innerHTML=
+    '<div style="padding:16px">'
+    +'<div style="font-size:13px;color:var(--muted);margin-bottom:12px">'+my.length+' כתובות מוקצות · לחץ לפרטים</div>'
+    +my.map(function(a){
+      return '<button class="acard" data-id="'+a.id+'">'
+        +'<div style="text-align:right;flex:1">'
+        +'<div style="font-weight:600;font-size:14px">'+a.addr+'</div>'
+        +'<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">'+stBadge(a.status)+(a.val?badge("מאומת","#16a34a","#f0fdf4"):"")+'</div>'
+        +'</div>'
+        +'<div style="text-align:center;flex-shrink:0">'+pill(a.score)+'<div style="font-size:11px;color:var(--muted);margin-top:4px">'+a.biz.length+' עסקים</div></div>'
+        +'</button>';
+    }).join("")
+    +'</div>';
+  document.querySelectorAll(".acard").forEach(function(btn){
+    btn.addEventListener("click",function(){buildSurvDetail(this.dataset.id);});
+  });
+}
+
+function buildSurvDetail(id){
+  var a=DATA.find(function(x){return x.id===id;});
+  if(!a)return;
+  document.getElementById("surv-title").textContent="פרטי כתובת";
+  var bizH=a.biz.length===0
+    ?'<div class="card" style="padding:14px;font-style:italic;color:var(--muted)">לא צוינו עסקים ספציפיים.</div>'
+    :a.biz.map(function(b){
+      return '<div class="card" style="padding:14px;margin-bottom:8px">'
+        +'<div style="font-weight:600;font-size:14px">'+b.name+'</div>'
+        +'<div style="font-size:12px;color:var(--muted)">'+b.cat+'</div>'
+        +'<div style="margin-top:6px">'+pill(b.score)+'</div></div>';
+    }).join("");
+  var footer=a.val
+    ?'<div style="padding:14px;margin-top:12px;border:1px solid #bbf7d0;background:#f0fdf4;border-radius:12px"><div style="color:#16a34a;font-weight:700">✓ כבר אומת</div><div style="font-size:12px;color:var(--muted);margin-top:2px">'+(a.val==="found"?"עסק נמצא":"לא נמצא עסק")+'</div></div>'
+    :'<button class="vbtn" id="to-form" data-id="'+a.id+'">← שלח דיווח שטח</button>';
+
+  document.getElementById("surv-body").innerHTML=
+    '<div style="padding:16px">'
+    +'<button class="btn-back" id="surv-back">→ חזרה</button>'
+    +'<div class="card" style="padding:16px;margin-bottom:12px">'
+    +'<div style="font-size:12px;color:var(--muted);margin-bottom:4px">כתובת חשודה</div>'
+    +'<div style="font-weight:700;font-size:15px">'+a.addr+'</div>'
+    +'<div style="margin-top:10px;display:flex;gap:8px;align-items:center">'+pill(a.score)+'<span style="font-size:12px;color:var(--muted)">ציון חשד AI</span></div>'
+    +'</div>'
+    +'<div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:8px;text-transform:uppercase">עסקים לאימות</div>'
+    +bizH+footer+'</div>';
+
+  document.getElementById("surv-back").addEventListener("click",buildSurvList);
+  var tf=document.getElementById("to-form");
+  if(tf) tf.addEventListener("click",function(){buildSurvForm(this.dataset.id);});
+}
+
+function buildSurvForm(id){
+  var a=DATA.find(function(x){return x.id===id;});
+  if(!a)return;
+  document.getElementById("surv-title").textContent="שלח דיווח שטח";
+  selOpt=null;
+  document.getElementById("surv-body").innerHTML=
+    '<form style="padding:16px" id="val-form">'
+    +'<div style="padding:14px;border:2px solid #fcd34d;background:#fffbeb;border-radius:12px;margin-bottom:16px">'
+    +'<div style="font-weight:600;font-size:13px">⚠️ אתה בשטח ב: '+a.addr+'</div>'
+    +'<div style="font-size:12px;color:var(--muted);margin-top:2px">מלא את הטופס תוך כדי נוכחות פיזית בכתובת.</div>'
+    +'</div>'
+    +'<div style="margin-bottom:16px">'
+    +'<div style="font-weight:700;font-size:13px;margin-bottom:10px">מה מצאת? *</div>'
+    +'<button type="button" class="optbtn" id="o-found"><div><div class="option-label" style="font-weight:700;color:#dc2626">✓ עסק אושר</div><div style="font-size:12px;color:var(--muted)">לפחות עסק אחד פועל בבירור</div></div></button>'
+    +'<button type="button" class="optbtn" id="o-poss"><div><div class="option-label" style="font-weight:700;color:#d97706">⚠ פעילות אפשרית</div><div style="font-size:12px;color:var(--muted)">סימנים אך לא ודאי</div></div></button>'
+    +'<button type="button" class="optbtn" id="o-none"><div><div class="option-label" style="font-weight:700;color:#16a34a">✗ אין עסק</div><div style="font-size:12px;color:var(--muted)">מגורים בלבד</div></div></button>'
+    +'</div>'
+    +'<div style="margin-bottom:14px"><label style="font-weight:700;font-size:13px;display:block;margin-bottom:6px">הערות</label>'
+    +'<textarea class="notes" rows="4" placeholder="תאר מה ראית..."></textarea></div>'
+    +'<div style="padding:14px;border:2px dashed var(--border);border-radius:12px;text-align:center;color:var(--muted);font-size:13px;margin-bottom:14px">📷 לחץ להוספת תמונות<div style="font-size:11px;margin-top:3px">זמין בגרסת הייצור</div></div>'
+    +'<button type="submit" class="sbtn off" id="sub-btn">שלח דיווח</button>'
+    +'</form>';
+
+  function pick(val,cls){
+    selOpt=val;
+    document.getElementById("o-found").className="optbtn"+(val==="found"?" sr":"");
+    document.getElementById("o-poss").className="optbtn"+(val==="poss"?" sy":"");
+    document.getElementById("o-none").className="optbtn"+(val==="none"?" sg":"");
+    document.getElementById("sub-btn").className="sbtn on";
+  }
+  document.getElementById("o-found").addEventListener("click",function(){pick("found");});
+  document.getElementById("o-poss").addEventListener("click",function(){pick("poss");});
+  document.getElementById("o-none").addEventListener("click",function(){pick("none");});
+  document.getElementById("val-form").addEventListener("submit",function(e){
+    e.preventDefault();
+    if(!selOpt)return;
+    go("success-page");
+    setTimeout(function(){buildSurvList();go("surveyor-page");},2200);
+  });
 }
 </script>
 </body>
