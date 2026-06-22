@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SuspectBiz — Jerusalem Business Verification System</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f8f9fa;
+      --surface: #ffffff;
+      --border: #e5e7eb;
+      --text: #111827;
+      --muted: #6b7280;
+      --accent: #2563eb;
+      --accent-light: #eff6ff;
+      --danger: #dc2626;
+      --warning: #d97706;
+      --success: #16a34a;
+      --shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.04);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,.07), 0 2px 4px -1px rgba(0,0,0,.04);
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+    button { cursor: pointer; font-family: inherit; }
+    input, select, textarea { font-family: inherit; }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+// ─── Mock Data ───────────────────────────────────────────────────────────────
+
+const MOCK_ADDRESSES = [
+  {
+    id: "addr-001",
+    address: "רחוב יפו 42, דירה 3, ירושלים",
+    addressEn: "42 Jaffa St, Apt 3, Jerusalem",
+    status: "verified",
+    suspicionScore: 0.91,
+    businessCount: 2,
+    assignedTo: "surveyor1",
+    lastUpdated: "2024-01-15",
+    fieldValidation: "business_found",
+    businesses: [
+      {
+        name: "Tov Legal Services Ltd.",
+        isReal: true,
+        isActive: true,
+        confidence: 0.93,
+        resolvedAddress: "42 Jaffa St, Jerusalem",
+        addressMatch: true,
+        sources: [
+          { url: "https://d.co.il/tov-legal", title: "Tov Legal – B2B Directory", type: "directory" },
+          { url: "https://maps.google.com/?q=tov+legal+jerusalem", title: "Google Maps – Tov Legal", type: "maps" },
+          { url: "https://tov-legal.co.il", title: "Official Website", type: "official" },
+        ],
+        reasoning: "Three independent high-quality sources confirm business operation at this address. Official website lists suite number consistent with apartment 3. Last review dated 3 months ago indicates active operation.",
+        suspicionScore: 0.91,
+        category: "Legal Services",
+      },
+      {
+        name: "Sunrise Consulting",
+        isReal: true,
+        isActive: false,
+        confidence: 0.71,
+        resolvedAddress: "42 Jaffa St, Jerusalem",
+        addressMatch: true,
+        sources: [
+          { url: "https://linkedin.com/company/sunrise-consulting-il", title: "LinkedIn – Sunrise Consulting", type: "social" },
+        ],
+        reasoning: "Found in LinkedIn company registry but no website or recent activity. Possibly dormant. Address listed matches input.",
+        suspicionScore: 0.55,
+        category: "Business Consulting",
+      }
+    ],
+    pipeline: [
+      { step: "Query Builder", status: "done", detail: "Generated 5 Hebrew queries for business discovery" },
+      { step: "Tavily Search", status: "done", detail: "Retrieved 28 results across 5 queries" },
+      { step: "Extraction", status: "done", detail: "Extracted 3 business candidates from results" },
+      { step: "Business Investigator", status: "done", detail: "Verified 2/3 businesses; 1 discarded (no match)" },
+      { step: "Final Scoring", status: "done", detail: "2 businesses passed threshold → output ready" },
+    ]
+  },
+  {
+    id: "addr-002",
+    address: "רחוב בן יהודה 18, דירה 7, ירושלים",
+    addressEn: "18 Ben Yehuda St, Apt 7, Jerusalem",
+    status: "pending",
+    suspicionScore: 0.74,
+    businessCount: 1,
+    assignedTo: "surveyor2",
+    lastUpdated: "2024-01-14",
+    fieldValidation: null,
+    businesses: [
+      {
+        name: "Jerusalem Tax Advisors",
+        isReal: true,
+        isActive: true,
+        confidence: 0.78,
+        resolvedAddress: "18 Ben Yehuda St, Jerusalem",
+        addressMatch: true,
+        sources: [
+          { url: "https://kav-laoved.org.il/advisor/jta", title: "Professional Registry – JTA", type: "directory" },
+          { url: "https://fb.com/JerusalemTaxAdvisors", title: "Facebook Business Page", type: "social" },
+        ],
+        reasoning: "Professional registry lists active license at this address. Facebook page active with posts from last month. Confidence slightly reduced due to no official website found.",
+        suspicionScore: 0.74,
+        category: "Financial Services",
+      }
+    ],
+    pipeline: [
+      { step: "Query Builder", status: "done", detail: "Generated 4 Hebrew queries" },
+      { step: "Tavily Search", status: "done", detail: "Retrieved 19 results" },
+      { step: "Extraction", status: "done", detail: "Extracted 1 business candidate" },
+      { step: "Business Investigator", status: "done", detail: "Verified 1/1 business" },
+      { step: "Final Scoring", status: "done", detail: "1 business passed threshold" },
+    ]
+  },
+  {
+    id: "addr-003",
+    address: "רחוב הנביאים 55, דירה 12, ירושלים",
+    addressEn: "55 HaNevi'im St, Apt 12, Jerusalem",
+    status: "investigating",
+    suspicionScore: 0.62,
+    businessCount: 0,
+    assignedTo: null,
+    lastUpdated: "2024-01-15",
+    fieldValidation: null,
+    businesses: [],
+    pipeline: [
+      { step: "Query Builder", status: "done", detail: "Generated 6 Hebrew queries" },
+      { step: "Tavily Search", status: "done", detail: "Retrieved 31 results" },
+      { step: "Extraction", status: "done", detail: "Extracted 2 candidates" },
+      { step: "Business Investigator", status: "running", detail: "Investigating 2 candidates..." },
+      { step: "Final Scoring", status: "pending", detail: "Waiting for investigator" },
+    ]
+  },
+  {
+    id: "addr-004",
+    address: "רחוב קינג ג'ורג' 31, דירה 2, ירושלים",
+    addressEn: "31 King George St, Apt 2, Jerusalem",
+    status: "no_business",
+    suspicionScore: 0.18,
+    businessCount: 0,
+    assignedTo: "surveyor1",
+    lastUpdated: "2024-01-13",
+    fieldValidation: "no_business",
+    businesses: [],
+    pipeline: [
+      { step: "Query Builder", status: "done", detail: "Generated 4 queries" },
+      { step: "Tavily Search", status: "done", detail: "Retrieved 11 results" },
+      { step: "Extraction", status: "done", detail: "0 business candidates found" },
+      { step: "Business Investigator", status: "skipped", detail: "No candidates to investigate" },
+      { step: "Final Scoring", status: "done", detail: "No businesses → score 0.18 (low)" },
+    ]
+  },
+  {
+    id: "addr-005",
+    address: "רחוב אגריפס 8, דירה 5, ירושלים",
+    addressEn: "8 Agrippas St, Apt 5, Jerusalem",
+    status: "pending",
+    suspicionScore: 0.85,
+    businessCount: 3,
+    assignedTo: "surveyor2",
+    lastUpdated: "2024-01-15",
+    fieldValidation: null,
+    businesses: [
+      {
+        name: "Mahane Yehuda Import & Export",
+        isReal: true,
+        isActive: true,
+        confidence: 0.88,
+        resolvedAddress: "8 Agrippas St, Jerusalem",
+        addressMatch: true,
+        sources: [
+          { url: "https://misrad-hamishpatim.gov.il/companies/mye", title: "Companies Registrar – MYE", type: "government" },
+        ],
+        reasoning: "Government registrar shows active company registered at this address. Official registration date 2019, last annual report filed 2023.",
+        suspicionScore: 0.88,
+        category: "Import / Export",
+      },
+      {
+        name: "Spice Garden Restaurant",
+        isReal: true,
+        isActive: true,
+        confidence: 0.82,
+        resolvedAddress: "8 Agrippas St, Jerusalem",
+        addressMatch: true,
+        sources: [
+          { url: "https://rest.co.il/spicegarden", title: "Rest.co.il – Spice Garden", type: "directory" },
+          { url: "https://google.com/maps/place/spice-garden-jlm", title: "Google Maps", type: "maps" },
+        ],
+        reasoning: "Listed on food directory and Google Maps, both confirming address. 47 reviews, last review 2 weeks ago. Likely home-based catering or ghost kitchen.",
+        suspicionScore: 0.82,
+        category: "Food & Catering",
+      },
+      {
+        name: "Ronen IT Solutions",
+        isReal: true,
+        isActive: true,
+        confidence: 0.76,
+        resolvedAddress: "8 Agrippas St, Jerusalem",
+        addressMatch: true,
+        sources: [
+          { url: "https://linkedin.com/company/ronen-it", title: "LinkedIn – Ronen IT", type: "social" },
+          { url: "https://ronen-it.co.il", title: "Official Website", type: "official" },
+        ],
+        reasoning: "Website and LinkedIn both list residential address. Freelance IT contractor, likely operating from home.",
+        suspicionScore: 0.76,
+        category: "Technology",
+      }
+    ],
+    pipeline: [
+      { step: "Query Builder", status: "done", detail: "Generated 6 Hebrew queries" },
+      { step: "Tavily Search", status: "done", detail: "Retrieved 44 results" },
+      { step: "Extraction", status: "done", detail: "Extracted 4 candidates" },
+      { step: "Business Investigator", status: "done", detail: "Verified 3/4; 1 false positive removed" },
+      { step: "Final Scoring", status: "done", detail: "3 businesses confirmed suspicious" },
+    ]
+  },
+];
+
+const SURVEYORS = [
+  { id: "surveyor1", name: "Yosef Cohen", email: "yosef@city.gov.il", assigned: 3 },
+  { id: "surveyor2", name: "Miriam Levy", email: "miriam@city.gov.il", assigned: 2 },
+];
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+const { useState, useEffect, useRef } = React;
+
+const score2color = (s) => {
+  if (s >= 0.8) return { bg: "#fef2f2", text: "#dc2626", dot: "#dc2626" };
+  if (s >= 0.5) return { bg: "#fffbeb", text: "#d97706", dot: "#d97706" };
+  return { bg: "#f0fdf4", text: "#16a34a", dot: "#16a34a" };
+};
+
+const statusLabel = {
+  verified: { label: "Verified", color: "#dc2626" },
+  pending: { label: "Pending Review", color: "#d97706" },
+  investigating: { label: "Investigating", color: "#2563eb" },
+  no_business: { label: "No Business", color: "#16a34a" },
+};
+
+const sourceIcon = { directory: "📋", maps: "🗺️", official: "🌐", social: "💬", government: "🏛️" };
+
+// ─── Components ──────────────────────────────────────────────────────────────
+
+function Badge({ children, color = "#6b7280", bg = "#f3f4f6" }) {
+  return (
+    <span style={{
+      display: "inline-flex", alignItems: "center", gap: 4,
+      padding: "2px 8px", borderRadius: 999, fontSize: 12, fontWeight: 500,
+      color, background: bg, whiteSpace: "nowrap"
+    }}>{children}</span>
+  );
+}
+
+function ScorePill({ score }) {
+  const c = score2color(score);
+  return (
+    <span style={{
+      display: "inline-flex", alignItems: "center", gap: 5,
+      padding: "2px 10px", borderRadius: 999, fontSize: 12, fontWeight: 600,
+      color: c.text, background: c.bg
+    }}>
+      <span style={{ width: 6, height: 6, borderRadius: "50%", background: c.dot, display: "inline-block" }} />
+      {Math.round(score * 100)}%
+    </span>
+  );
+}
+
+function Avatar({ name, size = 32 }) {
+  const initials = name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase();
+  const colors = ["#2563eb", "#7c3aed", "#db2777", "#0891b2", "#16a34a"];
+  const bg = colors[name.charCodeAt(0) % colors.length];
+  return (
+    <div style={{
+      width: size, height: size, borderRadius: "50%", background: bg,
+      color: "#fff", display: "flex", alignItems: "center", justifyContent: "center",
+      fontSize: size * 0.35, fontWeight: 600, flexShrink: 0
+    }}>{initials}</div>
+  );
+}
+
+function Card({ children, style }) {
+  return (
+    <div style={{
+      background: "var(--surface)", border: "1px solid var(--border)",
+      borderRadius: 12, boxShadow: "var(--shadow)", ...style
+    }}>{children}</div>
+  );
+}
+
+function PipelineStatus({ pipeline }) {
+  const stepIcons = { done: "✓", running: "↻", pending: "○", skipped: "—" };
+  const stepColors = { done: "#16a34a", running: "#2563eb", pending: "#9ca3af", skipped: "#d1d5db" };
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+      {pipeline.map((s, i) => (
+        <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+          <div style={{
+            width: 22, height: 22, borderRadius: "50%", flexShrink: 0,
+            background: stepColors[s.status] + "20",
+            color: stepColors[s.status], display: "flex", alignItems: "center",
+            justifyContent: "center", fontSize: 11, fontWeight: 700, marginTop: 1
+          }}>{stepIcons[s.status]}</div>
+          <div>
+            <div style={{ fontWeight: 500, fontSize: 13 }}>{s.step}</div>
+            <div style={{ color: "var(--muted)", fontSize: 12 }}>{s.detail}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ─── Admin: Address Detail ────────────────────────────────────────────────────
+
+function AddressDetail({ addr, onBack }) {
+  const [tab, setTab] = useState("businesses");
+  const tabs = ["businesses", "pipeline", "validation"];
+
+  return (
+    <div style={{ maxWidth: 860, margin: "0 auto" }}>
+      <button onClick={onBack} style={{
+        background: "none", border: "none", color: "var(--accent)",
+        display: "flex", alignItems: "center", gap: 6, marginBottom: 20,
+        fontSize: 13, fontWeight: 500, padding: 0
+      }}>← Back to Addresses</button>
+
+      <Card style={{ padding: 24, marginBottom: 16 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 12 }}>
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 1, color: "var(--muted)", textTransform: "uppercase", marginBottom: 4 }}>Address</div>
+            <div style={{ fontSize: 18, fontWeight: 600 }}>{addr.addressEn}</div>
+            <div style={{ color: "var(--muted)", fontSize: 13, direction: "rtl", textAlign: "right", marginTop: 2 }}>{addr.address}</div>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <Badge color={statusLabel[addr.status].color} bg={statusLabel[addr.status].color + "15"}>
+              {statusLabel[addr.status].label}
+            </Badge>
+            <div style={{ textAlign: "center" }}>
+              <div style={{ fontSize: 11, color: "var(--muted)", marginBottom: 2 }}>Suspicion Score</div>
+              <ScorePill score={addr.suspicionScore} />
+            </div>
+          </div>
+        </div>
+      </Card>
+
+      <div style={{ display: "flex", gap: 2, marginBottom: 16, background: "var(--surface)", borderRadius: 10, padding: 4, border: "1px solid var(--border)" }}>
+        {tabs.map(t => (
+          <button key={t} onClick={() => setTab(t)} style={{
+            flex: 1, padding: "7px 0", border: "none", borderRadius: 8,
+            background: tab === t ? "var(--accent)" : "transparent",
+            color: tab === t ? "#fff" : "var(--muted)",
+            fontWeight: 500, fontSize: 13, transition: "all .15s", textTransform: "capitalize"
+          }}>{t}</button>
+        ))}
+      </div>
+
+      {tab === "businesses" && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          {addr.businesses.length === 0 ? (
+            <Card style={{ padding: 32, textAlign: "center", color: "var(--muted)" }}>
+              No businesses found at this address.
+            </Card>
+          ) : addr.businesses.map((biz, i) => (
+            <Card key={i} style={{ padding: 20 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, marginBottom: 12 }}>
+                <div>
+                  <div style={{ fontWeight: 600, fontSize: 15 }}>{biz.name}</div>
+                  <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}>{biz.category}</div>
+                </div>
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap", justifyContent: "flex-end" }}>
+                  <Badge color={biz.isActive ? "#16a34a" : "#9ca3af"} bg={biz.isActive ? "#f0fdf4" : "#f9fafb"}>
+                    {biz.isActive ? "Active" : "Inactive"}
+                  </Badge>
+                  <ScorePill score={biz.suspicionScore} />
+                </div>
+              </div>
+
+              <div style={{ fontSize: 13, color: "#374151", background: "#f9fafb", borderRadius: 8, padding: "10px 14px", marginBottom: 12, lineHeight: 1.6 }}>
+                <strong style={{ color: "var(--text)" }}>AI Reasoning: </strong>{biz.reasoning}
+              </div>
+
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                {biz.sources.map((s, j) => (
+                  <a key={j} href={s.url} target="_blank" rel="noreferrer" style={{
+                    display: "inline-flex", alignItems: "center", gap: 5,
+                    padding: "4px 10px", borderRadius: 6, border: "1px solid var(--border)",
+                    fontSize: 12, color: "var(--accent)", textDecoration: "none",
+                    background: "var(--accent-light)"
+                  }}>
+                    {sourceIcon[s.type] || "🔗"} {s.title}
+                  </a>
+                ))}
+              </div>
+            </Card>
+          ))}
+        </div>
+      )}
+
+      {tab === "pipeline" && (
+        <Card style={{ padding: 24 }}>
+          <div style={{ fontWeight: 600, marginBottom: 16 }}>LangGraph Pipeline Execution</div>
+          <PipelineStatus pipeline={addr.pipeline} />
+        </Card>
+      )}
+
+      {tab === "validation" && (
+        <Card style={{ padding: 24 }}>
+          <div style={{ fontWeight: 600, marginBottom: 4 }}>Field Validation</div>
+          <div style={{ color: "var(--muted)", fontSize: 13, marginBottom: 20 }}>Submitted by field surveyor after on-site visit.</div>
+          {addr.fieldValidation ? (
+            <div>
+              <Badge
+                color={addr.fieldValidation === "business_found" ? "#dc2626" : "#16a34a"}
+                bg={addr.fieldValidation === "business_found" ? "#fef2f2" : "#f0fdf4"}
+              >{addr.fieldValidation === "business_found" ? "✓ Business Found On-Site" : "✗ No Business Found"}</Badge>
+              <div style={{ marginTop: 12, fontSize: 13, color: "var(--muted)" }}>
+                Validated on {addr.lastUpdated} · {addr.fieldValidation === "business_found" ? "Matches AI prediction" : "Contradicts AI prediction — feedback sent to ML pipeline"}
+              </div>
+            </div>
+          ) : (
+            <div style={{ color: "var(--muted)", fontSize: 13, fontStyle: "italic" }}>Not yet validated by field surveyor.</div>
+          )}
+        </Card>
+      )}
+    </div>
+  );
+}
+
+// ─── Admin Dashboard ──────────────────────────────────────────────────────────
+
+function AdminDashboard({ onLogout }) {
+  const [selected, setSelected] = useState(null);
+  const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState("all");
+
+  const stats = {
+    total: MOCK_ADDRESSES.length,
+    verified: MOCK_ADDRESSES.filter(a => a.status === "verified").length,
+    pending: MOCK_ADDRESSES.filter(a => a.status === "pending").length,
+    businesses: MOCK_ADDRESSES.reduce((s, a) => s + a.businessCount, 0),
+  };
+
+  const filtered = MOCK_ADDRESSES.filter(a => {
+    const matchSearch = a.addressEn.toLowerCase().includes(search.toLowerCase()) || a.address.includes(search);
+    const matchFilter = filter === "all" || a.status === filter;
+    return matchSearch && matchFilter;
+  });
+
+  if (selected) return <div style={{ padding: 24 }}><AddressDetail addr={selected} onBack={() => setSelected(null)} /></div>;
+
+  return (
+    <div>
+      {/* Header */}
+      <div style={{
+        background: "var(--surface)", borderBottom: "1px solid var(--border)",
+        padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "space-between",
+        height: 58, position: "sticky", top: 0, zIndex: 100
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{
+            width: 32, height: 32, borderRadius: 8, background: "#2563eb",
+            display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 700, fontSize: 14
+          }}>SB</div>
+          <span style={{ fontWeight: 600, fontSize: 15 }}>SuspectBiz</span>
+          <span style={{ color: "var(--muted)", fontSize: 13 }}>Admin Portal</span>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <Avatar name="Admin User" size={30} />
+          <button onClick={onLogout} style={{
+            background: "none", border: "1px solid var(--border)", borderRadius: 8,
+            padding: "5px 12px", fontSize: 13, color: "var(--muted)"
+          }}>Sign out</button>
+        </div>
+      </div>
+
+      <div style={{ padding: "24px" }}>
+        {/* Stats */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 12, marginBottom: 24 }}>
+          {[
+            { label: "Total Addresses", value: stats.total, color: "#2563eb" },
+            { label: "Verified Suspicious", value: stats.verified, color: "#dc2626" },
+            { label: "Pending Review", value: stats.pending, color: "#d97706" },
+            { label: "Businesses Found", value: stats.businesses, color: "#7c3aed" },
+          ].map((s, i) => (
+            <Card key={i} style={{ padding: "16px 20px" }}>
+              <div style={{ fontSize: 26, fontWeight: 700, color: s.color }}>{s.value}</div>
+              <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}>{s.label}</div>
+            </Card>
+          ))}
+        </div>
+
+        {/* Controls */}
+        <div style={{ display: "flex", gap: 10, marginBottom: 16, flexWrap: "wrap" }}>
+          <input
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Search addresses..."
+            style={{
+              flex: "1 1 200px", padding: "8px 12px", border: "1px solid var(--border)",
+              borderRadius: 8, fontSize: 13, background: "var(--surface)", outline: "none"
+            }}
+          />
+          <select value={filter} onChange={e => setFilter(e.target.value)} style={{
+            padding: "8px 12px", border: "1px solid var(--border)", borderRadius: 8,
+            fontSize: 13, background: "var(--surface)", outline: "none"
+          }}>
+            <option value="all">All Statuses</option>
+            <option value="verified">Verified</option>
+            <option value="pending">Pending</option>
+            <option value="investigating">Investigating</option>
+            <option value="no_business">No Business</option>
+          </select>
+          <button style={{
+            padding: "8px 16px", background: "#f3f4f6", border: "1px solid var(--border)",
+            borderRadius: 8, fontSize: 13, fontWeight: 500, color: "var(--muted)"
+          }}>⬇ Export CSV</button>
+        </div>
+
+        {/* Table */}
+        <Card>
+          <div style={{ overflowX: "auto" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+              <thead>
+                <tr style={{ borderBottom: "1px solid var(--border)" }}>
+                  {["Address", "Status", "Businesses", "Score", "Assigned To", "Updated", ""].map((h, i) => (
+                    <th key={i} style={{
+                      padding: "11px 16px", textAlign: "left", fontSize: 11,
+                      fontWeight: 600, color: "var(--muted)", letterSpacing: .5,
+                      textTransform: "uppercase", whiteSpace: "nowrap"
+                    }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((addr, i) => {
+                  const sv = addr.assignedTo ? SURVEYORS.find(s => s.id === addr.assignedTo) : null;
+                  return (
+                    <tr key={addr.id} style={{ borderBottom: "1px solid var(--border)", transition: "background .1s" }}
+                      onMouseEnter={e => e.currentTarget.style.background = "#f9fafb"}
+                      onMouseLeave={e => e.currentTarget.style.background = ""}>
+                      <td style={{ padding: "12px 16px" }}>
+                        <div style={{ fontWeight: 500, fontSize: 13 }}>{addr.addressEn}</div>
+                        <div style={{ fontSize: 12, color: "var(--muted)", direction: "rtl" }}>{addr.address}</div>
+                      </td>
+                      <td style={{ padding: "12px 16px" }}>
+                        <Badge color={statusLabel[addr.status].color} bg={statusLabel[addr.status].color + "15"}>
+                          {statusLabel[addr.status].label}
+                        </Badge>
+                      </td>
+                      <td style={{ padding: "12px 16px", textAlign: "center", fontWeight: 600 }}>
+                        {addr.businessCount || "—"}
+                      </td>
+                      <td style={{ padding: "12px 16px" }}><ScorePill score={addr.suspicionScore} /></td>
+                      <td style={{ padding: "12px 16px" }}>
+                        {sv ? (
+                          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                            <Avatar name={sv.name} size={24} />
+                            <span style={{ fontSize: 13 }}>{sv.name}</span>
+                          </div>
+                        ) : <span style={{ color: "var(--muted)", fontSize: 13 }}>Unassigned</span>}
+                      </td>
+                      <td style={{ padding: "12px 16px", color: "var(--muted)", fontSize: 12 }}>{addr.lastUpdated}</td>
+                      <td style={{ padding: "12px 16px" }}>
+                        <button onClick={() => setSelected(addr)} style={{
+                          padding: "5px 12px", border: "1px solid var(--border)", borderRadius: 7,
+                          background: "var(--surface)", fontSize: 12, fontWeight: 500, color: "var(--accent)"
+                        }}>View →</button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </Card>
+      </div>
+    </div>
+  );
+}
+
+// ─── Surveyor Mobile View ─────────────────────────────────────────────────────
+
+function SurveyorView({ onLogout }) {
+  const [view, setView] = useState("list"); // list | detail | form
+  const [selected, setSelected] = useState(null);
+  const [submitted, setSubmitted] = useState(false);
+  const [formData, setFormData] = useState({ result: "", notes: "", photos: 0 });
+
+  const myAddresses = MOCK_ADDRESSES.filter(a => a.assignedTo === "surveyor1");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setSubmitted(true);
+    setTimeout(() => {
+      setSubmitted(false);
+      setView("list");
+      setSelected(null);
+    }, 2200);
+  };
+
+  if (submitted) return (
+    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 24, textAlign: "center" }}>
+      <div style={{ fontSize: 48, marginBottom: 16 }}>✅</div>
+      <div style={{ fontSize: 18, fontWeight: 600 }}>Validation Submitted!</div>
+      <div style={{ color: "var(--muted)", fontSize: 14, marginTop: 8 }}>Returning to your assignments...</div>
+    </div>
+  );
+
+  return (
+    <div style={{ maxWidth: 480, margin: "0 auto", minHeight: "100vh", background: "var(--bg)" }}>
+      {/* Header */}
+      <div style={{
+        background: "var(--surface)", borderBottom: "1px solid var(--border)",
+        padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between",
+        position: "sticky", top: 0, zIndex: 100
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          {(view === "detail" || view === "form") ? (
+            <button onClick={() => view === "form" ? setView("detail") : setView("list")} style={{
+              background: "none", border: "none", fontSize: 18, color: "var(--accent)", padding: "0 6px 0 0"
+            }}>←</button>
+          ) : null}
+          <div style={{ fontWeight: 600, fontSize: 15 }}>
+            {view === "list" ? "My Assignments" : view === "detail" ? "Address Details" : "Submit Validation"}
+          </div>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <Avatar name="Yosef Cohen" size={28} />
+          <button onClick={onLogout} style={{
+            background: "none", border: "none", color: "var(--muted)", fontSize: 12
+          }}>Out</button>
+        </div>
+      </div>
+
+      {/* List */}
+      {view === "list" && (
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 13, color: "var(--muted)", marginBottom: 12 }}>
+            {myAddresses.length} addresses assigned · tap to inspect
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            {myAddresses.map(addr => (
+              <button key={addr.id} onClick={() => { setSelected(addr); setView("detail"); }} style={{
+                background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 14,
+                padding: "16px", textAlign: "left", width: "100%", boxShadow: "var(--shadow)",
+                display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10
+              }}>
+                <div>
+                  <div style={{ fontWeight: 500, fontSize: 14 }}>{addr.addressEn}</div>
+                  <div style={{ fontSize: 12, color: "var(--muted)", direction: "rtl", textAlign: "right", marginTop: 2 }}>{addr.address}</div>
+                  <div style={{ marginTop: 8, display: "flex", gap: 6 }}>
+                    <Badge color={statusLabel[addr.status].color} bg={statusLabel[addr.status].color + "15"}>
+                      {statusLabel[addr.status].label}
+                    </Badge>
+                    {addr.fieldValidation && (
+                      <Badge color="#16a34a" bg="#f0fdf4">Validated</Badge>
+                    )}
+                  </div>
+                </div>
+                <div style={{ textAlign: "center", flexShrink: 0 }}>
+                  <ScorePill score={addr.suspicionScore} />
+                  <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 4 }}>
+                    {addr.businessCount} biz
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Detail */}
+      {view === "detail" && selected && (
+        <div style={{ padding: 16 }}>
+          <Card style={{ padding: 16, marginBottom: 12 }}>
+            <div style={{ fontSize: 12, color: "var(--muted)", marginBottom: 4 }}>SUSPECTED ADDRESS</div>
+            <div style={{ fontWeight: 600, fontSize: 15 }}>{selected.addressEn}</div>
+            <div style={{ fontSize: 13, color: "var(--muted)", direction: "rtl", textAlign: "right", marginTop: 2 }}>{selected.address}</div>
+            <div style={{ marginTop: 12, display: "flex", gap: 8, alignItems: "center" }}>
+              <ScorePill score={selected.suspicionScore} />
+              <span style={{ fontSize: 12, color: "var(--muted)" }}>AI suspicion score</span>
+            </div>
+          </Card>
+
+          <div style={{ fontSize: 13, fontWeight: 600, color: "var(--muted)", marginBottom: 8, textTransform: "uppercase", letterSpacing: .5, fontSize: 11 }}>Businesses to Verify</div>
+          {selected.businesses.length === 0 ? (
+            <Card style={{ padding: 16, color: "var(--muted)", fontSize: 13, fontStyle: "italic" }}>No specific businesses flagged. Inspect for any commercial activity.</Card>
+          ) : selected.businesses.map((biz, i) => (
+            <Card key={i} style={{ padding: 14, marginBottom: 8 }}>
+              <div style={{ fontWeight: 500, fontSize: 14 }}>{biz.name}</div>
+              <div style={{ fontSize: 12, color: "var(--muted)" }}>{biz.category}</div>
+              <div style={{ marginTop: 6 }}>
+                <ScorePill score={biz.suspicionScore} />
+              </div>
+            </Card>
+          ))}
+
+          {!selected.fieldValidation && (
+            <button onClick={() => setView("form")} style={{
+              width: "100%", marginTop: 16, padding: "15px", background: "#2563eb",
+              color: "#fff", border: "none", borderRadius: 14, fontSize: 15, fontWeight: 600,
+              boxShadow: "0 4px 14px rgba(37,99,235,.3)"
+            }}>Submit Field Validation →</button>
+          )}
+          {selected.fieldValidation && (
+            <Card style={{ padding: 14, marginTop: 12, borderColor: "#16a34a30", background: "#f0fdf4" }}>
+              <div style={{ fontSize: 13, color: "#16a34a", fontWeight: 600 }}>✓ Already validated</div>
+              <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}>
+                Result: {selected.fieldValidation === "business_found" ? "Business found on-site" : "No business found"}
+              </div>
+            </Card>
+          )}
+        </div>
+      )}
+
+      {/* Form */}
+      {view === "form" && selected && (
+        <form onSubmit={handleSubmit} style={{ padding: 16 }}>
+          <Card style={{ padding: 16, marginBottom: 16, background: "#fffbeb", borderColor: "#fcd34d" }}>
+            <div style={{ fontSize: 13, fontWeight: 500 }}>⚠️ On-site at {selected.addressEn}</div>
+            <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}>Please complete this form while physically present at the address.</div>
+          </Card>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <div>
+              <label style={{ fontWeight: 600, fontSize: 13, display: "block", marginBottom: 10 }}>What did you find? *</label>
+              {[
+                { value: "business_found", label: "✓ Business Confirmed", desc: "At least one business is clearly operating here", color: "#dc2626" },
+                { value: "possible", label: "⚠ Possible Activity", desc: "Signs of business activity but not confirmed", color: "#d97706" },
+                { value: "no_business", label: "✗ No Business", desc: "Residential only — no commercial activity found", color: "#16a34a" },
+              ].map(opt => (
+                <button type="button" key={opt.value} onClick={() => setFormData(f => ({ ...f, result: opt.value }))} style={{
+                  display: "flex", width: "100%", padding: "13px 16px", border: "2px solid",
+                  borderColor: formData.result === opt.value ? opt.color : "var(--border)",
+                  borderRadius: 12, background: formData.result === opt.value ? opt.color + "10" : "var(--surface)",
+                  textAlign: "left", gap: 12, alignItems: "center", marginBottom: 8, cursor: "pointer"
+                }}>
+                  <div>
+                    <div style={{ fontWeight: 600, fontSize: 14, color: formData.result === opt.value ? opt.color : "var(--text)" }}>{opt.label}</div>
+                    <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 1 }}>{opt.desc}</div>
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            <div>
+              <label style={{ fontWeight: 600, fontSize: 13, display: "block", marginBottom: 6 }}>Notes</label>
+              <textarea
+                value={formData.notes}
+                onChange={e => setFormData(f => ({ ...f, notes: e.target.value }))}
+                placeholder="Describe what you observed (signage, people, equipment, etc.)"
+                rows={4}
+                style={{
+                  width: "100%", padding: "10px 12px", border: "1px solid var(--border)",
+                  borderRadius: 10, fontSize: 13, resize: "none", outline: "none", background: "var(--surface)"
+                }}
+              />
+            </div>
+
+            <div style={{
+              padding: "14px 16px", border: "2px dashed var(--border)", borderRadius: 12,
+              textAlign: "center", color: "var(--muted)", fontSize: 13
+            }}>
+              📷 Tap to add photos ({formData.photos})
+              <div style={{ fontSize: 11, marginTop: 4 }}>Photo upload available in production build</div>
+            </div>
+
+            <button type="submit" disabled={!formData.result} style={{
+              padding: "15px", background: formData.result ? "#2563eb" : "#e5e7eb",
+              color: formData.result ? "#fff" : "#9ca3af", border: "none", borderRadius: 14,
+              fontSize: 15, fontWeight: 600, transition: "all .2s"
+            }}>Submit Validation</button>
+          </div>
+        </form>
+      )}
+    </div>
+  );
+}
+
+// ─── Login ────────────────────────────────────────────────────────────────────
+
+function Login({ onLogin }) {
+  const [role, setRole] = useState("admin");
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = () => {
+    setLoading(true);
+    setTimeout(() => { setLoading(false); onLogin(role); }, 800);
+  };
+
+  return (
+    <div style={{
+      minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center",
+      background: "linear-gradient(135deg, #f0f4ff 0%, #f8f9fa 60%, #fef9f0 100%)", padding: 24
+    }}>
+      <div style={{ width: "100%", maxWidth: 380 }}>
+        <div style={{ textAlign: "center", marginBottom: 32 }}>
+          <div style={{
+            width: 52, height: 52, borderRadius: 14, background: "#2563eb",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            color: "#fff", fontWeight: 800, fontSize: 20, margin: "0 auto 14px"
+          }}>SB</div>
+          <div style={{ fontSize: 22, fontWeight: 700 }}>SuspectBiz</div>
+          <div style={{ color: "var(--muted)", fontSize: 14, marginTop: 4 }}>Jerusalem Business Verification System</div>
+        </div>
+
+        <Card style={{ padding: 28 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "var(--muted)", marginBottom: 10, textTransform: "uppercase", letterSpacing: .5, fontSize: 11 }}>Sign in as</div>
+          <div style={{ display: "flex", gap: 8, marginBottom: 20 }}>
+            {[["admin", "🖥️ Admin"], ["surveyor", "📱 Field Surveyor"]].map(([r, label]) => (
+              <button key={r} onClick={() => setRole(r)} style={{
+                flex: 1, padding: "10px 6px", border: "2px solid",
+                borderColor: role === r ? "#2563eb" : "var(--border)",
+                borderRadius: 10, background: role === r ? "#eff6ff" : "var(--surface)",
+                color: role === r ? "#2563eb" : "var(--muted)",
+                fontWeight: 600, fontSize: 13, transition: "all .15s"
+              }}>{label}</button>
+            ))}
+          </div>
+
+          <div style={{ marginBottom: 14 }}>
+            <label style={{ fontSize: 12, fontWeight: 600, color: "var(--muted)", display: "block", marginBottom: 5 }}>Email</label>
+            <input defaultValue={role === "admin" ? "admin@city.gov.il" : "yosef@city.gov.il"} style={{
+              width: "100%", padding: "9px 12px", border: "1px solid var(--border)",
+              borderRadius: 8, fontSize: 13, outline: "none"
+            }} />
+          </div>
+          <div style={{ marginBottom: 20 }}>
+            <label style={{ fontSize: 12, fontWeight: 600, color: "var(--muted)", display: "block", marginBottom: 5 }}>Password</label>
+            <input type="password" defaultValue="••••••••" style={{
+              width: "100%", padding: "9px 12px", border: "1px solid var(--border)",
+              borderRadius: 8, fontSize: 13, outline: "none"
+            }} />
+          </div>
+
+          <button onClick={handleLogin} style={{
+            width: "100%", padding: "12px", background: "#2563eb", color: "#fff",
+            border: "none", borderRadius: 10, fontWeight: 600, fontSize: 15,
+            opacity: loading ? .7 : 1, transition: "opacity .2s"
+          }}>{loading ? "Signing in..." : "Sign In"}</button>
+        </Card>
+
+        <div style={{ textAlign: "center", color: "var(--muted)", fontSize: 12, marginTop: 20 }}>
+          Demo system — LangGraph + Tavily + Supabase + Next.js
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── App Root ─────────────────────────────────────────────────────────────────
+
+function App() {
+  const [user, setUser] = useState(null);
+  return user
+    ? user === "admin"
+      ? <AdminDashboard onLogout={() => setUser(null)} />
+      : <SurveyorView onLogout={() => setUser(null)} />
+    : <Login onLogin={setUser} />;
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>
