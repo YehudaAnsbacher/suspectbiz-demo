@@ -1,34 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>SuspectBiz — Jerusalem Business Verification</title>
+<title>מערכת זיהוי עסקים חשודים — עיריית ירושלים</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#f8f9fb;--surface:#fff;--border:#e5e7eb;--text:#111827;--muted:#6b7280;
-  --accent:#2563eb;--accent-bg:#eff6ff;--danger:#dc2626;--warning:#d97706;--success:#16a34a;
-  --r-sm:8px;--r-md:12px;--r-lg:16px;
+  --accent:#1a56a0;--accent-bg:#eff3fb;--danger:#dc2626;--warning:#d97706;--success:#16a34a;
+  --jlm:#1a56a0;--jlm-gold:#c9a227;
 }
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Arial Hebrew',Arial,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;direction:rtl}
 button{cursor:pointer;font-family:inherit;transition:opacity .15s,background .15s,border-color .15s}
-input,select,textarea{font-family:inherit;font-size:14px}
+input,select,textarea{font-family:inherit;font-size:14px;direction:rtl}
 a{text-decoration:none}
-.hidden{display:none!important}
 
-/* Layout */
-#app{min-height:100vh}
 .page{display:none;min-height:100vh}
 .page.active{display:block}
-
-/* Cards */
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);box-shadow:0 1px 3px rgba(0,0,0,.06)}
-
-/* Badge */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
 .badge{display:inline-flex;align-items:center;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:500;white-space:nowrap}
-
-/* Score pill */
 .score-pill{display:inline-flex;align-items:center;gap:5px;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:600}
 .score-dot{width:6px;height:6px;border-radius:50%;display:inline-block}
 .score-high{background:#fef2f2;color:#dc2626}.score-high .score-dot{background:#dc2626}
@@ -36,121 +27,101 @@ a{text-decoration:none}
 .score-low{background:#f0fdf4;color:#16a34a}.score-low .score-dot{background:#16a34a}
 
 /* Topbar */
-.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:58px;position:sticky;top:0;z-index:100}
+.topbar{background:var(--jlm);padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:62px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.18)}
 .topbar-brand{display:flex;align-items:center;gap:10px}
-.logo{width:32px;height:32px;border-radius:8px;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0}
-.topbar-right{display:flex;align-items:center;gap:12px}
-.avatar{border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;flex-shrink:0;font-size:12px}
-.btn-ghost{background:none;border:1px solid var(--border);border-radius:var(--r-sm);padding:5px 12px;font-size:13px;color:var(--muted)}
-.btn-ghost:hover{background:var(--bg)}
-.btn-back{background:none;border:none;color:var(--accent);font-size:13px;font-weight:500;display:flex;align-items:center;gap:4px;padding:0;margin-bottom:20px}
+.topbar-title{color:#fff;font-weight:700;font-size:15px}
+.topbar-sub{color:rgba(255,255,255,.7);font-size:12px;margin-top:1px}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.btn-topbar-out{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:5px 12px;font-size:13px;color:#fff}
+.btn-topbar-out:hover{background:rgba(255,255,255,.25)}
+.avatar{border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;flex-shrink:0;font-size:11px}
+.btn-back{background:none;border:none;color:var(--accent);font-size:13px;font-weight:600;display:flex;align-items:center;gap:4px;padding:0;margin-bottom:20px}
+
+/* Jerusalem emblem SVG */
+.jlm-emblem{flex-shrink:0}
 
 /* Login */
-#login-page{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#f0f4ff 0%,#f8f9fa 60%,#fef9f0 100%);padding:24px}
-.login-box{width:100%;max-width:380px}
-.login-header{text-align:center;margin-bottom:32px}
-.login-logo{width:52px;height:52px;border-radius:14px;background:#2563eb;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:20px}
-.login-title{font-size:22px;font-weight:700}
-.login-sub{color:var(--muted);font-size:14px;margin-top:4px}
-.login-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:28px}
-.label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px}
-.input-field{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:var(--r-sm);font-size:13px;outline:none;background:var(--surface)}
+#login-page{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(160deg,#1a3a6e 0%,#1a56a0 50%,#2563c0 100%);padding:24px}
+.login-box{width:100%;max-width:400px}
+.login-header{text-align:center;margin-bottom:28px}
+.login-system-name{color:#fff;font-size:22px;font-weight:800;margin-top:12px}
+.login-municipality{color:rgba(255,255,255,.8);font-size:14px;margin-top:3px}
+.login-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;box-shadow:0 8px 32px rgba(0,0,0,.25)}
+.label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px}
+.input-field{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;outline:none;background:var(--surface)}
 .input-field:focus{border-color:var(--accent)}
 .role-btns{display:flex;gap:8px;margin-bottom:20px}
 .role-btn{flex:1;padding:10px 6px;border:2px solid var(--border);border-radius:10px;background:var(--surface);color:var(--muted);font-weight:600;font-size:13px}
-.role-btn.active{border-color:#2563eb;background:#eff6ff;color:#2563eb}
-.btn-primary{width:100%;padding:12px;background:#2563eb;color:#fff;border:none;border-radius:10px;font-weight:600;font-size:15px}
+.role-btn.active{border-color:var(--accent);background:var(--accent-bg);color:var(--accent)}
+.btn-primary{width:100%;padding:13px;background:var(--jlm);color:#fff;border:none;border-radius:10px;font-weight:700;font-size:15px}
 .btn-primary:hover{opacity:.9}
-.login-footer{text-align:center;color:var(--muted);font-size:12px;margin-top:20px}
+.login-footer{text-align:center;color:rgba(255,255,255,.6);font-size:12px;margin-top:16px}
 
-/* Admin Dashboard */
+/* Admin */
 .admin-content{padding:24px;max-width:1200px}
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:24px}
-.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:16px 20px}
-.stat-value{font-size:26px;font-weight:700}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 20px}
+.stat-value{font-size:26px;font-weight:800}
 .stat-label{font-size:12px;color:var(--muted);margin-top:2px}
 .controls{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
-.search-input{flex:1 1 200px;padding:8px 12px;border:1px solid var(--border);border-radius:var(--r-sm);font-size:13px;background:var(--surface);outline:none}
+.search-input{flex:1 1 200px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--surface);outline:none}
 .search-input:focus{border-color:var(--accent)}
-.filter-select{padding:8px 12px;border:1px solid var(--border);border-radius:var(--r-sm);font-size:13px;background:var(--surface);outline:none}
-.btn-export{padding:8px 16px;background:#f3f4f6;border:1px solid var(--border);border-radius:var(--r-sm);font-size:13px;font-weight:500;color:var(--muted)}
+.filter-select{padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--surface);outline:none}
+.btn-export{padding:9px 16px;background:#f3f4f6;border:1px solid var(--border);border-radius:8px;font-size:13px;font-weight:500;color:var(--muted)}
 table{width:100%;border-collapse:collapse}
-th{padding:11px 16px;text-align:left;font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;white-space:nowrap;border-bottom:1px solid var(--border)}
-td{padding:12px 16px;border-bottom:1px solid var(--border)}
+th{padding:11px 16px;text-align:right;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.3px;text-transform:uppercase;white-space:nowrap;border-bottom:1px solid var(--border)}
+td{padding:12px 16px;border-bottom:1px solid var(--border);vertical-align:middle}
 tr:last-child td{border-bottom:none}
 tr:hover td{background:#f9fafb}
 .addr-en{font-weight:500;font-size:13px}
-.addr-he{font-size:12px;color:var(--muted);direction:rtl;text-align:right;margin-top:1px}
-.btn-view{padding:5px 12px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:12px;font-weight:500;color:var(--accent)}
-.btn-view:hover{background:var(--accent-bg)}
+.addr-he{font-size:12px;color:var(--muted);margin-top:1px}
+.btn-view{padding:5px 14px;border:1.5px solid var(--accent);border-radius:7px;background:var(--accent-bg);font-size:12px;font-weight:600;color:var(--accent)}
+.btn-view:hover{background:var(--accent);color:#fff}
 
-/* Detail page */
+/* Detail */
 .detail-content{padding:24px;max-width:860px;margin:0 auto}
-.detail-header{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px}
-.detail-addr-en{font-size:18px;font-weight:600}
-.detail-addr-he{color:var(--muted);font-size:13px;direction:rtl;text-align:right;margin-top:2px}
-.detail-meta{font-size:11px;font-weight:600;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:4px}
 .tab-bar{display:flex;gap:2px;margin-bottom:16px;background:var(--surface);border-radius:10px;padding:4px;border:1px solid var(--border)}
-.tab-btn{flex:1;padding:7px 0;border:none;border-radius:8px;background:transparent;color:var(--muted);font-weight:500;font-size:13px;text-transform:capitalize}
-.tab-btn.active{background:#2563eb;color:#fff}
+.tab-btn{flex:1;padding:8px 0;border:none;border-radius:8px;background:transparent;color:var(--muted);font-weight:600;font-size:13px}
+.tab-btn.active{background:var(--jlm);color:#fff}
 .tab-panel{display:none}
 .tab-panel.active{display:block}
-.biz-card{margin-bottom:12px}
-.biz-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px}
-.biz-name{font-weight:600;font-size:15px}
+.biz-name{font-weight:700;font-size:15px}
 .biz-cat{font-size:12px;color:var(--muted);margin-top:2px}
-.biz-badges{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
-.reasoning{font-size:13px;color:#374151;background:#f9fafb;border-radius:8px;padding:10px 14px;margin-bottom:12px;line-height:1.6}
+.reasoning{font-size:13px;color:#374151;background:#f9fafb;border-radius:8px;padding:10px 14px;margin-bottom:12px;line-height:1.65}
 .sources{display:flex;flex-wrap:wrap;gap:6px}
 .source-link{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:6px;border:1px solid var(--border);font-size:12px;color:var(--accent);background:var(--accent-bg)}
-.source-link:hover{opacity:.8}
 .pipeline-step{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
-.step-icon{width:22px;height:22px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin-top:1px}
-.step-name{font-weight:500;font-size:13px}
+.step-icon{width:24px;height:24px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;margin-top:1px}
+.step-name{font-weight:600;font-size:13px}
 .step-detail{color:var(--muted);font-size:12px}
-.empty-state{padding:32px;text-align:center;color:var(--muted)}
+.empty-state{padding:32px;text-align:center;color:var(--muted);font-style:italic}
 
 /* Surveyor */
 #surveyor-page{max-width:480px;margin:0 auto;min-height:100vh;background:var(--bg)}
 .surveyor-list{padding:16px}
-.surveyor-hint{font-size:13px;color:var(--muted);margin-bottom:12px}
-.addr-card-btn{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:left;width:100%;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:10px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
-.addr-card-btn:hover{border-color:#2563eb30;background:#f9fafb}
-.surveyor-detail{padding:16px}
-.addr-box{padding:16px;margin-bottom:12px}
-.biz-mini{padding:14px;margin-bottom:8px}
-.validate-btn{width:100%;margin-top:16px;padding:15px;background:#2563eb;color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:600;box-shadow:0 4px 14px rgba(37,99,235,.25)}
+.addr-card-btn{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:right;width:100%;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:10px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.addr-card-btn:hover{border-color:var(--accent);background:#f5f8ff}
+.validate-btn{width:100%;margin-top:16px;padding:15px;background:var(--jlm);color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700;box-shadow:0 4px 14px rgba(26,86,160,.3)}
 .validate-btn:hover{opacity:.9}
-.already-validated{padding:14px;margin-top:12px;border-color:#bbf7d0;background:#f0fdf4;border-radius:var(--r-md);border:1px solid #bbf7d0}
+.already-validated{padding:14px;margin-top:12px;border:1px solid #bbf7d0;background:#f0fdf4;border-radius:12px}
 
 /* Form */
-.surveyor-form{padding:16px}
-.warn-box{padding:14px 16px;border:2px solid #fcd34d;background:#fffbeb;border-radius:12px;margin-bottom:16px}
-.warn-title{font-size:13px;font-weight:500}
-.warn-sub{font-size:12px;color:var(--muted);margin-top:2px}
-.form-section{margin-bottom:16px}
-.form-label{font-weight:600;font-size:13px;display:block;margin-bottom:10px}
-.option-btn{display:flex;width:100%;padding:13px 16px;border:2px solid var(--border);border-radius:12px;background:var(--surface);text-align:left;gap:12px;align-items:center;margin-bottom:8px}
-.option-btn.selected-red{border-color:#dc2626;background:#fef2f2}
-.option-btn.selected-yellow{border-color:#d97706;background:#fffbeb}
-.option-btn.selected-green{border-color:#16a34a;background:#f0fdf4}
-.option-label{font-weight:600;font-size:14px}
+.option-btn{display:flex;width:100%;padding:13px 16px;border:2px solid var(--border);border-radius:12px;background:var(--surface);text-align:right;gap:12px;align-items:center;margin-bottom:8px}
+.option-btn.sel-red{border-color:#dc2626;background:#fef2f2}
+.option-btn.sel-yellow{border-color:#d97706;background:#fffbeb}
+.option-btn.sel-green{border-color:#16a34a;background:#f0fdf4}
+.option-label{font-weight:700;font-size:14px}
 .option-desc{font-size:12px;color:var(--muted);margin-top:1px}
-textarea.notes{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:10px;font-size:13px;resize:none;outline:none;background:var(--surface)}
+textarea.notes{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:13px;resize:none;outline:none;background:var(--surface)}
 textarea.notes:focus{border-color:var(--accent)}
 .photo-zone{padding:16px;border:2px dashed var(--border);border-radius:12px;text-align:center;color:var(--muted);font-size:13px;margin-bottom:16px}
-.photo-sub{font-size:11px;margin-top:4px}
-.submit-btn{width:100%;padding:15px;border:none;border-radius:14px;font-size:15px;font-weight:600;transition:background .2s,color .2s}
-.submit-btn.ready{background:#2563eb;color:#fff}
+.submit-btn{width:100%;padding:15px;border:none;border-radius:14px;font-size:15px;font-weight:700}
+.submit-btn.ready{background:var(--jlm);color:#fff}
 .submit-btn.disabled{background:#e5e7eb;color:#9ca3af}
 
 /* Success */
 .success-screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center}
-.success-icon{font-size:56px;margin-bottom:16px}
-.success-title{font-size:18px;font-weight:600}
-.success-sub{color:var(--muted);font-size:14px;margin-top:8px}
 
-/* Responsive tweaks */
 @media(max-width:640px){
   .admin-content{padding:12px}
   th,td{padding:8px 10px}
@@ -159,70 +130,127 @@ textarea.notes:focus{border-color:var(--accent)}
 </style>
 </head>
 <body>
-<div id="app">
 
 <!-- LOGIN -->
 <div id="login-page" class="page active">
-  <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#f0f4ff 0%,#f8f9fa 60%,#fef9f0 100%);padding:24px">
-    <div class="login-box">
-      <div class="login-header">
-        <div class="login-logo">SB</div>
-        <div class="login-title">SuspectBiz</div>
-        <div class="login-sub">Jerusalem Business Verification System</div>
+  <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(160deg,#1a3a6e 0%,#1a56a0 50%,#2563c0 100%);padding:24px">
+    <div style="width:100%;max-width:400px">
+      <div style="text-align:center;margin-bottom:28px">
+        <div style="display:flex;justify-content:center;margin-bottom:10px">
+          <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="36" cy="36" r="36" fill="#c9a227"/>
+            <circle cx="36" cy="36" r="32" fill="#1a56a0"/>
+            <!-- Lion body -->
+            <g fill="#c9a227">
+              <!-- Body -->
+              <ellipse cx="36" cy="42" rx="12" ry="9"/>
+              <!-- Head -->
+              <circle cx="44" cy="32" r="8"/>
+              <!-- Mane -->
+              <circle cx="44" cy="32" r="10" fill="#c9a227" opacity=".5"/>
+              <!-- Ear -->
+              <polygon points="50,24 53,18 56,24"/>
+              <!-- Eye -->
+              <circle cx="47" cy="30" r="1.5" fill="#1a56a0"/>
+              <!-- Nose -->
+              <ellipse cx="50" cy="34" rx="1.5" ry="1" fill="#b08000"/>
+              <!-- Front legs -->
+              <rect x="26" y="44" width="5" height="10" rx="2.5"/>
+              <rect x="33" y="44" width="5" height="10" rx="2.5"/>
+              <!-- Back legs -->
+              <rect x="39" y="44" width="5" height="10" rx="2.5"/>
+              <rect x="46" y="43" width="5" height="10" rx="2.5"/>
+              <!-- Tail -->
+              <path d="M24 40 Q16 35 18 28 Q20 24 24 28" stroke="#c9a227" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <circle cx="18" cy="27" r="3"/>
+            </g>
+            <!-- Crown -->
+            <g fill="#c9a227">
+              <rect x="30" y="16" width="16" height="6" rx="1"/>
+              <polygon points="30,16 32,10 35,16"/>
+              <polygon points="36,16 38,9 40,16"/>
+              <polygon points="43,16 45,10 46,16"/>
+            </g>
+          </svg>
+        </div>
+        <div style="color:#fff;font-size:22px;font-weight:800">מערכת זיהוי עסקים חשודים</div>
+        <div style="color:rgba(255,255,255,.75);font-size:14px;margin-top:4px">עיריית ירושלים</div>
       </div>
-      <div class="login-card card">
-        <div class="label" style="margin-bottom:10px">Sign in as</div>
+      <div class="login-card">
+        <div class="label" style="margin-bottom:10px">כניסה בתפקיד</div>
         <div class="role-btns">
-          <button class="role-btn active" id="role-admin" onclick="selectRole('admin')">🖥️ Admin</button>
-          <button class="role-btn" id="role-surveyor" onclick="selectRole('surveyor')">📱 Field Surveyor</button>
+          <button class="role-btn active" id="role-admin" onclick="selectRole('admin')">🖥️ מנהל מערכת</button>
+          <button class="role-btn" id="role-surveyor" onclick="selectRole('surveyor')">📱 סוקר שטח</button>
         </div>
         <div style="margin-bottom:14px">
-          <label class="label">Email</label>
-          <input id="login-email" class="input-field" value="admin@city.gov.il"/>
+          <label class="label">דוא"ל</label>
+          <input id="login-email" class="input-field" value="admin@jerusalem.muni.il"/>
         </div>
-        <div style="margin-bottom:20px">
-          <label class="label">Password</label>
+        <div style="margin-bottom:22px">
+          <label class="label">סיסמה</label>
           <input class="input-field" type="password" value="••••••••"/>
         </div>
-        <button class="btn-primary" onclick="doLogin()">Sign In</button>
+        <button class="btn-primary" id="login-btn" onclick="doLogin()">התחבר</button>
       </div>
-      <div class="login-footer">Demo system · LangGraph + Tavily + Supabase + Next.js</div>
+      <div style="text-align:center;color:rgba(255,255,255,.55);font-size:12px;margin-top:16px">מערכת הדגמה · LangGraph + Tavily + Supabase</div>
     </div>
   </div>
 </div>
 
-<!-- ADMIN DASHBOARD -->
+<!-- ADMIN PAGE -->
 <div id="admin-page" class="page">
   <div class="topbar">
     <div class="topbar-brand">
-      <div class="logo">SB</div>
-      <span style="font-weight:600;font-size:15px">SuspectBiz</span>
-      <span style="color:var(--muted);font-size:13px">Admin Portal</span>
+      <svg width="40" height="40" viewBox="0 0 72 72" fill="none" class="jlm-emblem">
+        <circle cx="36" cy="36" r="34" fill="#c9a227"/>
+        <circle cx="36" cy="36" r="30" fill="#1a56a0"/>
+        <g fill="#c9a227">
+          <ellipse cx="36" cy="42" rx="12" ry="9"/>
+          <circle cx="44" cy="32" r="8"/>
+          <circle cx="44" cy="32" r="10" fill="#c9a227" opacity=".4"/>
+          <polygon points="50,24 53,18 56,24"/>
+          <circle cx="47" cy="30" r="1.5" fill="#1a3a6e"/>
+          <rect x="26" y="44" width="5" height="9" rx="2.5"/>
+          <rect x="33" y="44" width="5" height="9" rx="2.5"/>
+          <rect x="39" y="44" width="5" height="9" rx="2.5"/>
+          <rect x="46" y="43" width="5" height="9" rx="2.5"/>
+          <path d="M24 40 Q16 35 18 28 Q20 24 24 28" stroke="#c9a227" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <circle cx="18" cy="27" r="3"/>
+          <rect x="30" y="16" width="16" height="5" rx="1"/>
+          <polygon points="30,16 32,10 35,16"/>
+          <polygon points="36,16 38,9 40,16"/>
+          <polygon points="43,16 45,10 46,16"/>
+        </g>
+      </svg>
+      <div>
+        <div class="topbar-title">מערכת זיהוי עסקים חשודים</div>
+        <div class="topbar-sub">פורטל מנהל · עיריית ירושלים</div>
+      </div>
     </div>
     <div class="topbar-right">
-      <div class="avatar" id="admin-avatar" style="width:30px;height:30px;background:#2563eb;font-size:11px">AD</div>
-      <button class="btn-ghost" onclick="logout()">Sign out</button>
+      <div class="avatar" style="width:34px;height:34px;background:rgba(255,255,255,.2);font-size:11px;border:1.5px solid rgba(255,255,255,.4)">מנ</div>
+      <button class="btn-topbar-out" onclick="logout()">יציאה</button>
     </div>
   </div>
   <div class="admin-content">
     <div class="stats-grid" id="stats-grid"></div>
     <div class="controls">
-      <input class="search-input" id="search-input" placeholder="Search addresses..." oninput="renderTable()"/>
+      <input class="search-input" id="search-input" placeholder="חיפוש לפי כתובת..." oninput="renderTable()"/>
       <select class="filter-select" id="filter-select" onchange="renderTable()">
-        <option value="all">All Statuses</option>
-        <option value="verified">Verified</option>
-        <option value="pending">Pending</option>
-        <option value="investigating">Investigating</option>
-        <option value="no_business">No Business</option>
+        <option value="all">כל הסטטוסים</option>
+        <option value="verified">מאומת</option>
+        <option value="pending">ממתין לבדיקה</option>
+        <option value="investigating">בחקירה</option>
+        <option value="no_business">אין עסק</option>
       </select>
-      <button class="btn-export">⬇ Export CSV</button>
+      <button class="btn-export">⬇ ייצוא CSV</button>
     </div>
     <div class="card" style="overflow:hidden">
       <div style="overflow-x:auto">
         <table>
           <thead>
             <tr>
-              <th>Address</th><th>Status</th><th>Businesses</th><th>Score</th><th>Assigned To</th><th>Updated</th><th></th>
+              <th>כתובת</th><th>סטטוס</th><th>עסקים</th><th>ציון חשד</th><th>סוקר אחראי</th><th>עדכון אחרון</th><th></th>
             </tr>
           </thead>
           <tbody id="addr-table-body"></tbody>
@@ -236,11 +264,34 @@ textarea.notes:focus{border-color:var(--accent)}
 <div id="detail-page" class="page">
   <div class="topbar">
     <div class="topbar-brand">
-      <div class="logo">SB</div>
-      <span style="font-weight:600;font-size:15px">SuspectBiz</span>
+      <svg width="40" height="40" viewBox="0 0 72 72" fill="none" class="jlm-emblem">
+        <circle cx="36" cy="36" r="34" fill="#c9a227"/>
+        <circle cx="36" cy="36" r="30" fill="#1a56a0"/>
+        <g fill="#c9a227">
+          <ellipse cx="36" cy="42" rx="12" ry="9"/>
+          <circle cx="44" cy="32" r="8"/>
+          <circle cx="44" cy="32" r="10" fill="#c9a227" opacity=".4"/>
+          <polygon points="50,24 53,18 56,24"/>
+          <circle cx="47" cy="30" r="1.5" fill="#1a3a6e"/>
+          <rect x="26" y="44" width="5" height="9" rx="2.5"/>
+          <rect x="33" y="44" width="5" height="9" rx="2.5"/>
+          <rect x="39" y="44" width="5" height="9" rx="2.5"/>
+          <rect x="46" y="43" width="5" height="9" rx="2.5"/>
+          <path d="M24 40 Q16 35 18 28 Q20 24 24 28" stroke="#c9a227" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <circle cx="18" cy="27" r="3"/>
+          <rect x="30" y="16" width="16" height="5" rx="1"/>
+          <polygon points="30,16 32,10 35,16"/>
+          <polygon points="36,16 38,9 40,16"/>
+          <polygon points="43,16 45,10 46,16"/>
+        </g>
+      </svg>
+      <div>
+        <div class="topbar-title">מערכת זיהוי עסקים חשודים</div>
+        <div class="topbar-sub">פרטי כתובת</div>
+      </div>
     </div>
     <div class="topbar-right">
-      <button class="btn-ghost" onclick="logout()">Sign out</button>
+      <button class="btn-topbar-out" onclick="logout()">יציאה</button>
     </div>
   </div>
   <div class="detail-content" id="detail-content"></div>
@@ -249,164 +300,202 @@ textarea.notes:focus{border-color:var(--accent)}
 <!-- SURVEYOR PAGE -->
 <div id="surveyor-page" class="page">
   <div class="topbar">
-    <div class="topbar-brand" id="surveyor-topbar-left">
-      <div class="logo" style="background:#7c3aed">SB</div>
-      <span style="font-weight:600;font-size:15px" id="surveyor-topbar-title">My Assignments</span>
+    <div class="topbar-brand">
+      <svg width="40" height="40" viewBox="0 0 72 72" fill="none" class="jlm-emblem">
+        <circle cx="36" cy="36" r="34" fill="#c9a227"/>
+        <circle cx="36" cy="36" r="30" fill="#1a56a0"/>
+        <g fill="#c9a227">
+          <ellipse cx="36" cy="42" rx="12" ry="9"/>
+          <circle cx="44" cy="32" r="8"/>
+          <circle cx="44" cy="32" r="10" fill="#c9a227" opacity=".4"/>
+          <polygon points="50,24 53,18 56,24"/>
+          <circle cx="47" cy="30" r="1.5" fill="#1a3a6e"/>
+          <rect x="26" y="44" width="5" height="9" rx="2.5"/>
+          <rect x="33" y="44" width="5" height="9" rx="2.5"/>
+          <rect x="39" y="44" width="5" height="9" rx="2.5"/>
+          <rect x="46" y="43" width="5" height="9" rx="2.5"/>
+          <path d="M24 40 Q16 35 18 28 Q20 24 24 28" stroke="#c9a227" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <circle cx="18" cy="27" r="3"/>
+          <rect x="30" y="16" width="16" height="5" rx="1"/>
+          <polygon points="30,16 32,10 35,16"/>
+          <polygon points="36,16 38,9 40,16"/>
+          <polygon points="43,16 45,10 46,16"/>
+        </g>
+      </svg>
+      <div>
+        <div class="topbar-title" id="surveyor-topbar-title">המשימות שלי</div>
+        <div class="topbar-sub">סוקר שטח · עיריית ירושלים</div>
+      </div>
     </div>
     <div class="topbar-right">
-      <div class="avatar" style="width:28px;height:28px;background:#7c3aed;font-size:10px">YC</div>
-      <button class="btn-ghost" onclick="logout()" style="font-size:12px;padding:4px 8px">Out</button>
+      <div class="avatar" style="width:32px;height:32px;background:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.4);font-size:11px">יכ</div>
+      <button class="btn-topbar-out" onclick="logout()">יציאה</button>
     </div>
   </div>
-  <div id="surveyor-inner"></div>
+  <div id="surveyor-inner" style="max-width:480px;margin:0 auto"></div>
 </div>
 
 <!-- SUCCESS -->
 <div id="success-page" class="page">
+  <div class="topbar">
+    <div class="topbar-brand">
+      <svg width="40" height="40" viewBox="0 0 72 72" fill="none">
+        <circle cx="36" cy="36" r="34" fill="#c9a227"/>
+        <circle cx="36" cy="36" r="30" fill="#1a56a0"/>
+        <g fill="#c9a227">
+          <ellipse cx="36" cy="42" rx="12" ry="9"/>
+          <circle cx="44" cy="32" r="8"/>
+          <circle cx="44" cy="32" r="10" fill="#c9a227" opacity=".4"/>
+          <polygon points="50,24 53,18 56,24"/>
+          <circle cx="47" cy="30" r="1.5" fill="#1a3a6e"/>
+          <rect x="26" y="44" width="5" height="9" rx="2.5"/>
+          <rect x="33" y="44" width="5" height="9" rx="2.5"/>
+          <rect x="39" y="44" width="5" height="9" rx="2.5"/>
+          <rect x="46" y="43" width="5" height="9" rx="2.5"/>
+          <path d="M24 40 Q16 35 18 28 Q20 24 24 28" stroke="#c9a227" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <circle cx="18" cy="27" r="3"/>
+          <rect x="30" y="16" width="16" height="5" rx="1"/>
+          <polygon points="30,16 32,10 35,16"/>
+          <polygon points="36,16 38,9 40,16"/>
+          <polygon points="43,16 45,10 46,16"/>
+        </g>
+      </svg>
+      <div class="topbar-title">מערכת זיהוי עסקים חשודים</div>
+    </div>
+  </div>
   <div class="success-screen">
-    <div class="success-icon">✅</div>
-    <div class="success-title">Validation Submitted!</div>
-    <div class="success-sub">Returning to your assignments...</div>
+    <div style="font-size:56px;margin-bottom:16px">✅</div>
+    <div style="font-size:20px;font-weight:700">הדיווח נשלח בהצלחה!</div>
+    <div style="color:var(--muted);font-size:14px;margin-top:8px">חוזר לרשימת המשימות...</div>
   </div>
 </div>
 
-</div>
-
 <script>
-// ── Data ──────────────────────────────────────────────────────────────────────
+// ── נתונים ────────────────────────────────────────────────────────────────────
 const SURVEYORS = {
-  surveyor1: { name: "Yosef Cohen", initials: "YC" },
-  surveyor2: { name: "Miriam Levy", initials: "ML" },
+  surveyor1: { name:"יוסף כהן", initials:"יכ" },
+  surveyor2: { name:"מרים לוי", initials:"מל" },
 };
 
 const ADDRESSES = [
   {
-    id:"a1", addressEn:"42 Jaffa St, Apt 3, Jerusalem", addressHe:"רחוב יפו 42, דירה 3, ירושלים",
-    status:"verified", score:0.91, assignedTo:"surveyor1", updated:"2024-01-15", validated:"business_found",
+    id:"a1", addr:"רחוב יפו 42, דירה 3, ירושלים",
+    status:"verified", score:0.91, assignedTo:"surveyor1", updated:"15.01.2024", validated:"business_found",
     businesses:[
-      { name:"Tov Legal Services Ltd.", cat:"Legal Services", active:true, conf:0.93, score:0.91,
-        reasoning:"Three independent high-quality sources confirm business operation at this address. Official website lists suite number consistent with apartment 3. Last review dated 3 months ago indicates active operation.",
-        sources:[{icon:"📋",title:"Tov Legal – B2B Directory",url:"#"},{icon:"🗺️",title:"Google Maps – Tov Legal",url:"#"},{icon:"🌐",title:"Official Website",url:"#"}] },
-      { name:"Sunrise Consulting", cat:"Business Consulting", active:false, conf:0.71, score:0.55,
-        reasoning:"Found in LinkedIn company registry but no website or recent activity. Possibly dormant. Address listed matches input.",
-        sources:[{icon:"💬",title:"LinkedIn – Sunrise Consulting",url:"#"}] },
+      { name:"שירותי משפט טוב בע\"מ", cat:"שירותים משפטיים", active:true, score:0.91,
+        reasoning:"שלושה מקורות עצמאיים ואיכותיים מאשרים פעילות עסקית בכתובת זו. האתר הרשמי מציין מספר חדר התואם לדירה 3. הביקורת האחרונה לפני 3 חודשים מצביעה על פעילות שוטפת.",
+        sources:[{icon:"📋",title:"מדריך עסקי B2B"},{icon:"🗺️",title:"Google Maps"},{icon:"🌐",title:"אתר רשמי"}] },
+      { name:"ייעוץ שחר", cat:"ייעוץ עסקי", active:false, score:0.55,
+        reasoning:"נמצא במאגר חברות LinkedIn אך אין אתר או פעילות עדכנית. ייתכן שהעסק לא פעיל. הכתובת תואמת את הקלט.",
+        sources:[{icon:"💬",title:"LinkedIn – ייעוץ שחר"}] },
     ],
     pipeline:[
-      {step:"Query Builder",status:"done",detail:"Generated 5 Hebrew queries for business discovery"},
-      {step:"Tavily Search",status:"done",detail:"Retrieved 28 results across 5 queries"},
-      {step:"Extraction",status:"done",detail:"Extracted 3 business candidates from results"},
-      {step:"Business Investigator",status:"done",detail:"Verified 2/3 businesses; 1 discarded (no match)"},
-      {step:"Final Scoring",status:"done",detail:"2 businesses passed threshold → output ready"},
+      {step:"בונה שאילתות",status:"done",detail:"הופקו 5 שאילתות בעברית לגילוי עסקים"},
+      {step:"חיפוש Tavily",status:"done",detail:"אוחזרו 28 תוצאות על פני 5 שאילתות"},
+      {step:"חילוץ מידע",status:"done",detail:"חולצו 3 מועמדי עסק מהתוצאות"},
+      {step:"חוקר עסקים",status:"done",detail:"אומתו 2/3 עסקים; 1 הוסר (אי-התאמה)"},
+      {step:"ניקוד סופי",status:"done",detail:"2 עסקים עברו את הסף → פלט מוכן"},
     ]
   },
   {
-    id:"a2", addressEn:"18 Ben Yehuda St, Apt 7, Jerusalem", addressHe:"רחוב בן יהודה 18, דירה 7, ירושלים",
-    status:"pending", score:0.74, assignedTo:"surveyor2", updated:"2024-01-14", validated:null,
+    id:"a2", addr:"רחוב בן יהודה 18, דירה 7, ירושלים",
+    status:"pending", score:0.74, assignedTo:"surveyor2", updated:"14.01.2024", validated:null,
     businesses:[
-      { name:"Jerusalem Tax Advisors", cat:"Financial Services", active:true, conf:0.78, score:0.74,
-        reasoning:"Professional registry lists active license at this address. Facebook page active with posts from last month. Confidence slightly reduced due to no official website found.",
-        sources:[{icon:"📋",title:"Professional Registry – JTA",url:"#"},{icon:"💬",title:"Facebook Business Page",url:"#"}] },
+      { name:"יועצי מס ירושלים", cat:"שירותים פיננסיים", active:true, score:0.74,
+        reasoning:"מרשם מקצועי רשם רישיון פעיל בכתובת זו. עמוד Facebook פעיל עם פוסטים מהחודש שעבר. האמינות מופחתת מעט כי לא נמצא אתר רשמי.",
+        sources:[{icon:"📋",title:"מרשם מקצועי – יועצי מס"},{icon:"💬",title:"עמוד עסקי Facebook"}] },
     ],
     pipeline:[
-      {step:"Query Builder",status:"done",detail:"Generated 4 Hebrew queries"},
-      {step:"Tavily Search",status:"done",detail:"Retrieved 19 results"},
-      {step:"Extraction",status:"done",detail:"Extracted 1 business candidate"},
-      {step:"Business Investigator",status:"done",detail:"Verified 1/1 business"},
-      {step:"Final Scoring",status:"done",detail:"1 business passed threshold"},
+      {step:"בונה שאילתות",status:"done",detail:"הופקו 4 שאילתות בעברית"},
+      {step:"חיפוש Tavily",status:"done",detail:"אוחזרו 19 תוצאות"},
+      {step:"חילוץ מידע",status:"done",detail:"חולץ מועמד עסק אחד"},
+      {step:"חוקר עסקים",status:"done",detail:"אומת 1/1 עסק"},
+      {step:"ניקוד סופי",status:"done",detail:"עסק 1 עבר את הסף"},
     ]
   },
   {
-    id:"a3", addressEn:"55 HaNevi'im St, Apt 12, Jerusalem", addressHe:"רחוב הנביאים 55, דירה 12, ירושלים",
-    status:"investigating", score:0.62, assignedTo:null, updated:"2024-01-15", validated:null,
+    id:"a3", addr:"רחוב הנביאים 55, דירה 12, ירושלים",
+    status:"investigating", score:0.62, assignedTo:null, updated:"15.01.2024", validated:null,
     businesses:[],
     pipeline:[
-      {step:"Query Builder",status:"done",detail:"Generated 6 Hebrew queries"},
-      {step:"Tavily Search",status:"done",detail:"Retrieved 31 results"},
-      {step:"Extraction",status:"done",detail:"Extracted 2 candidates"},
-      {step:"Business Investigator",status:"running",detail:"Investigating 2 candidates..."},
-      {step:"Final Scoring",status:"pending",detail:"Waiting for investigator"},
+      {step:"בונה שאילתות",status:"done",detail:"הופקו 6 שאילתות בעברית"},
+      {step:"חיפוש Tavily",status:"done",detail:"אוחזרו 31 תוצאות"},
+      {step:"חילוץ מידע",status:"done",detail:"חולצו 2 מועמדים"},
+      {step:"חוקר עסקים",status:"running",detail:"בודק 2 מועמדים..."},
+      {step:"ניקוד סופי",status:"pending",detail:"ממתין לחוקר"},
     ]
   },
   {
-    id:"a4", addressEn:"31 King George St, Apt 2, Jerusalem", addressHe:"רחוב קינג ג'ורג' 31, דירה 2, ירושלים",
-    status:"no_business", score:0.18, assignedTo:"surveyor1", updated:"2024-01-13", validated:"no_business",
+    id:"a4", addr:"רחוב קינג ג'ורג' 31, דירה 2, ירושלים",
+    status:"no_business", score:0.18, assignedTo:"surveyor1", updated:"13.01.2024", validated:"no_business",
     businesses:[],
     pipeline:[
-      {step:"Query Builder",status:"done",detail:"Generated 4 queries"},
-      {step:"Tavily Search",status:"done",detail:"Retrieved 11 results"},
-      {step:"Extraction",status:"done",detail:"0 business candidates found"},
-      {step:"Business Investigator",status:"skipped",detail:"No candidates to investigate"},
-      {step:"Final Scoring",status:"done",detail:"No businesses → score 0.18 (low)"},
+      {step:"בונה שאילתות",status:"done",detail:"הופקו 4 שאילתות"},
+      {step:"חיפוש Tavily",status:"done",detail:"אוחזרו 11 תוצאות"},
+      {step:"חילוץ מידע",status:"done",detail:"לא נמצאו מועמדי עסק"},
+      {step:"חוקר עסקים",status:"skipped",detail:"אין מועמדים לחקירה"},
+      {step:"ניקוד סופי",status:"done",detail:"אין עסקים → ציון 0.18 (נמוך)"},
     ]
   },
   {
-    id:"a5", addressEn:"8 Agrippas St, Apt 5, Jerusalem", addressHe:"רחוב אגריפס 8, דירה 5, ירושלים",
-    status:"pending", score:0.85, assignedTo:"surveyor2", updated:"2024-01-15", validated:null,
+    id:"a5", addr:"רחוב אגריפס 8, דירה 5, ירושלים",
+    status:"pending", score:0.85, assignedTo:"surveyor2", updated:"15.01.2024", validated:null,
     businesses:[
-      { name:"Mahane Yehuda Import & Export", cat:"Import / Export", active:true, conf:0.88, score:0.88,
-        reasoning:"Government registrar shows active company registered at this address. Official registration date 2019, last annual report filed 2023.",
-        sources:[{icon:"🏛️",title:"Companies Registrar – MYE",url:"#"}] },
-      { name:"Spice Garden Restaurant", cat:"Food & Catering", active:true, conf:0.82, score:0.82,
-        reasoning:"Listed on food directory and Google Maps, both confirming address. 47 reviews, last review 2 weeks ago. Likely home-based catering or ghost kitchen.",
-        sources:[{icon:"📋",title:"Rest.co.il – Spice Garden",url:"#"},{icon:"🗺️",title:"Google Maps",url:"#"}] },
-      { name:"Ronen IT Solutions", cat:"Technology", active:true, conf:0.76, score:0.76,
-        reasoning:"Website and LinkedIn both list residential address. Freelance IT contractor, likely operating from home.",
-        sources:[{icon:"💬",title:"LinkedIn – Ronen IT",url:"#"},{icon:"🌐",title:"Official Website",url:"#"}] },
+      { name:"מחנה יהודה יבוא ויצוא", cat:"יבוא / יצוא", active:true, score:0.88,
+        reasoning:"רשם החברות מציג חברה פעילה הרשומה בכתובת זו. תאריך רישום 2019, דוח שנתי אחרון הוגש ב-2023.",
+        sources:[{icon:"🏛️",title:"רשם החברות – משרד המשפטים"}] },
+      { name:"מסעדת גן התבלינים", cat:"מזון ואירוח", active:true, score:0.82,
+        reasoning:"רשומה במדריך מסעדות ובגוגל מפות, שניהם מאשרים את הכתובת. 47 ביקורות, ביקורת אחרונה לפני שבועיים. ככל הנראה מטבח רזה מהבית.",
+        sources:[{icon:"📋",title:"Rest.co.il – גן התבלינים"},{icon:"🗺️",title:"Google Maps"}] },
+      { name:"פתרונות IT רונן", cat:"טכנולוגיה", active:true, score:0.76,
+        reasoning:"אתר ו-LinkedIn שניהם מציינים כתובת מגורים. קבלן IT עצמאי, ככל הנראה עובד מהבית.",
+        sources:[{icon:"💬",title:"LinkedIn – פתרונות IT רונן"},{icon:"🌐",title:"אתר רשמי"}] },
     ],
     pipeline:[
-      {step:"Query Builder",status:"done",detail:"Generated 6 Hebrew queries"},
-      {step:"Tavily Search",status:"done",detail:"Retrieved 44 results"},
-      {step:"Extraction",status:"done",detail:"Extracted 4 candidates"},
-      {step:"Business Investigator",status:"done",detail:"Verified 3/4; 1 false positive removed"},
-      {step:"Final Scoring",status:"done",detail:"3 businesses confirmed suspicious"},
+      {step:"בונה שאילתות",status:"done",detail:"הופקו 6 שאילתות בעברית"},
+      {step:"חיפוש Tavily",status:"done",detail:"אוחזרו 44 תוצאות"},
+      {step:"חילוץ מידע",status:"done",detail:"חולצו 4 מועמדים"},
+      {step:"חוקר עסקים",status:"done",detail:"אומתו 3/4; 1 תוצאה שגויה הוסרה"},
+      {step:"ניקוד סופי",status:"done",detail:"3 עסקים אושרו כחשודים"},
     ]
   },
 ];
 
-// ── State ─────────────────────────────────────────────────────────────────────
-let currentRole = "admin";
-let selectedValidation = null;
-
-// ── Helpers ───────────────────────────────────────────────────────────────────
-function scorePill(s) {
-  const cls = s >= 0.8 ? "score-high" : s >= 0.5 ? "score-med" : "score-low";
-  return `<span class="score-pill ${cls}"><span class="score-dot"></span>${Math.round(s*100)}%</span>`;
+// ── עזרים ─────────────────────────────────────────────────────────────────────
+function scorePill(s){
+  const c=s>=0.8?"score-high":s>=0.5?"score-med":"score-low";
+  return`<span class="score-pill ${c}"><span class="score-dot"></span>${Math.round(s*100)}%</span>`;
 }
-function badge(label, color, bgColor) {
-  return `<span class="badge" style="color:${color};background:${bgColor}">${label}</span>`;
+function badge(lbl,col,bg){
+  return`<span class="badge" style="color:${col};background:${bg}">${lbl}</span>`;
 }
-const STATUS = {
-  verified: {label:"Verified", color:"#dc2626"},
-  pending: {label:"Pending Review", color:"#d97706"},
-  investigating: {label:"Investigating", color:"#2563eb"},
-  no_business: {label:"No Business", color:"#16a34a"},
+const STATUS={
+  verified:{label:"מאומת",color:"#dc2626"},
+  pending:{label:"ממתין לבדיקה",color:"#d97706"},
+  investigating:{label:"בחקירה",color:"#1a56a0"},
+  no_business:{label:"אין עסק",color:"#16a34a"},
 };
-function statusBadge(s) {
-  const st = STATUS[s];
-  return badge(st.label, st.color, st.color+"20");
-}
-function e(tag, attrs, ...children) {
-  const el = document.createElement(tag);
-  if (attrs) Object.entries(attrs).forEach(([k,v]) => { if(k==="class") el.className=v; else if(k.startsWith("on")) el.addEventListener(k.slice(2),v); else el.setAttribute(k,v); });
-  children.forEach(c => { if(typeof c==="string") el.insertAdjacentHTML("beforeend",c); else if(c) el.appendChild(c); });
-  return el;
-}
+function statusBadge(s){const st=STATUS[s];return badge(st.label,st.color,st.color+"22");}
 
-// ── Pages ─────────────────────────────────────────────────────────────────────
-function showPage(id) {
-  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+// ── ניווט ──────────────────────────────────────────────────────────────────────
+function showPage(id){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 }
 
-// ── Login ─────────────────────────────────────────────────────────────────────
-function selectRole(r) {
-  currentRole = r;
-  document.getElementById("role-admin").classList.toggle("active", r==="admin");
-  document.getElementById("role-surveyor").classList.toggle("active", r==="surveyor");
-  document.getElementById("login-email").value = r==="admin" ? "admin@city.gov.il" : "yosef@city.gov.il";
+// ── כניסה ──────────────────────────────────────────────────────────────────────
+let currentRole="admin";
+let selectedValidation=null;
+
+function selectRole(r){
+  currentRole=r;
+  document.getElementById("role-admin").classList.toggle("active",r==="admin");
+  document.getElementById("role-surveyor").classList.toggle("active",r==="surveyor");
+  document.getElementById("login-email").value=r==="admin"?"admin@jerusalem.muni.il":"yosef@jerusalem.muni.il";
 }
-function doLogin() {
-  if (currentRole === "admin") {
+
+function doLogin(){
+  if(currentRole==="admin"){
     renderAdminDashboard();
     showPage("admin-page");
   } else {
@@ -414,262 +503,233 @@ function doLogin() {
     showPage("surveyor-page");
   }
 }
-function logout() {
+
+function logout(){
   showPage("login-page");
 }
 
-// ── Admin ─────────────────────────────────────────────────────────────────────
-function renderAdminDashboard() {
-  // Stats
-  const stats = [
-    { label:"Total Addresses", value: ADDRESSES.length, color:"#2563eb" },
-    { label:"Verified Suspicious", value: ADDRESSES.filter(a=>a.status==="verified").length, color:"#dc2626" },
-    { label:"Pending Review", value: ADDRESSES.filter(a=>a.status==="pending").length, color:"#d97706" },
-    { label:"Businesses Found", value: ADDRESSES.reduce((s,a)=>s+a.businesses.length,0), color:"#7c3aed" },
-  ];
-  const sg = document.getElementById("stats-grid");
-  sg.innerHTML = stats.map(s => `
-    <div class="stat-card">
-      <div class="stat-value" style="color:${s.color}">${s.value}</div>
-      <div class="stat-label">${s.label}</div>
-    </div>`).join("");
+// ── לוח בקרה מנהל ────────────────────────────────────────────────────────────
+function renderAdminDashboard(){
+  const sg=document.getElementById("stats-grid");
+  sg.innerHTML=[
+    {label:"סה\"כ כתובות",value:ADDRESSES.length,color:"#1a56a0"},
+    {label:"מאושרות כחשודות",value:ADDRESSES.filter(a=>a.status==="verified").length,color:"#dc2626"},
+    {label:"ממתינות לבדיקה",value:ADDRESSES.filter(a=>a.status==="pending").length,color:"#d97706"},
+    {label:"עסקים שנמצאו",value:ADDRESSES.reduce((s,a)=>s+a.businesses.length,0),color:"#7c3aed"},
+  ].map(s=>`<div class="stat-card"><div class="stat-value" style="color:${s.color}">${s.value}</div><div class="stat-label">${s.label}</div></div>`).join("");
   renderTable();
 }
 
-function renderTable() {
-  const search = (document.getElementById("search-input")||{value:""}).value.toLowerCase();
-  const filter = (document.getElementById("filter-select")||{value:"all"}).value;
-  const tbody = document.getElementById("addr-table-body");
-  if (!tbody) return;
-  const filtered = ADDRESSES.filter(a => {
-    const ms = a.addressEn.toLowerCase().includes(search) || a.addressHe.includes(search);
-    const mf = filter==="all" || a.status===filter;
-    return ms && mf;
+function renderTable(){
+  const search=(document.getElementById("search-input")||{value:""}).value;
+  const filter=(document.getElementById("filter-select")||{value:"all"}).value;
+  const tbody=document.getElementById("addr-table-body");
+  if(!tbody)return;
+  const filtered=ADDRESSES.filter(a=>{
+    const ms=a.addr.includes(search);
+    const mf=filter==="all"||a.status===filter;
+    return ms&&mf;
   });
-  tbody.innerHTML = filtered.map(a => {
-    const sv = a.assignedTo ? SURVEYORS[a.assignedTo] : null;
-    const svHtml = sv
-      ? `<div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="width:24px;height:24px;background:#7c3aed;font-size:9px">${sv.initials}</div><span style="font-size:13px">${sv.name}</span></div>`
-      : `<span style="color:var(--muted);font-size:13px">Unassigned</span>`;
-    return `<tr>
-      <td><div class="addr-en">${a.addressEn}</div><div class="addr-he">${a.addressHe}</div></td>
+  tbody.innerHTML=filtered.map(a=>{
+    const sv=a.assignedTo?SURVEYORS[a.assignedTo]:null;
+    const svHtml=sv
+      ?`<div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="width:26px;height:26px;background:#7c3aed;font-size:10px">${sv.initials}</div><span style="font-size:13px">${sv.name}</span></div>`
+      :`<span style="color:var(--muted);font-size:13px">לא שויך</span>`;
+    return`<tr>
+      <td><div class="addr-en">${a.addr}</div></td>
       <td>${statusBadge(a.status)}</td>
-      <td style="text-align:center;font-weight:600">${a.businesses.length || "—"}</td>
+      <td style="text-align:center;font-weight:700">${a.businesses.length||"—"}</td>
       <td>${scorePill(a.score)}</td>
       <td>${svHtml}</td>
       <td style="color:var(--muted);font-size:12px">${a.updated}</td>
-      <td><button class="btn-view" onclick="showDetail('${a.id}')">View →</button></td>
+      <td><button class="btn-view" onclick="showDetail('${a.id}','admin-page')">פרטים ←</button></td>
     </tr>`;
   }).join("");
 }
 
-// ── Detail ────────────────────────────────────────────────────────────────────
-function showDetail(id) {
-  const a = ADDRESSES.find(x => x.id === id);
-  if (!a) return;
-
-  const stepIcon = {done:"✓",running:"↻",pending:"○",skipped:"—"};
-  const stepColor = {done:"#16a34a",running:"#2563eb",pending:"#9ca3af",skipped:"#d1d5db"};
-
-  const bizHtml = a.businesses.length === 0
-    ? `<div class="card empty-state">No businesses found at this address.</div>`
-    : a.businesses.map(b => `
-      <div class="card biz-card" style="padding:20px">
-        <div class="biz-header">
+// ── פרטי כתובת ────────────────────────────────────────────────────────────────
+function showDetail(id,fromPage){
+  const a=ADDRESSES.find(x=>x.id===id);
+  if(!a)return;
+  const stepIcon={done:"✓",running:"↻",pending:"○",skipped:"—"};
+  const stepColor={done:"#16a34a",running:"#1a56a0",pending:"#9ca3af",skipped:"#d1d5db"};
+  const bizHtml=a.businesses.length===0
+    ?`<div class="card empty-state">לא נמצאו עסקים בכתובת זו.</div>`
+    :a.businesses.map(b=>`
+      <div class="card" style="padding:20px;margin-bottom:12px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px;flex-wrap:wrap">
           <div><div class="biz-name">${b.name}</div><div class="biz-cat">${b.cat}</div></div>
-          <div class="biz-badges">
-            ${badge(b.active?"Active":"Inactive", b.active?"#16a34a":"#9ca3af", b.active?"#f0fdf4":"#f9fafb")}
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            ${badge(b.active?"פעיל":"לא פעיל",b.active?"#16a34a":"#9ca3af",b.active?"#f0fdf4":"#f9fafb")}
             ${scorePill(b.score)}
           </div>
         </div>
-        <div class="reasoning"><strong>AI Reasoning: </strong>${b.reasoning}</div>
-        <div class="sources">${b.sources.map(s=>`<a href="${s.url}" class="source-link">${s.icon} ${s.title}</a>`).join("")}</div>
+        <div class="reasoning"><strong>נימוק AI: </strong>${b.reasoning}</div>
+        <div class="sources">${b.sources.map(s=>`<a href="#" class="source-link">${s.icon} ${s.title}</a>`).join("")}</div>
       </div>`).join("");
-
-  const pipeHtml = a.pipeline.map(s => `
+  const pipeHtml=a.pipeline.map(s=>`
     <div class="pipeline-step">
-      <div class="step-icon" style="background:${stepColor[s.status]}20;color:${stepColor[s.status]}">${stepIcon[s.status]}</div>
+      <div class="step-icon" style="background:${stepColor[s.status]}22;color:${stepColor[s.status]}">${stepIcon[s.status]}</div>
       <div><div class="step-name">${s.step}</div><div class="step-detail">${s.detail}</div></div>
     </div>`).join("");
+  const valHtml=a.validated
+    ?`${badge(a.validated==="business_found"?"✓ עסק נמצא בשטח":"✗ לא נמצא עסק",a.validated==="business_found"?"#dc2626":"#16a34a",a.validated==="business_found"?"#fef2f2":"#f0fdf4")}
+     <div style="margin-top:12px;font-size:13px;color:var(--muted)">אומת ב-${a.updated} · ${a.validated==="business_found"?"תואם לתחזית ה-AI":"סותר את תחזית ה-AI — משוב נשלח לצינור ה-ML"}</div>`
+    :`<div style="color:var(--muted);font-size:13px;font-style:italic">טרם אומת על ידי סוקר שטח.</div>`;
 
-  const valHtml = a.validated
-    ? `${badge(a.validated==="business_found"?"✓ Business Found On-Site":"✗ No Business Found", a.validated==="business_found"?"#dc2626":"#16a34a", a.validated==="business_found"?"#fef2f2":"#f0fdf4")}
-       <div style="margin-top:12px;font-size:13px;color:var(--muted)">Validated on ${a.updated} · ${a.validated==="business_found"?"Matches AI prediction":"Contradicts AI prediction — feedback sent to ML pipeline"}</div>`
-    : `<div style="color:var(--muted);font-size:13px;font-style:italic">Not yet validated by field surveyor.</div>`;
-
-  const fromPage = currentRole === "admin" ? "admin-page" : "surveyor-page";
-
-  document.getElementById("detail-content").innerHTML = `
-    <button class="btn-back" onclick="showPage('${fromPage}')">← Back</button>
+  document.getElementById("detail-content").innerHTML=`
+    <button class="btn-back" onclick="showPage('${fromPage||"admin-page"}')">→ חזרה לרשימה</button>
     <div class="card" style="padding:24px;margin-bottom:16px">
-      <div class="detail-header">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px">
         <div>
-          <div class="detail-meta">Address</div>
-          <div class="detail-addr-en">${a.addressEn}</div>
-          <div class="detail-addr-he">${a.addressHe}</div>
+          <div style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px">כתובת חשודה</div>
+          <div style="font-size:18px;font-weight:700">${a.addr}</div>
         </div>
         <div style="display:flex;align-items:center;gap:10px">
           ${statusBadge(a.status)}
           <div style="text-align:center">
-            <div style="font-size:11px;color:var(--muted);margin-bottom:2px">Suspicion Score</div>
+            <div style="font-size:11px;color:var(--muted);margin-bottom:2px">ציון חשד</div>
             ${scorePill(a.score)}
           </div>
         </div>
       </div>
     </div>
     <div class="tab-bar">
-      <button class="tab-btn active" onclick="switchTab(this,'tab-businesses')">Businesses</button>
-      <button class="tab-btn" onclick="switchTab(this,'tab-pipeline')">Pipeline</button>
-      <button class="tab-btn" onclick="switchTab(this,'tab-validation')">Validation</button>
+      <button class="tab-btn active" onclick="switchTab(this,'tab-biz')">עסקים</button>
+      <button class="tab-btn" onclick="switchTab(this,'tab-pipe')">צינור LangGraph</button>
+      <button class="tab-btn" onclick="switchTab(this,'tab-val')">אימות שטח</button>
     </div>
-    <div id="tab-businesses" class="tab-panel active">${bizHtml}</div>
-    <div id="tab-pipeline" class="tab-panel">
+    <div id="tab-biz" class="tab-panel active">${bizHtml}</div>
+    <div id="tab-pipe" class="tab-panel">
       <div class="card" style="padding:24px">
-        <div style="font-weight:600;margin-bottom:16px">LangGraph Pipeline Execution</div>
+        <div style="font-weight:700;margin-bottom:16px">ביצוע צינור LangGraph</div>
         ${pipeHtml}
       </div>
     </div>
-    <div id="tab-validation" class="tab-panel">
+    <div id="tab-val" class="tab-panel">
       <div class="card" style="padding:24px">
-        <div style="font-weight:600;margin-bottom:4px">Field Validation</div>
-        <div style="color:var(--muted);font-size:13px;margin-bottom:16px">Submitted by field surveyor after on-site visit.</div>
+        <div style="font-weight:700;margin-bottom:4px">אימות שטח</div>
+        <div style="color:var(--muted);font-size:13px;margin-bottom:16px">נשלח על ידי סוקר שטח לאחר ביקור פיזי.</div>
         ${valHtml}
       </div>
-    </div>
-  `;
+    </div>`;
   showPage("detail-page");
 }
 
-function switchTab(btn, tabId) {
-  btn.closest(".tab-bar").querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+function switchTab(btn,tabId){
+  btn.closest(".tab-bar").querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
   btn.classList.add("active");
-  const bar = btn.closest(".tab-bar");
-  let next = bar.nextElementSibling;
-  while (next && next.classList.contains("tab-panel")) {
-    next.classList.remove("active");
-    next = next.nextElementSibling;
-  }
+  let next=btn.closest(".tab-bar").nextElementSibling;
+  while(next&&next.classList.contains("tab-panel")){next.classList.remove("active");next=next.nextElementSibling;}
   document.getElementById(tabId).classList.add("active");
 }
 
-// ── Surveyor ──────────────────────────────────────────────────────────────────
-function renderSurveyorList() {
-  document.getElementById("surveyor-topbar-title").textContent = "My Assignments";
-  const myAddrs = ADDRESSES.filter(a => a.assignedTo === "surveyor1");
-  document.getElementById("surveyor-inner").innerHTML = `
+// ── סוקר שטח ─────────────────────────────────────────────────────────────────
+function renderSurveyorList(){
+  document.getElementById("surveyor-topbar-title").textContent="המשימות שלי";
+  const myAddrs=ADDRESSES.filter(a=>a.assignedTo==="surveyor1");
+  document.getElementById("surveyor-inner").innerHTML=`
     <div class="surveyor-list">
-      <div class="surveyor-hint">${myAddrs.length} addresses assigned · tap to inspect</div>
-      ${myAddrs.map(a => `
+      <div style="font-size:13px;color:var(--muted);margin-bottom:12px">${myAddrs.length} כתובות מוקצות · לחץ לפרטים</div>
+      ${myAddrs.map(a=>`
         <button class="addr-card-btn" onclick="renderSurveyorDetail('${a.id}')">
-          <div style="text-align:left;flex:1">
-            <div style="font-weight:500;font-size:14px">${a.addressEn}</div>
-            <div style="font-size:12px;color:var(--muted);direction:rtl;text-align:right;margin-top:2px">${a.addressHe}</div>
+          <div style="text-align:right;flex:1">
+            <div style="font-weight:600;font-size:14px">${a.addr}</div>
             <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
               ${statusBadge(a.status)}
-              ${a.validated ? badge("Validated","#16a34a","#f0fdf4") : ""}
+              ${a.validated?badge("מאומת","#16a34a","#f0fdf4"):""}
             </div>
           </div>
           <div style="text-align:center;flex-shrink:0">
             ${scorePill(a.score)}
-            <div style="font-size:11px;color:var(--muted);margin-top:4px">${a.businesses.length} biz</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">${a.businesses.length} עסקים</div>
           </div>
         </button>`).join("")}
     </div>`;
 }
 
-function renderSurveyorDetail(id) {
-  const a = ADDRESSES.find(x => x.id === id);
-  if (!a) return;
-  document.getElementById("surveyor-topbar-title").textContent = "Address Details";
-  const bizHtml = a.businesses.length === 0
-    ? `<div class="card biz-mini" style="color:var(--muted);font-size:13px;font-style:italic;padding:14px">No specific businesses flagged. Inspect for any commercial activity.</div>`
-    : a.businesses.map(b => `
-        <div class="card biz-mini" style="padding:14px;margin-bottom:8px">
-          <div style="font-weight:500;font-size:14px">${b.name}</div>
-          <div style="font-size:12px;color:var(--muted)">${b.cat}</div>
-          <div style="margin-top:6px">${scorePill(b.score)}</div>
-        </div>`).join("");
-
-  const footerHtml = a.validated
-    ? `<div class="already-validated">
-        <div style="font-size:13px;color:#16a34a;font-weight:600">✓ Already validated</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:2px">Result: ${a.validated==="business_found"?"Business found on-site":"No business found"}</div>
-       </div>`
-    : `<button class="validate-btn" onclick="renderValidationForm('${a.id}')">Submit Field Validation →</button>`;
-
-  document.getElementById("surveyor-inner").innerHTML = `
-    <div class="surveyor-detail">
-      <button class="btn-back" onclick="renderSurveyorList()">← Back</button>
-      <div class="card addr-box" style="padding:16px;margin-bottom:12px">
-        <div style="font-size:12px;color:var(--muted);margin-bottom:4px">SUSPECTED ADDRESS</div>
-        <div style="font-weight:600;font-size:15px">${a.addressEn}</div>
-        <div style="font-size:13px;color:var(--muted);direction:rtl;text-align:right;margin-top:2px">${a.addressHe}</div>
-        <div style="margin-top:12px;display:flex;gap:8px;align-items:center">
+function renderSurveyorDetail(id){
+  const a=ADDRESSES.find(x=>x.id===id);
+  if(!a)return;
+  document.getElementById("surveyor-topbar-title").textContent="פרטי כתובת";
+  const bizHtml=a.businesses.length===0
+    ?`<div class="card empty-state" style="padding:14px">לא צוינו עסקים ספציפיים. בדוק פעילות מסחרית כלשהי.</div>`
+    :a.businesses.map(b=>`
+      <div class="card" style="padding:14px;margin-bottom:8px">
+        <div style="font-weight:600;font-size:14px">${b.name}</div>
+        <div style="font-size:12px;color:var(--muted)">${b.cat}</div>
+        <div style="margin-top:6px">${scorePill(b.score)}</div>
+      </div>`).join("");
+  const footerHtml=a.validated
+    ?`<div class="already-validated"><div style="font-size:13px;color:#16a34a;font-weight:700">✓ כבר אומת</div><div style="font-size:12px;color:var(--muted);margin-top:2px">תוצאה: ${a.validated==="business_found"?"עסק נמצא בשטח":"לא נמצא עסק"}</div></div>`
+    :`<button class="validate-btn" onclick="renderValidationForm('${a.id}')">← שלח דיווח שטח</button>`;
+  document.getElementById("surveyor-inner").innerHTML=`
+    <div style="padding:16px">
+      <button class="btn-back" onclick="renderSurveyorList()">→ חזרה לרשימה</button>
+      <div class="card" style="padding:16px;margin-bottom:12px">
+        <div style="font-size:12px;color:var(--muted);margin-bottom:4px">כתובת חשודה</div>
+        <div style="font-weight:700;font-size:15px">${a.addr}</div>
+        <div style="margin-top:10px;display:flex;gap:8px;align-items:center">
           ${scorePill(a.score)}
-          <span style="font-size:12px;color:var(--muted)">AI suspicion score</span>
+          <span style="font-size:12px;color:var(--muted)">ציון חשד AI</span>
         </div>
       </div>
-      <div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">Businesses to Verify</div>
+      <div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">עסקים לאימות</div>
       ${bizHtml}
       ${footerHtml}
     </div>`;
 }
 
-function renderValidationForm(id) {
-  const a = ADDRESSES.find(x => x.id === id);
-  if (!a) return;
-  document.getElementById("surveyor-topbar-title").textContent = "Submit Validation";
-  selectedValidation = null;
-
-  document.getElementById("surveyor-inner").innerHTML = `
-    <form class="surveyor-form" onsubmit="submitValidation(event,'${id}')">
-      <div class="warn-box">
-        <div class="warn-title">⚠️ On-site at ${a.addressEn}</div>
-        <div class="warn-sub">Please complete this form while physically present at the address.</div>
+function renderValidationForm(id){
+  const a=ADDRESSES.find(x=>x.id===id);
+  if(!a)return;
+  document.getElementById("surveyor-topbar-title").textContent="שלח דיווח שטח";
+  selectedValidation=null;
+  document.getElementById("surveyor-inner").innerHTML=`
+    <form style="padding:16px" onsubmit="submitValidation(event,'${id}')">
+      <div style="padding:14px 16px;border:2px solid #fcd34d;background:#fffbeb;border-radius:12px;margin-bottom:16px">
+        <div style="font-size:13px;font-weight:600">⚠️ אתה בשטח ב: ${a.addr}</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px">נא למלא את הטופס בזמן הימצאות פיזית בכתובת.</div>
       </div>
-      <div class="form-section">
-        <label class="form-label">What did you find? *</label>
+      <div style="margin-bottom:16px">
+        <label style="font-weight:700;font-size:13px;display:block;margin-bottom:10px">מה מצאת? *</label>
         <button type="button" class="option-btn" id="opt-found" onclick="selectOpt('found')">
-          <div><div class="option-label" style="color:#dc2626">✓ Business Confirmed</div><div class="option-desc">At least one business is clearly operating here</div></div>
+          <div><div class="option-label" style="color:#dc2626">✓ עסק אושר</div><div class="option-desc">לפחות עסק אחד פועל כאן בבירור</div></div>
         </button>
         <button type="button" class="option-btn" id="opt-possible" onclick="selectOpt('possible')">
-          <div><div class="option-label" style="color:#d97706">⚠ Possible Activity</div><div class="option-desc">Signs of business activity but not confirmed</div></div>
+          <div><div class="option-label" style="color:#d97706">⚠ פעילות אפשרית</div><div class="option-desc">סימנים לפעילות עסקית אך לא ודאי</div></div>
         </button>
         <button type="button" class="option-btn" id="opt-none" onclick="selectOpt('none')">
-          <div><div class="option-label" style="color:#16a34a">✗ No Business</div><div class="option-desc">Residential only — no commercial activity found</div></div>
+          <div><div class="option-label" style="color:#16a34a">✗ אין עסק</div><div class="option-desc">מגורים בלבד — לא נמצאה פעילות מסחרית</div></div>
         </button>
       </div>
-      <div class="form-section">
-        <label class="form-label">Notes</label>
-        <textarea class="notes" rows="4" placeholder="Describe what you observed (signage, people, equipment, etc.)"></textarea>
+      <div style="margin-bottom:14px">
+        <label style="font-weight:700;font-size:13px;display:block;margin-bottom:6px">הערות</label>
+        <textarea class="notes" rows="4" placeholder="תאר מה ראית (שלטים, אנשים, ציוד וכד')"></textarea>
       </div>
       <div class="photo-zone">
-        📷 Tap to add photos
-        <div class="photo-sub">Photo upload available in production build</div>
+        📷 לחץ להוספת תמונות
+        <div class="photo-sub" style="font-size:11px;margin-top:4px">העלאת תמונות זמינה בגרסת הייצור</div>
       </div>
-      <button type="submit" class="submit-btn disabled" id="submit-btn">Submit Validation</button>
+      <button type="submit" class="submit-btn disabled" id="submit-btn">שלח דיווח</button>
     </form>`;
 }
 
-function selectOpt(val) {
-  selectedValidation = val;
-  const map = {found:"selected-red", possible:"selected-yellow", none:"selected-green"};
-  ["found","possible","none"].forEach(k => {
-    const el = document.getElementById("opt-"+k);
-    el.className = "option-btn" + (k===val ? " "+map[k] : "");
+function selectOpt(val){
+  selectedValidation=val;
+  const map={found:"sel-red",possible:"sel-yellow",none:"sel-green"};
+  ["found","possible","none"].forEach(k=>{
+    const el=document.getElementById("opt-"+k);
+    el.className="option-btn"+(k===val?" "+map[k]:"");
   });
-  const sb = document.getElementById("submit-btn");
-  sb.className = "submit-btn ready";
+  document.getElementById("submit-btn").className="submit-btn ready";
 }
 
-function submitValidation(e, id) {
+function submitValidation(e,id){
   e.preventDefault();
-  if (!selectedValidation) return;
+  if(!selectedValidation)return;
   showPage("success-page");
-  setTimeout(() => {
-    renderSurveyorList();
-    showPage("surveyor-page");
-  }, 2200);
+  setTimeout(()=>{renderSurveyorList();showPage("surveyor-page");},2200);
 }
 </script>
 </body>
