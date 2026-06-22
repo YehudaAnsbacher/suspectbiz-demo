@@ -1,879 +1,676 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SuspectBiz — Jerusalem Business Verification System</title>
-  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --bg: #f8f9fa;
-      --surface: #ffffff;
-      --border: #e5e7eb;
-      --text: #111827;
-      --muted: #6b7280;
-      --accent: #2563eb;
-      --accent-light: #eff6ff;
-      --danger: #dc2626;
-      --warning: #d97706;
-      --success: #16a34a;
-      --shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.04);
-      --shadow-md: 0 4px 6px -1px rgba(0,0,0,.07), 0 2px 4px -1px rgba(0,0,0,.04);
-    }
-    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; }
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
-    button { cursor: pointer; font-family: inherit; }
-    input, select, textarea { font-family: inherit; }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SuspectBiz — Jerusalem Business Verification</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f8f9fb;--surface:#fff;--border:#e5e7eb;--text:#111827;--muted:#6b7280;
+  --accent:#2563eb;--accent-bg:#eff6ff;--danger:#dc2626;--warning:#d97706;--success:#16a34a;
+  --r-sm:8px;--r-md:12px;--r-lg:16px;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+button{cursor:pointer;font-family:inherit;transition:opacity .15s,background .15s,border-color .15s}
+input,select,textarea{font-family:inherit;font-size:14px}
+a{text-decoration:none}
+.hidden{display:none!important}
+
+/* Layout */
+#app{min-height:100vh}
+.page{display:none;min-height:100vh}
+.page.active{display:block}
+
+/* Cards */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);box-shadow:0 1px 3px rgba(0,0,0,.06)}
+
+/* Badge */
+.badge{display:inline-flex;align-items:center;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:500;white-space:nowrap}
+
+/* Score pill */
+.score-pill{display:inline-flex;align-items:center;gap:5px;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:600}
+.score-dot{width:6px;height:6px;border-radius:50%;display:inline-block}
+.score-high{background:#fef2f2;color:#dc2626}.score-high .score-dot{background:#dc2626}
+.score-med{background:#fffbeb;color:#d97706}.score-med .score-dot{background:#d97706}
+.score-low{background:#f0fdf4;color:#16a34a}.score-low .score-dot{background:#16a34a}
+
+/* Topbar */
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:58px;position:sticky;top:0;z-index:100}
+.topbar-brand{display:flex;align-items:center;gap:10px}
+.logo{width:32px;height:32px;border-radius:8px;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.avatar{border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;flex-shrink:0;font-size:12px}
+.btn-ghost{background:none;border:1px solid var(--border);border-radius:var(--r-sm);padding:5px 12px;font-size:13px;color:var(--muted)}
+.btn-ghost:hover{background:var(--bg)}
+.btn-back{background:none;border:none;color:var(--accent);font-size:13px;font-weight:500;display:flex;align-items:center;gap:4px;padding:0;margin-bottom:20px}
+
+/* Login */
+#login-page{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#f0f4ff 0%,#f8f9fa 60%,#fef9f0 100%);padding:24px}
+.login-box{width:100%;max-width:380px}
+.login-header{text-align:center;margin-bottom:32px}
+.login-logo{width:52px;height:52px;border-radius:14px;background:#2563eb;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:20px}
+.login-title{font-size:22px;font-weight:700}
+.login-sub{color:var(--muted);font-size:14px;margin-top:4px}
+.login-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:28px}
+.label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px}
+.input-field{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:var(--r-sm);font-size:13px;outline:none;background:var(--surface)}
+.input-field:focus{border-color:var(--accent)}
+.role-btns{display:flex;gap:8px;margin-bottom:20px}
+.role-btn{flex:1;padding:10px 6px;border:2px solid var(--border);border-radius:10px;background:var(--surface);color:var(--muted);font-weight:600;font-size:13px}
+.role-btn.active{border-color:#2563eb;background:#eff6ff;color:#2563eb}
+.btn-primary{width:100%;padding:12px;background:#2563eb;color:#fff;border:none;border-radius:10px;font-weight:600;font-size:15px}
+.btn-primary:hover{opacity:.9}
+.login-footer{text-align:center;color:var(--muted);font-size:12px;margin-top:20px}
+
+/* Admin Dashboard */
+.admin-content{padding:24px;max-width:1200px}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:24px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:16px 20px}
+.stat-value{font-size:26px;font-weight:700}
+.stat-label{font-size:12px;color:var(--muted);margin-top:2px}
+.controls{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.search-input{flex:1 1 200px;padding:8px 12px;border:1px solid var(--border);border-radius:var(--r-sm);font-size:13px;background:var(--surface);outline:none}
+.search-input:focus{border-color:var(--accent)}
+.filter-select{padding:8px 12px;border:1px solid var(--border);border-radius:var(--r-sm);font-size:13px;background:var(--surface);outline:none}
+.btn-export{padding:8px 16px;background:#f3f4f6;border:1px solid var(--border);border-radius:var(--r-sm);font-size:13px;font-weight:500;color:var(--muted)}
+table{width:100%;border-collapse:collapse}
+th{padding:11px 16px;text-align:left;font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;white-space:nowrap;border-bottom:1px solid var(--border)}
+td{padding:12px 16px;border-bottom:1px solid var(--border)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#f9fafb}
+.addr-en{font-weight:500;font-size:13px}
+.addr-he{font-size:12px;color:var(--muted);direction:rtl;text-align:right;margin-top:1px}
+.btn-view{padding:5px 12px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:12px;font-weight:500;color:var(--accent)}
+.btn-view:hover{background:var(--accent-bg)}
+
+/* Detail page */
+.detail-content{padding:24px;max-width:860px;margin:0 auto}
+.detail-header{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px}
+.detail-addr-en{font-size:18px;font-weight:600}
+.detail-addr-he{color:var(--muted);font-size:13px;direction:rtl;text-align:right;margin-top:2px}
+.detail-meta{font-size:11px;font-weight:600;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:4px}
+.tab-bar{display:flex;gap:2px;margin-bottom:16px;background:var(--surface);border-radius:10px;padding:4px;border:1px solid var(--border)}
+.tab-btn{flex:1;padding:7px 0;border:none;border-radius:8px;background:transparent;color:var(--muted);font-weight:500;font-size:13px;text-transform:capitalize}
+.tab-btn.active{background:#2563eb;color:#fff}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+.biz-card{margin-bottom:12px}
+.biz-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px}
+.biz-name{font-weight:600;font-size:15px}
+.biz-cat{font-size:12px;color:var(--muted);margin-top:2px}
+.biz-badges{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.reasoning{font-size:13px;color:#374151;background:#f9fafb;border-radius:8px;padding:10px 14px;margin-bottom:12px;line-height:1.6}
+.sources{display:flex;flex-wrap:wrap;gap:6px}
+.source-link{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:6px;border:1px solid var(--border);font-size:12px;color:var(--accent);background:var(--accent-bg)}
+.source-link:hover{opacity:.8}
+.pipeline-step{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
+.step-icon{width:22px;height:22px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin-top:1px}
+.step-name{font-weight:500;font-size:13px}
+.step-detail{color:var(--muted);font-size:12px}
+.empty-state{padding:32px;text-align:center;color:var(--muted)}
+
+/* Surveyor */
+#surveyor-page{max-width:480px;margin:0 auto;min-height:100vh;background:var(--bg)}
+.surveyor-list{padding:16px}
+.surveyor-hint{font-size:13px;color:var(--muted);margin-bottom:12px}
+.addr-card-btn{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:left;width:100%;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:10px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.addr-card-btn:hover{border-color:#2563eb30;background:#f9fafb}
+.surveyor-detail{padding:16px}
+.addr-box{padding:16px;margin-bottom:12px}
+.biz-mini{padding:14px;margin-bottom:8px}
+.validate-btn{width:100%;margin-top:16px;padding:15px;background:#2563eb;color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:600;box-shadow:0 4px 14px rgba(37,99,235,.25)}
+.validate-btn:hover{opacity:.9}
+.already-validated{padding:14px;margin-top:12px;border-color:#bbf7d0;background:#f0fdf4;border-radius:var(--r-md);border:1px solid #bbf7d0}
+
+/* Form */
+.surveyor-form{padding:16px}
+.warn-box{padding:14px 16px;border:2px solid #fcd34d;background:#fffbeb;border-radius:12px;margin-bottom:16px}
+.warn-title{font-size:13px;font-weight:500}
+.warn-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.form-section{margin-bottom:16px}
+.form-label{font-weight:600;font-size:13px;display:block;margin-bottom:10px}
+.option-btn{display:flex;width:100%;padding:13px 16px;border:2px solid var(--border);border-radius:12px;background:var(--surface);text-align:left;gap:12px;align-items:center;margin-bottom:8px}
+.option-btn.selected-red{border-color:#dc2626;background:#fef2f2}
+.option-btn.selected-yellow{border-color:#d97706;background:#fffbeb}
+.option-btn.selected-green{border-color:#16a34a;background:#f0fdf4}
+.option-label{font-weight:600;font-size:14px}
+.option-desc{font-size:12px;color:var(--muted);margin-top:1px}
+textarea.notes{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:10px;font-size:13px;resize:none;outline:none;background:var(--surface)}
+textarea.notes:focus{border-color:var(--accent)}
+.photo-zone{padding:16px;border:2px dashed var(--border);border-radius:12px;text-align:center;color:var(--muted);font-size:13px;margin-bottom:16px}
+.photo-sub{font-size:11px;margin-top:4px}
+.submit-btn{width:100%;padding:15px;border:none;border-radius:14px;font-size:15px;font-weight:600;transition:background .2s,color .2s}
+.submit-btn.ready{background:#2563eb;color:#fff}
+.submit-btn.disabled{background:#e5e7eb;color:#9ca3af}
+
+/* Success */
+.success-screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center}
+.success-icon{font-size:56px;margin-bottom:16px}
+.success-title{font-size:18px;font-weight:600}
+.success-sub{color:var(--muted);font-size:14px;margin-top:8px}
+
+/* Responsive tweaks */
+@media(max-width:640px){
+  .admin-content{padding:12px}
+  th,td{padding:8px 10px}
+  .topbar{padding:0 12px}
+}
+</style>
 </head>
 <body>
-<div id="root"></div>
-<script type="text/babel">
+<div id="app">
 
-// ─── Mock Data ───────────────────────────────────────────────────────────────
-
-const MOCK_ADDRESSES = [
-  {
-    id: "addr-001",
-    address: "רחוב יפו 42, דירה 3, ירושלים",
-    addressEn: "42 Jaffa St, Apt 3, Jerusalem",
-    status: "verified",
-    suspicionScore: 0.91,
-    businessCount: 2,
-    assignedTo: "surveyor1",
-    lastUpdated: "2024-01-15",
-    fieldValidation: "business_found",
-    businesses: [
-      {
-        name: "Tov Legal Services Ltd.",
-        isReal: true,
-        isActive: true,
-        confidence: 0.93,
-        resolvedAddress: "42 Jaffa St, Jerusalem",
-        addressMatch: true,
-        sources: [
-          { url: "https://d.co.il/tov-legal", title: "Tov Legal – B2B Directory", type: "directory" },
-          { url: "https://maps.google.com/?q=tov+legal+jerusalem", title: "Google Maps – Tov Legal", type: "maps" },
-          { url: "https://tov-legal.co.il", title: "Official Website", type: "official" },
-        ],
-        reasoning: "Three independent high-quality sources confirm business operation at this address. Official website lists suite number consistent with apartment 3. Last review dated 3 months ago indicates active operation.",
-        suspicionScore: 0.91,
-        category: "Legal Services",
-      },
-      {
-        name: "Sunrise Consulting",
-        isReal: true,
-        isActive: false,
-        confidence: 0.71,
-        resolvedAddress: "42 Jaffa St, Jerusalem",
-        addressMatch: true,
-        sources: [
-          { url: "https://linkedin.com/company/sunrise-consulting-il", title: "LinkedIn – Sunrise Consulting", type: "social" },
-        ],
-        reasoning: "Found in LinkedIn company registry but no website or recent activity. Possibly dormant. Address listed matches input.",
-        suspicionScore: 0.55,
-        category: "Business Consulting",
-      }
-    ],
-    pipeline: [
-      { step: "Query Builder", status: "done", detail: "Generated 5 Hebrew queries for business discovery" },
-      { step: "Tavily Search", status: "done", detail: "Retrieved 28 results across 5 queries" },
-      { step: "Extraction", status: "done", detail: "Extracted 3 business candidates from results" },
-      { step: "Business Investigator", status: "done", detail: "Verified 2/3 businesses; 1 discarded (no match)" },
-      { step: "Final Scoring", status: "done", detail: "2 businesses passed threshold → output ready" },
-    ]
-  },
-  {
-    id: "addr-002",
-    address: "רחוב בן יהודה 18, דירה 7, ירושלים",
-    addressEn: "18 Ben Yehuda St, Apt 7, Jerusalem",
-    status: "pending",
-    suspicionScore: 0.74,
-    businessCount: 1,
-    assignedTo: "surveyor2",
-    lastUpdated: "2024-01-14",
-    fieldValidation: null,
-    businesses: [
-      {
-        name: "Jerusalem Tax Advisors",
-        isReal: true,
-        isActive: true,
-        confidence: 0.78,
-        resolvedAddress: "18 Ben Yehuda St, Jerusalem",
-        addressMatch: true,
-        sources: [
-          { url: "https://kav-laoved.org.il/advisor/jta", title: "Professional Registry – JTA", type: "directory" },
-          { url: "https://fb.com/JerusalemTaxAdvisors", title: "Facebook Business Page", type: "social" },
-        ],
-        reasoning: "Professional registry lists active license at this address. Facebook page active with posts from last month. Confidence slightly reduced due to no official website found.",
-        suspicionScore: 0.74,
-        category: "Financial Services",
-      }
-    ],
-    pipeline: [
-      { step: "Query Builder", status: "done", detail: "Generated 4 Hebrew queries" },
-      { step: "Tavily Search", status: "done", detail: "Retrieved 19 results" },
-      { step: "Extraction", status: "done", detail: "Extracted 1 business candidate" },
-      { step: "Business Investigator", status: "done", detail: "Verified 1/1 business" },
-      { step: "Final Scoring", status: "done", detail: "1 business passed threshold" },
-    ]
-  },
-  {
-    id: "addr-003",
-    address: "רחוב הנביאים 55, דירה 12, ירושלים",
-    addressEn: "55 HaNevi'im St, Apt 12, Jerusalem",
-    status: "investigating",
-    suspicionScore: 0.62,
-    businessCount: 0,
-    assignedTo: null,
-    lastUpdated: "2024-01-15",
-    fieldValidation: null,
-    businesses: [],
-    pipeline: [
-      { step: "Query Builder", status: "done", detail: "Generated 6 Hebrew queries" },
-      { step: "Tavily Search", status: "done", detail: "Retrieved 31 results" },
-      { step: "Extraction", status: "done", detail: "Extracted 2 candidates" },
-      { step: "Business Investigator", status: "running", detail: "Investigating 2 candidates..." },
-      { step: "Final Scoring", status: "pending", detail: "Waiting for investigator" },
-    ]
-  },
-  {
-    id: "addr-004",
-    address: "רחוב קינג ג'ורג' 31, דירה 2, ירושלים",
-    addressEn: "31 King George St, Apt 2, Jerusalem",
-    status: "no_business",
-    suspicionScore: 0.18,
-    businessCount: 0,
-    assignedTo: "surveyor1",
-    lastUpdated: "2024-01-13",
-    fieldValidation: "no_business",
-    businesses: [],
-    pipeline: [
-      { step: "Query Builder", status: "done", detail: "Generated 4 queries" },
-      { step: "Tavily Search", status: "done", detail: "Retrieved 11 results" },
-      { step: "Extraction", status: "done", detail: "0 business candidates found" },
-      { step: "Business Investigator", status: "skipped", detail: "No candidates to investigate" },
-      { step: "Final Scoring", status: "done", detail: "No businesses → score 0.18 (low)" },
-    ]
-  },
-  {
-    id: "addr-005",
-    address: "רחוב אגריפס 8, דירה 5, ירושלים",
-    addressEn: "8 Agrippas St, Apt 5, Jerusalem",
-    status: "pending",
-    suspicionScore: 0.85,
-    businessCount: 3,
-    assignedTo: "surveyor2",
-    lastUpdated: "2024-01-15",
-    fieldValidation: null,
-    businesses: [
-      {
-        name: "Mahane Yehuda Import & Export",
-        isReal: true,
-        isActive: true,
-        confidence: 0.88,
-        resolvedAddress: "8 Agrippas St, Jerusalem",
-        addressMatch: true,
-        sources: [
-          { url: "https://misrad-hamishpatim.gov.il/companies/mye", title: "Companies Registrar – MYE", type: "government" },
-        ],
-        reasoning: "Government registrar shows active company registered at this address. Official registration date 2019, last annual report filed 2023.",
-        suspicionScore: 0.88,
-        category: "Import / Export",
-      },
-      {
-        name: "Spice Garden Restaurant",
-        isReal: true,
-        isActive: true,
-        confidence: 0.82,
-        resolvedAddress: "8 Agrippas St, Jerusalem",
-        addressMatch: true,
-        sources: [
-          { url: "https://rest.co.il/spicegarden", title: "Rest.co.il – Spice Garden", type: "directory" },
-          { url: "https://google.com/maps/place/spice-garden-jlm", title: "Google Maps", type: "maps" },
-        ],
-        reasoning: "Listed on food directory and Google Maps, both confirming address. 47 reviews, last review 2 weeks ago. Likely home-based catering or ghost kitchen.",
-        suspicionScore: 0.82,
-        category: "Food & Catering",
-      },
-      {
-        name: "Ronen IT Solutions",
-        isReal: true,
-        isActive: true,
-        confidence: 0.76,
-        resolvedAddress: "8 Agrippas St, Jerusalem",
-        addressMatch: true,
-        sources: [
-          { url: "https://linkedin.com/company/ronen-it", title: "LinkedIn – Ronen IT", type: "social" },
-          { url: "https://ronen-it.co.il", title: "Official Website", type: "official" },
-        ],
-        reasoning: "Website and LinkedIn both list residential address. Freelance IT contractor, likely operating from home.",
-        suspicionScore: 0.76,
-        category: "Technology",
-      }
-    ],
-    pipeline: [
-      { step: "Query Builder", status: "done", detail: "Generated 6 Hebrew queries" },
-      { step: "Tavily Search", status: "done", detail: "Retrieved 44 results" },
-      { step: "Extraction", status: "done", detail: "Extracted 4 candidates" },
-      { step: "Business Investigator", status: "done", detail: "Verified 3/4; 1 false positive removed" },
-      { step: "Final Scoring", status: "done", detail: "3 businesses confirmed suspicious" },
-    ]
-  },
-];
-
-const SURVEYORS = [
-  { id: "surveyor1", name: "Yosef Cohen", email: "yosef@city.gov.il", assigned: 3 },
-  { id: "surveyor2", name: "Miriam Levy", email: "miriam@city.gov.il", assigned: 2 },
-];
-
-// ─── Helpers ─────────────────────────────────────────────────────────────────
-
-const { useState, useEffect, useRef } = React;
-
-const score2color = (s) => {
-  if (s >= 0.8) return { bg: "#fef2f2", text: "#dc2626", dot: "#dc2626" };
-  if (s >= 0.5) return { bg: "#fffbeb", text: "#d97706", dot: "#d97706" };
-  return { bg: "#f0fdf4", text: "#16a34a", dot: "#16a34a" };
-};
-
-const statusLabel = {
-  verified: { label: "Verified", color: "#dc2626" },
-  pending: { label: "Pending Review", color: "#d97706" },
-  investigating: { label: "Investigating", color: "#2563eb" },
-  no_business: { label: "No Business", color: "#16a34a" },
-};
-
-const sourceIcon = { directory: "📋", maps: "🗺️", official: "🌐", social: "💬", government: "🏛️" };
-
-// ─── Components ──────────────────────────────────────────────────────────────
-
-function Badge({ children, color = "#6b7280", bg = "#f3f4f6" }) {
-  return (
-    <span style={{
-      display: "inline-flex", alignItems: "center", gap: 4,
-      padding: "2px 8px", borderRadius: 999, fontSize: 12, fontWeight: 500,
-      color, background: bg, whiteSpace: "nowrap"
-    }}>{children}</span>
-  );
-}
-
-function ScorePill({ score }) {
-  const c = score2color(score);
-  return (
-    <span style={{
-      display: "inline-flex", alignItems: "center", gap: 5,
-      padding: "2px 10px", borderRadius: 999, fontSize: 12, fontWeight: 600,
-      color: c.text, background: c.bg
-    }}>
-      <span style={{ width: 6, height: 6, borderRadius: "50%", background: c.dot, display: "inline-block" }} />
-      {Math.round(score * 100)}%
-    </span>
-  );
-}
-
-function Avatar({ name, size = 32 }) {
-  const initials = name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase();
-  const colors = ["#2563eb", "#7c3aed", "#db2777", "#0891b2", "#16a34a"];
-  const bg = colors[name.charCodeAt(0) % colors.length];
-  return (
-    <div style={{
-      width: size, height: size, borderRadius: "50%", background: bg,
-      color: "#fff", display: "flex", alignItems: "center", justifyContent: "center",
-      fontSize: size * 0.35, fontWeight: 600, flexShrink: 0
-    }}>{initials}</div>
-  );
-}
-
-function Card({ children, style }) {
-  return (
-    <div style={{
-      background: "var(--surface)", border: "1px solid var(--border)",
-      borderRadius: 12, boxShadow: "var(--shadow)", ...style
-    }}>{children}</div>
-  );
-}
-
-function PipelineStatus({ pipeline }) {
-  const stepIcons = { done: "✓", running: "↻", pending: "○", skipped: "—" };
-  const stepColors = { done: "#16a34a", running: "#2563eb", pending: "#9ca3af", skipped: "#d1d5db" };
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-      {pipeline.map((s, i) => (
-        <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
-          <div style={{
-            width: 22, height: 22, borderRadius: "50%", flexShrink: 0,
-            background: stepColors[s.status] + "20",
-            color: stepColors[s.status], display: "flex", alignItems: "center",
-            justifyContent: "center", fontSize: 11, fontWeight: 700, marginTop: 1
-          }}>{stepIcons[s.status]}</div>
-          <div>
-            <div style={{ fontWeight: 500, fontSize: 13 }}>{s.step}</div>
-            <div style={{ color: "var(--muted)", fontSize: 12 }}>{s.detail}</div>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-// ─── Admin: Address Detail ────────────────────────────────────────────────────
-
-function AddressDetail({ addr, onBack }) {
-  const [tab, setTab] = useState("businesses");
-  const tabs = ["businesses", "pipeline", "validation"];
-
-  return (
-    <div style={{ maxWidth: 860, margin: "0 auto" }}>
-      <button onClick={onBack} style={{
-        background: "none", border: "none", color: "var(--accent)",
-        display: "flex", alignItems: "center", gap: 6, marginBottom: 20,
-        fontSize: 13, fontWeight: 500, padding: 0
-      }}>← Back to Addresses</button>
-
-      <Card style={{ padding: 24, marginBottom: 16 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 12 }}>
-          <div>
-            <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 1, color: "var(--muted)", textTransform: "uppercase", marginBottom: 4 }}>Address</div>
-            <div style={{ fontSize: 18, fontWeight: 600 }}>{addr.addressEn}</div>
-            <div style={{ color: "var(--muted)", fontSize: 13, direction: "rtl", textAlign: "right", marginTop: 2 }}>{addr.address}</div>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <Badge color={statusLabel[addr.status].color} bg={statusLabel[addr.status].color + "15"}>
-              {statusLabel[addr.status].label}
-            </Badge>
-            <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: 11, color: "var(--muted)", marginBottom: 2 }}>Suspicion Score</div>
-              <ScorePill score={addr.suspicionScore} />
-            </div>
-          </div>
-        </div>
-      </Card>
-
-      <div style={{ display: "flex", gap: 2, marginBottom: 16, background: "var(--surface)", borderRadius: 10, padding: 4, border: "1px solid var(--border)" }}>
-        {tabs.map(t => (
-          <button key={t} onClick={() => setTab(t)} style={{
-            flex: 1, padding: "7px 0", border: "none", borderRadius: 8,
-            background: tab === t ? "var(--accent)" : "transparent",
-            color: tab === t ? "#fff" : "var(--muted)",
-            fontWeight: 500, fontSize: 13, transition: "all .15s", textTransform: "capitalize"
-          }}>{t}</button>
-        ))}
+<!-- LOGIN -->
+<div id="login-page" class="page active">
+  <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#f0f4ff 0%,#f8f9fa 60%,#fef9f0 100%);padding:24px">
+    <div class="login-box">
+      <div class="login-header">
+        <div class="login-logo">SB</div>
+        <div class="login-title">SuspectBiz</div>
+        <div class="login-sub">Jerusalem Business Verification System</div>
       </div>
-
-      {tab === "businesses" && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          {addr.businesses.length === 0 ? (
-            <Card style={{ padding: 32, textAlign: "center", color: "var(--muted)" }}>
-              No businesses found at this address.
-            </Card>
-          ) : addr.businesses.map((biz, i) => (
-            <Card key={i} style={{ padding: 20 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, marginBottom: 12 }}>
-                <div>
-                  <div style={{ fontWeight: 600, fontSize: 15 }}>{biz.name}</div>
-                  <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}>{biz.category}</div>
-                </div>
-                <div style={{ display: "flex", gap: 6, flexWrap: "wrap", justifyContent: "flex-end" }}>
-                  <Badge color={biz.isActive ? "#16a34a" : "#9ca3af"} bg={biz.isActive ? "#f0fdf4" : "#f9fafb"}>
-                    {biz.isActive ? "Active" : "Inactive"}
-                  </Badge>
-                  <ScorePill score={biz.suspicionScore} />
-                </div>
-              </div>
-
-              <div style={{ fontSize: 13, color: "#374151", background: "#f9fafb", borderRadius: 8, padding: "10px 14px", marginBottom: 12, lineHeight: 1.6 }}>
-                <strong style={{ color: "var(--text)" }}>AI Reasoning: </strong>{biz.reasoning}
-              </div>
-
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                {biz.sources.map((s, j) => (
-                  <a key={j} href={s.url} target="_blank" rel="noreferrer" style={{
-                    display: "inline-flex", alignItems: "center", gap: 5,
-                    padding: "4px 10px", borderRadius: 6, border: "1px solid var(--border)",
-                    fontSize: 12, color: "var(--accent)", textDecoration: "none",
-                    background: "var(--accent-light)"
-                  }}>
-                    {sourceIcon[s.type] || "🔗"} {s.title}
-                  </a>
-                ))}
-              </div>
-            </Card>
-          ))}
+      <div class="login-card card">
+        <div class="label" style="margin-bottom:10px">Sign in as</div>
+        <div class="role-btns">
+          <button class="role-btn active" id="role-admin" onclick="selectRole('admin')">🖥️ Admin</button>
+          <button class="role-btn" id="role-surveyor" onclick="selectRole('surveyor')">📱 Field Surveyor</button>
         </div>
-      )}
-
-      {tab === "pipeline" && (
-        <Card style={{ padding: 24 }}>
-          <div style={{ fontWeight: 600, marginBottom: 16 }}>LangGraph Pipeline Execution</div>
-          <PipelineStatus pipeline={addr.pipeline} />
-        </Card>
-      )}
-
-      {tab === "validation" && (
-        <Card style={{ padding: 24 }}>
-          <div style={{ fontWeight: 600, marginBottom: 4 }}>Field Validation</div>
-          <div style={{ color: "var(--muted)", fontSize: 13, marginBottom: 20 }}>Submitted by field surveyor after on-site visit.</div>
-          {addr.fieldValidation ? (
-            <div>
-              <Badge
-                color={addr.fieldValidation === "business_found" ? "#dc2626" : "#16a34a"}
-                bg={addr.fieldValidation === "business_found" ? "#fef2f2" : "#f0fdf4"}
-              >{addr.fieldValidation === "business_found" ? "✓ Business Found On-Site" : "✗ No Business Found"}</Badge>
-              <div style={{ marginTop: 12, fontSize: 13, color: "var(--muted)" }}>
-                Validated on {addr.lastUpdated} · {addr.fieldValidation === "business_found" ? "Matches AI prediction" : "Contradicts AI prediction — feedback sent to ML pipeline"}
-              </div>
-            </div>
-          ) : (
-            <div style={{ color: "var(--muted)", fontSize: 13, fontStyle: "italic" }}>Not yet validated by field surveyor.</div>
-          )}
-        </Card>
-      )}
+        <div style="margin-bottom:14px">
+          <label class="label">Email</label>
+          <input id="login-email" class="input-field" value="admin@city.gov.il"/>
+        </div>
+        <div style="margin-bottom:20px">
+          <label class="label">Password</label>
+          <input class="input-field" type="password" value="••••••••"/>
+        </div>
+        <button class="btn-primary" onclick="doLogin()">Sign In</button>
+      </div>
+      <div class="login-footer">Demo system · LangGraph + Tavily + Supabase + Next.js</div>
     </div>
-  );
+  </div>
+</div>
+
+<!-- ADMIN DASHBOARD -->
+<div id="admin-page" class="page">
+  <div class="topbar">
+    <div class="topbar-brand">
+      <div class="logo">SB</div>
+      <span style="font-weight:600;font-size:15px">SuspectBiz</span>
+      <span style="color:var(--muted);font-size:13px">Admin Portal</span>
+    </div>
+    <div class="topbar-right">
+      <div class="avatar" id="admin-avatar" style="width:30px;height:30px;background:#2563eb;font-size:11px">AD</div>
+      <button class="btn-ghost" onclick="logout()">Sign out</button>
+    </div>
+  </div>
+  <div class="admin-content">
+    <div class="stats-grid" id="stats-grid"></div>
+    <div class="controls">
+      <input class="search-input" id="search-input" placeholder="Search addresses..." oninput="renderTable()"/>
+      <select class="filter-select" id="filter-select" onchange="renderTable()">
+        <option value="all">All Statuses</option>
+        <option value="verified">Verified</option>
+        <option value="pending">Pending</option>
+        <option value="investigating">Investigating</option>
+        <option value="no_business">No Business</option>
+      </select>
+      <button class="btn-export">⬇ Export CSV</button>
+    </div>
+    <div class="card" style="overflow:hidden">
+      <div style="overflow-x:auto">
+        <table>
+          <thead>
+            <tr>
+              <th>Address</th><th>Status</th><th>Businesses</th><th>Score</th><th>Assigned To</th><th>Updated</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="addr-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL PAGE -->
+<div id="detail-page" class="page">
+  <div class="topbar">
+    <div class="topbar-brand">
+      <div class="logo">SB</div>
+      <span style="font-weight:600;font-size:15px">SuspectBiz</span>
+    </div>
+    <div class="topbar-right">
+      <button class="btn-ghost" onclick="logout()">Sign out</button>
+    </div>
+  </div>
+  <div class="detail-content" id="detail-content"></div>
+</div>
+
+<!-- SURVEYOR PAGE -->
+<div id="surveyor-page" class="page">
+  <div class="topbar">
+    <div class="topbar-brand" id="surveyor-topbar-left">
+      <div class="logo" style="background:#7c3aed">SB</div>
+      <span style="font-weight:600;font-size:15px" id="surveyor-topbar-title">My Assignments</span>
+    </div>
+    <div class="topbar-right">
+      <div class="avatar" style="width:28px;height:28px;background:#7c3aed;font-size:10px">YC</div>
+      <button class="btn-ghost" onclick="logout()" style="font-size:12px;padding:4px 8px">Out</button>
+    </div>
+  </div>
+  <div id="surveyor-inner"></div>
+</div>
+
+<!-- SUCCESS -->
+<div id="success-page" class="page">
+  <div class="success-screen">
+    <div class="success-icon">✅</div>
+    <div class="success-title">Validation Submitted!</div>
+    <div class="success-sub">Returning to your assignments...</div>
+  </div>
+</div>
+
+</div>
+
+<script>
+// ── Data ──────────────────────────────────────────────────────────────────────
+const SURVEYORS = {
+  surveyor1: { name: "Yosef Cohen", initials: "YC" },
+  surveyor2: { name: "Miriam Levy", initials: "ML" },
+};
+
+const ADDRESSES = [
+  {
+    id:"a1", addressEn:"42 Jaffa St, Apt 3, Jerusalem", addressHe:"רחוב יפו 42, דירה 3, ירושלים",
+    status:"verified", score:0.91, assignedTo:"surveyor1", updated:"2024-01-15", validated:"business_found",
+    businesses:[
+      { name:"Tov Legal Services Ltd.", cat:"Legal Services", active:true, conf:0.93, score:0.91,
+        reasoning:"Three independent high-quality sources confirm business operation at this address. Official website lists suite number consistent with apartment 3. Last review dated 3 months ago indicates active operation.",
+        sources:[{icon:"📋",title:"Tov Legal – B2B Directory",url:"#"},{icon:"🗺️",title:"Google Maps – Tov Legal",url:"#"},{icon:"🌐",title:"Official Website",url:"#"}] },
+      { name:"Sunrise Consulting", cat:"Business Consulting", active:false, conf:0.71, score:0.55,
+        reasoning:"Found in LinkedIn company registry but no website or recent activity. Possibly dormant. Address listed matches input.",
+        sources:[{icon:"💬",title:"LinkedIn – Sunrise Consulting",url:"#"}] },
+    ],
+    pipeline:[
+      {step:"Query Builder",status:"done",detail:"Generated 5 Hebrew queries for business discovery"},
+      {step:"Tavily Search",status:"done",detail:"Retrieved 28 results across 5 queries"},
+      {step:"Extraction",status:"done",detail:"Extracted 3 business candidates from results"},
+      {step:"Business Investigator",status:"done",detail:"Verified 2/3 businesses; 1 discarded (no match)"},
+      {step:"Final Scoring",status:"done",detail:"2 businesses passed threshold → output ready"},
+    ]
+  },
+  {
+    id:"a2", addressEn:"18 Ben Yehuda St, Apt 7, Jerusalem", addressHe:"רחוב בן יהודה 18, דירה 7, ירושלים",
+    status:"pending", score:0.74, assignedTo:"surveyor2", updated:"2024-01-14", validated:null,
+    businesses:[
+      { name:"Jerusalem Tax Advisors", cat:"Financial Services", active:true, conf:0.78, score:0.74,
+        reasoning:"Professional registry lists active license at this address. Facebook page active with posts from last month. Confidence slightly reduced due to no official website found.",
+        sources:[{icon:"📋",title:"Professional Registry – JTA",url:"#"},{icon:"💬",title:"Facebook Business Page",url:"#"}] },
+    ],
+    pipeline:[
+      {step:"Query Builder",status:"done",detail:"Generated 4 Hebrew queries"},
+      {step:"Tavily Search",status:"done",detail:"Retrieved 19 results"},
+      {step:"Extraction",status:"done",detail:"Extracted 1 business candidate"},
+      {step:"Business Investigator",status:"done",detail:"Verified 1/1 business"},
+      {step:"Final Scoring",status:"done",detail:"1 business passed threshold"},
+    ]
+  },
+  {
+    id:"a3", addressEn:"55 HaNevi'im St, Apt 12, Jerusalem", addressHe:"רחוב הנביאים 55, דירה 12, ירושלים",
+    status:"investigating", score:0.62, assignedTo:null, updated:"2024-01-15", validated:null,
+    businesses:[],
+    pipeline:[
+      {step:"Query Builder",status:"done",detail:"Generated 6 Hebrew queries"},
+      {step:"Tavily Search",status:"done",detail:"Retrieved 31 results"},
+      {step:"Extraction",status:"done",detail:"Extracted 2 candidates"},
+      {step:"Business Investigator",status:"running",detail:"Investigating 2 candidates..."},
+      {step:"Final Scoring",status:"pending",detail:"Waiting for investigator"},
+    ]
+  },
+  {
+    id:"a4", addressEn:"31 King George St, Apt 2, Jerusalem", addressHe:"רחוב קינג ג'ורג' 31, דירה 2, ירושלים",
+    status:"no_business", score:0.18, assignedTo:"surveyor1", updated:"2024-01-13", validated:"no_business",
+    businesses:[],
+    pipeline:[
+      {step:"Query Builder",status:"done",detail:"Generated 4 queries"},
+      {step:"Tavily Search",status:"done",detail:"Retrieved 11 results"},
+      {step:"Extraction",status:"done",detail:"0 business candidates found"},
+      {step:"Business Investigator",status:"skipped",detail:"No candidates to investigate"},
+      {step:"Final Scoring",status:"done",detail:"No businesses → score 0.18 (low)"},
+    ]
+  },
+  {
+    id:"a5", addressEn:"8 Agrippas St, Apt 5, Jerusalem", addressHe:"רחוב אגריפס 8, דירה 5, ירושלים",
+    status:"pending", score:0.85, assignedTo:"surveyor2", updated:"2024-01-15", validated:null,
+    businesses:[
+      { name:"Mahane Yehuda Import & Export", cat:"Import / Export", active:true, conf:0.88, score:0.88,
+        reasoning:"Government registrar shows active company registered at this address. Official registration date 2019, last annual report filed 2023.",
+        sources:[{icon:"🏛️",title:"Companies Registrar – MYE",url:"#"}] },
+      { name:"Spice Garden Restaurant", cat:"Food & Catering", active:true, conf:0.82, score:0.82,
+        reasoning:"Listed on food directory and Google Maps, both confirming address. 47 reviews, last review 2 weeks ago. Likely home-based catering or ghost kitchen.",
+        sources:[{icon:"📋",title:"Rest.co.il – Spice Garden",url:"#"},{icon:"🗺️",title:"Google Maps",url:"#"}] },
+      { name:"Ronen IT Solutions", cat:"Technology", active:true, conf:0.76, score:0.76,
+        reasoning:"Website and LinkedIn both list residential address. Freelance IT contractor, likely operating from home.",
+        sources:[{icon:"💬",title:"LinkedIn – Ronen IT",url:"#"},{icon:"🌐",title:"Official Website",url:"#"}] },
+    ],
+    pipeline:[
+      {step:"Query Builder",status:"done",detail:"Generated 6 Hebrew queries"},
+      {step:"Tavily Search",status:"done",detail:"Retrieved 44 results"},
+      {step:"Extraction",status:"done",detail:"Extracted 4 candidates"},
+      {step:"Business Investigator",status:"done",detail:"Verified 3/4; 1 false positive removed"},
+      {step:"Final Scoring",status:"done",detail:"3 businesses confirmed suspicious"},
+    ]
+  },
+];
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let currentRole = "admin";
+let selectedValidation = null;
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function scorePill(s) {
+  const cls = s >= 0.8 ? "score-high" : s >= 0.5 ? "score-med" : "score-low";
+  return `<span class="score-pill ${cls}"><span class="score-dot"></span>${Math.round(s*100)}%</span>`;
+}
+function badge(label, color, bgColor) {
+  return `<span class="badge" style="color:${color};background:${bgColor}">${label}</span>`;
+}
+const STATUS = {
+  verified: {label:"Verified", color:"#dc2626"},
+  pending: {label:"Pending Review", color:"#d97706"},
+  investigating: {label:"Investigating", color:"#2563eb"},
+  no_business: {label:"No Business", color:"#16a34a"},
+};
+function statusBadge(s) {
+  const st = STATUS[s];
+  return badge(st.label, st.color, st.color+"20");
+}
+function e(tag, attrs, ...children) {
+  const el = document.createElement(tag);
+  if (attrs) Object.entries(attrs).forEach(([k,v]) => { if(k==="class") el.className=v; else if(k.startsWith("on")) el.addEventListener(k.slice(2),v); else el.setAttribute(k,v); });
+  children.forEach(c => { if(typeof c==="string") el.insertAdjacentHTML("beforeend",c); else if(c) el.appendChild(c); });
+  return el;
 }
 
-// ─── Admin Dashboard ──────────────────────────────────────────────────────────
+// ── Pages ─────────────────────────────────────────────────────────────────────
+function showPage(id) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
 
-function AdminDashboard({ onLogout }) {
-  const [selected, setSelected] = useState(null);
-  const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState("all");
+// ── Login ─────────────────────────────────────────────────────────────────────
+function selectRole(r) {
+  currentRole = r;
+  document.getElementById("role-admin").classList.toggle("active", r==="admin");
+  document.getElementById("role-surveyor").classList.toggle("active", r==="surveyor");
+  document.getElementById("login-email").value = r==="admin" ? "admin@city.gov.il" : "yosef@city.gov.il";
+}
+function doLogin() {
+  if (currentRole === "admin") {
+    renderAdminDashboard();
+    showPage("admin-page");
+  } else {
+    renderSurveyorList();
+    showPage("surveyor-page");
+  }
+}
+function logout() {
+  showPage("login-page");
+}
 
-  const stats = {
-    total: MOCK_ADDRESSES.length,
-    verified: MOCK_ADDRESSES.filter(a => a.status === "verified").length,
-    pending: MOCK_ADDRESSES.filter(a => a.status === "pending").length,
-    businesses: MOCK_ADDRESSES.reduce((s, a) => s + a.businessCount, 0),
-  };
+// ── Admin ─────────────────────────────────────────────────────────────────────
+function renderAdminDashboard() {
+  // Stats
+  const stats = [
+    { label:"Total Addresses", value: ADDRESSES.length, color:"#2563eb" },
+    { label:"Verified Suspicious", value: ADDRESSES.filter(a=>a.status==="verified").length, color:"#dc2626" },
+    { label:"Pending Review", value: ADDRESSES.filter(a=>a.status==="pending").length, color:"#d97706" },
+    { label:"Businesses Found", value: ADDRESSES.reduce((s,a)=>s+a.businesses.length,0), color:"#7c3aed" },
+  ];
+  const sg = document.getElementById("stats-grid");
+  sg.innerHTML = stats.map(s => `
+    <div class="stat-card">
+      <div class="stat-value" style="color:${s.color}">${s.value}</div>
+      <div class="stat-label">${s.label}</div>
+    </div>`).join("");
+  renderTable();
+}
 
-  const filtered = MOCK_ADDRESSES.filter(a => {
-    const matchSearch = a.addressEn.toLowerCase().includes(search.toLowerCase()) || a.address.includes(search);
-    const matchFilter = filter === "all" || a.status === filter;
-    return matchSearch && matchFilter;
+function renderTable() {
+  const search = (document.getElementById("search-input")||{value:""}).value.toLowerCase();
+  const filter = (document.getElementById("filter-select")||{value:"all"}).value;
+  const tbody = document.getElementById("addr-table-body");
+  if (!tbody) return;
+  const filtered = ADDRESSES.filter(a => {
+    const ms = a.addressEn.toLowerCase().includes(search) || a.addressHe.includes(search);
+    const mf = filter==="all" || a.status===filter;
+    return ms && mf;
   });
-
-  if (selected) return <div style={{ padding: 24 }}><AddressDetail addr={selected} onBack={() => setSelected(null)} /></div>;
-
-  return (
-    <div>
-      {/* Header */}
-      <div style={{
-        background: "var(--surface)", borderBottom: "1px solid var(--border)",
-        padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "space-between",
-        height: 58, position: "sticky", top: 0, zIndex: 100
-      }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{
-            width: 32, height: 32, borderRadius: 8, background: "#2563eb",
-            display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 700, fontSize: 14
-          }}>SB</div>
-          <span style={{ fontWeight: 600, fontSize: 15 }}>SuspectBiz</span>
-          <span style={{ color: "var(--muted)", fontSize: 13 }}>Admin Portal</span>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <Avatar name="Admin User" size={30} />
-          <button onClick={onLogout} style={{
-            background: "none", border: "1px solid var(--border)", borderRadius: 8,
-            padding: "5px 12px", fontSize: 13, color: "var(--muted)"
-          }}>Sign out</button>
-        </div>
-      </div>
-
-      <div style={{ padding: "24px" }}>
-        {/* Stats */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 12, marginBottom: 24 }}>
-          {[
-            { label: "Total Addresses", value: stats.total, color: "#2563eb" },
-            { label: "Verified Suspicious", value: stats.verified, color: "#dc2626" },
-            { label: "Pending Review", value: stats.pending, color: "#d97706" },
-            { label: "Businesses Found", value: stats.businesses, color: "#7c3aed" },
-          ].map((s, i) => (
-            <Card key={i} style={{ padding: "16px 20px" }}>
-              <div style={{ fontSize: 26, fontWeight: 700, color: s.color }}>{s.value}</div>
-              <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}>{s.label}</div>
-            </Card>
-          ))}
-        </div>
-
-        {/* Controls */}
-        <div style={{ display: "flex", gap: 10, marginBottom: 16, flexWrap: "wrap" }}>
-          <input
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            placeholder="Search addresses..."
-            style={{
-              flex: "1 1 200px", padding: "8px 12px", border: "1px solid var(--border)",
-              borderRadius: 8, fontSize: 13, background: "var(--surface)", outline: "none"
-            }}
-          />
-          <select value={filter} onChange={e => setFilter(e.target.value)} style={{
-            padding: "8px 12px", border: "1px solid var(--border)", borderRadius: 8,
-            fontSize: 13, background: "var(--surface)", outline: "none"
-          }}>
-            <option value="all">All Statuses</option>
-            <option value="verified">Verified</option>
-            <option value="pending">Pending</option>
-            <option value="investigating">Investigating</option>
-            <option value="no_business">No Business</option>
-          </select>
-          <button style={{
-            padding: "8px 16px", background: "#f3f4f6", border: "1px solid var(--border)",
-            borderRadius: 8, fontSize: 13, fontWeight: 500, color: "var(--muted)"
-          }}>⬇ Export CSV</button>
-        </div>
-
-        {/* Table */}
-        <Card>
-          <div style={{ overflowX: "auto" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse" }}>
-              <thead>
-                <tr style={{ borderBottom: "1px solid var(--border)" }}>
-                  {["Address", "Status", "Businesses", "Score", "Assigned To", "Updated", ""].map((h, i) => (
-                    <th key={i} style={{
-                      padding: "11px 16px", textAlign: "left", fontSize: 11,
-                      fontWeight: 600, color: "var(--muted)", letterSpacing: .5,
-                      textTransform: "uppercase", whiteSpace: "nowrap"
-                    }}>{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {filtered.map((addr, i) => {
-                  const sv = addr.assignedTo ? SURVEYORS.find(s => s.id === addr.assignedTo) : null;
-                  return (
-                    <tr key={addr.id} style={{ borderBottom: "1px solid var(--border)", transition: "background .1s" }}
-                      onMouseEnter={e => e.currentTarget.style.background = "#f9fafb"}
-                      onMouseLeave={e => e.currentTarget.style.background = ""}>
-                      <td style={{ padding: "12px 16px" }}>
-                        <div style={{ fontWeight: 500, fontSize: 13 }}>{addr.addressEn}</div>
-                        <div style={{ fontSize: 12, color: "var(--muted)", direction: "rtl" }}>{addr.address}</div>
-                      </td>
-                      <td style={{ padding: "12px 16px" }}>
-                        <Badge color={statusLabel[addr.status].color} bg={statusLabel[addr.status].color + "15"}>
-                          {statusLabel[addr.status].label}
-                        </Badge>
-                      </td>
-                      <td style={{ padding: "12px 16px", textAlign: "center", fontWeight: 600 }}>
-                        {addr.businessCount || "—"}
-                      </td>
-                      <td style={{ padding: "12px 16px" }}><ScorePill score={addr.suspicionScore} /></td>
-                      <td style={{ padding: "12px 16px" }}>
-                        {sv ? (
-                          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                            <Avatar name={sv.name} size={24} />
-                            <span style={{ fontSize: 13 }}>{sv.name}</span>
-                          </div>
-                        ) : <span style={{ color: "var(--muted)", fontSize: 13 }}>Unassigned</span>}
-                      </td>
-                      <td style={{ padding: "12px 16px", color: "var(--muted)", fontSize: 12 }}>{addr.lastUpdated}</td>
-                      <td style={{ padding: "12px 16px" }}>
-                        <button onClick={() => setSelected(addr)} style={{
-                          padding: "5px 12px", border: "1px solid var(--border)", borderRadius: 7,
-                          background: "var(--surface)", fontSize: 12, fontWeight: 500, color: "var(--accent)"
-                        }}>View →</button>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </Card>
-      </div>
-    </div>
-  );
+  tbody.innerHTML = filtered.map(a => {
+    const sv = a.assignedTo ? SURVEYORS[a.assignedTo] : null;
+    const svHtml = sv
+      ? `<div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="width:24px;height:24px;background:#7c3aed;font-size:9px">${sv.initials}</div><span style="font-size:13px">${sv.name}</span></div>`
+      : `<span style="color:var(--muted);font-size:13px">Unassigned</span>`;
+    return `<tr>
+      <td><div class="addr-en">${a.addressEn}</div><div class="addr-he">${a.addressHe}</div></td>
+      <td>${statusBadge(a.status)}</td>
+      <td style="text-align:center;font-weight:600">${a.businesses.length || "—"}</td>
+      <td>${scorePill(a.score)}</td>
+      <td>${svHtml}</td>
+      <td style="color:var(--muted);font-size:12px">${a.updated}</td>
+      <td><button class="btn-view" onclick="showDetail('${a.id}')">View →</button></td>
+    </tr>`;
+  }).join("");
 }
 
-// ─── Surveyor Mobile View ─────────────────────────────────────────────────────
+// ── Detail ────────────────────────────────────────────────────────────────────
+function showDetail(id) {
+  const a = ADDRESSES.find(x => x.id === id);
+  if (!a) return;
 
-function SurveyorView({ onLogout }) {
-  const [view, setView] = useState("list"); // list | detail | form
-  const [selected, setSelected] = useState(null);
-  const [submitted, setSubmitted] = useState(false);
-  const [formData, setFormData] = useState({ result: "", notes: "", photos: 0 });
+  const stepIcon = {done:"✓",running:"↻",pending:"○",skipped:"—"};
+  const stepColor = {done:"#16a34a",running:"#2563eb",pending:"#9ca3af",skipped:"#d1d5db"};
 
-  const myAddresses = MOCK_ADDRESSES.filter(a => a.assignedTo === "surveyor1");
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setView("list");
-      setSelected(null);
-    }, 2200);
-  };
-
-  if (submitted) return (
-    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 24, textAlign: "center" }}>
-      <div style={{ fontSize: 48, marginBottom: 16 }}>✅</div>
-      <div style={{ fontSize: 18, fontWeight: 600 }}>Validation Submitted!</div>
-      <div style={{ color: "var(--muted)", fontSize: 14, marginTop: 8 }}>Returning to your assignments...</div>
-    </div>
-  );
-
-  return (
-    <div style={{ maxWidth: 480, margin: "0 auto", minHeight: "100vh", background: "var(--bg)" }}>
-      {/* Header */}
-      <div style={{
-        background: "var(--surface)", borderBottom: "1px solid var(--border)",
-        padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between",
-        position: "sticky", top: 0, zIndex: 100
-      }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          {(view === "detail" || view === "form") ? (
-            <button onClick={() => view === "form" ? setView("detail") : setView("list")} style={{
-              background: "none", border: "none", fontSize: 18, color: "var(--accent)", padding: "0 6px 0 0"
-            }}>←</button>
-          ) : null}
-          <div style={{ fontWeight: 600, fontSize: 15 }}>
-            {view === "list" ? "My Assignments" : view === "detail" ? "Address Details" : "Submit Validation"}
+  const bizHtml = a.businesses.length === 0
+    ? `<div class="card empty-state">No businesses found at this address.</div>`
+    : a.businesses.map(b => `
+      <div class="card biz-card" style="padding:20px">
+        <div class="biz-header">
+          <div><div class="biz-name">${b.name}</div><div class="biz-cat">${b.cat}</div></div>
+          <div class="biz-badges">
+            ${badge(b.active?"Active":"Inactive", b.active?"#16a34a":"#9ca3af", b.active?"#f0fdf4":"#f9fafb")}
+            ${scorePill(b.score)}
           </div>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <Avatar name="Yosef Cohen" size={28} />
-          <button onClick={onLogout} style={{
-            background: "none", border: "none", color: "var(--muted)", fontSize: 12
-          }}>Out</button>
+        <div class="reasoning"><strong>AI Reasoning: </strong>${b.reasoning}</div>
+        <div class="sources">${b.sources.map(s=>`<a href="${s.url}" class="source-link">${s.icon} ${s.title}</a>`).join("")}</div>
+      </div>`).join("");
+
+  const pipeHtml = a.pipeline.map(s => `
+    <div class="pipeline-step">
+      <div class="step-icon" style="background:${stepColor[s.status]}20;color:${stepColor[s.status]}">${stepIcon[s.status]}</div>
+      <div><div class="step-name">${s.step}</div><div class="step-detail">${s.detail}</div></div>
+    </div>`).join("");
+
+  const valHtml = a.validated
+    ? `${badge(a.validated==="business_found"?"✓ Business Found On-Site":"✗ No Business Found", a.validated==="business_found"?"#dc2626":"#16a34a", a.validated==="business_found"?"#fef2f2":"#f0fdf4")}
+       <div style="margin-top:12px;font-size:13px;color:var(--muted)">Validated on ${a.updated} · ${a.validated==="business_found"?"Matches AI prediction":"Contradicts AI prediction — feedback sent to ML pipeline"}</div>`
+    : `<div style="color:var(--muted);font-size:13px;font-style:italic">Not yet validated by field surveyor.</div>`;
+
+  const fromPage = currentRole === "admin" ? "admin-page" : "surveyor-page";
+
+  document.getElementById("detail-content").innerHTML = `
+    <button class="btn-back" onclick="showPage('${fromPage}')">← Back</button>
+    <div class="card" style="padding:24px;margin-bottom:16px">
+      <div class="detail-header">
+        <div>
+          <div class="detail-meta">Address</div>
+          <div class="detail-addr-en">${a.addressEn}</div>
+          <div class="detail-addr-he">${a.addressHe}</div>
         </div>
-      </div>
-
-      {/* List */}
-      {view === "list" && (
-        <div style={{ padding: 16 }}>
-          <div style={{ fontSize: 13, color: "var(--muted)", marginBottom: 12 }}>
-            {myAddresses.length} addresses assigned · tap to inspect
+        <div style="display:flex;align-items:center;gap:10px">
+          ${statusBadge(a.status)}
+          <div style="text-align:center">
+            <div style="font-size:11px;color:var(--muted);margin-bottom:2px">Suspicion Score</div>
+            ${scorePill(a.score)}
           </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            {myAddresses.map(addr => (
-              <button key={addr.id} onClick={() => { setSelected(addr); setView("detail"); }} style={{
-                background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 14,
-                padding: "16px", textAlign: "left", width: "100%", boxShadow: "var(--shadow)",
-                display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10
-              }}>
-                <div>
-                  <div style={{ fontWeight: 500, fontSize: 14 }}>{addr.addressEn}</div>
-                  <div style={{ fontSize: 12, color: "var(--muted)", direction: "rtl", textAlign: "right", marginTop: 2 }}>{addr.address}</div>
-                  <div style={{ marginTop: 8, display: "flex", gap: 6 }}>
-                    <Badge color={statusLabel[addr.status].color} bg={statusLabel[addr.status].color + "15"}>
-                      {statusLabel[addr.status].label}
-                    </Badge>
-                    {addr.fieldValidation && (
-                      <Badge color="#16a34a" bg="#f0fdf4">Validated</Badge>
-                    )}
-                  </div>
-                </div>
-                <div style={{ textAlign: "center", flexShrink: 0 }}>
-                  <ScorePill score={addr.suspicionScore} />
-                  <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 4 }}>
-                    {addr.businessCount} biz
-                  </div>
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Detail */}
-      {view === "detail" && selected && (
-        <div style={{ padding: 16 }}>
-          <Card style={{ padding: 16, marginBottom: 12 }}>
-            <div style={{ fontSize: 12, color: "var(--muted)", marginBottom: 4 }}>SUSPECTED ADDRESS</div>
-            <div style={{ fontWeight: 600, fontSize: 15 }}>{selected.addressEn}</div>
-            <div style={{ fontSize: 13, color: "var(--muted)", direction: "rtl", textAlign: "right", marginTop: 2 }}>{selected.address}</div>
-            <div style={{ marginTop: 12, display: "flex", gap: 8, alignItems: "center" }}>
-              <ScorePill score={selected.suspicionScore} />
-              <span style={{ fontSize: 12, color: "var(--muted)" }}>AI suspicion score</span>
-            </div>
-          </Card>
-
-          <div style={{ fontSize: 13, fontWeight: 600, color: "var(--muted)", marginBottom: 8, textTransform: "uppercase", letterSpacing: .5, fontSize: 11 }}>Businesses to Verify</div>
-          {selected.businesses.length === 0 ? (
-            <Card style={{ padding: 16, color: "var(--muted)", fontSize: 13, fontStyle: "italic" }}>No specific businesses flagged. Inspect for any commercial activity.</Card>
-          ) : selected.businesses.map((biz, i) => (
-            <Card key={i} style={{ padding: 14, marginBottom: 8 }}>
-              <div style={{ fontWeight: 500, fontSize: 14 }}>{biz.name}</div>
-              <div style={{ fontSize: 12, color: "var(--muted)" }}>{biz.category}</div>
-              <div style={{ marginTop: 6 }}>
-                <ScorePill score={biz.suspicionScore} />
-              </div>
-            </Card>
-          ))}
-
-          {!selected.fieldValidation && (
-            <button onClick={() => setView("form")} style={{
-              width: "100%", marginTop: 16, padding: "15px", background: "#2563eb",
-              color: "#fff", border: "none", borderRadius: 14, fontSize: 15, fontWeight: 600,
-              boxShadow: "0 4px 14px rgba(37,99,235,.3)"
-            }}>Submit Field Validation →</button>
-          )}
-          {selected.fieldValidation && (
-            <Card style={{ padding: 14, marginTop: 12, borderColor: "#16a34a30", background: "#f0fdf4" }}>
-              <div style={{ fontSize: 13, color: "#16a34a", fontWeight: 600 }}>✓ Already validated</div>
-              <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}>
-                Result: {selected.fieldValidation === "business_found" ? "Business found on-site" : "No business found"}
-              </div>
-            </Card>
-          )}
-        </div>
-      )}
-
-      {/* Form */}
-      {view === "form" && selected && (
-        <form onSubmit={handleSubmit} style={{ padding: 16 }}>
-          <Card style={{ padding: 16, marginBottom: 16, background: "#fffbeb", borderColor: "#fcd34d" }}>
-            <div style={{ fontSize: 13, fontWeight: 500 }}>⚠️ On-site at {selected.addressEn}</div>
-            <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}>Please complete this form while physically present at the address.</div>
-          </Card>
-
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            <div>
-              <label style={{ fontWeight: 600, fontSize: 13, display: "block", marginBottom: 10 }}>What did you find? *</label>
-              {[
-                { value: "business_found", label: "✓ Business Confirmed", desc: "At least one business is clearly operating here", color: "#dc2626" },
-                { value: "possible", label: "⚠ Possible Activity", desc: "Signs of business activity but not confirmed", color: "#d97706" },
-                { value: "no_business", label: "✗ No Business", desc: "Residential only — no commercial activity found", color: "#16a34a" },
-              ].map(opt => (
-                <button type="button" key={opt.value} onClick={() => setFormData(f => ({ ...f, result: opt.value }))} style={{
-                  display: "flex", width: "100%", padding: "13px 16px", border: "2px solid",
-                  borderColor: formData.result === opt.value ? opt.color : "var(--border)",
-                  borderRadius: 12, background: formData.result === opt.value ? opt.color + "10" : "var(--surface)",
-                  textAlign: "left", gap: 12, alignItems: "center", marginBottom: 8, cursor: "pointer"
-                }}>
-                  <div>
-                    <div style={{ fontWeight: 600, fontSize: 14, color: formData.result === opt.value ? opt.color : "var(--text)" }}>{opt.label}</div>
-                    <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 1 }}>{opt.desc}</div>
-                  </div>
-                </button>
-              ))}
-            </div>
-
-            <div>
-              <label style={{ fontWeight: 600, fontSize: 13, display: "block", marginBottom: 6 }}>Notes</label>
-              <textarea
-                value={formData.notes}
-                onChange={e => setFormData(f => ({ ...f, notes: e.target.value }))}
-                placeholder="Describe what you observed (signage, people, equipment, etc.)"
-                rows={4}
-                style={{
-                  width: "100%", padding: "10px 12px", border: "1px solid var(--border)",
-                  borderRadius: 10, fontSize: 13, resize: "none", outline: "none", background: "var(--surface)"
-                }}
-              />
-            </div>
-
-            <div style={{
-              padding: "14px 16px", border: "2px dashed var(--border)", borderRadius: 12,
-              textAlign: "center", color: "var(--muted)", fontSize: 13
-            }}>
-              📷 Tap to add photos ({formData.photos})
-              <div style={{ fontSize: 11, marginTop: 4 }}>Photo upload available in production build</div>
-            </div>
-
-            <button type="submit" disabled={!formData.result} style={{
-              padding: "15px", background: formData.result ? "#2563eb" : "#e5e7eb",
-              color: formData.result ? "#fff" : "#9ca3af", border: "none", borderRadius: 14,
-              fontSize: 15, fontWeight: 600, transition: "all .2s"
-            }}>Submit Validation</button>
-          </div>
-        </form>
-      )}
-    </div>
-  );
-}
-
-// ─── Login ────────────────────────────────────────────────────────────────────
-
-function Login({ onLogin }) {
-  const [role, setRole] = useState("admin");
-  const [loading, setLoading] = useState(false);
-
-  const handleLogin = () => {
-    setLoading(true);
-    setTimeout(() => { setLoading(false); onLogin(role); }, 800);
-  };
-
-  return (
-    <div style={{
-      minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center",
-      background: "linear-gradient(135deg, #f0f4ff 0%, #f8f9fa 60%, #fef9f0 100%)", padding: 24
-    }}>
-      <div style={{ width: "100%", maxWidth: 380 }}>
-        <div style={{ textAlign: "center", marginBottom: 32 }}>
-          <div style={{
-            width: 52, height: 52, borderRadius: 14, background: "#2563eb",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            color: "#fff", fontWeight: 800, fontSize: 20, margin: "0 auto 14px"
-          }}>SB</div>
-          <div style={{ fontSize: 22, fontWeight: 700 }}>SuspectBiz</div>
-          <div style={{ color: "var(--muted)", fontSize: 14, marginTop: 4 }}>Jerusalem Business Verification System</div>
-        </div>
-
-        <Card style={{ padding: 28 }}>
-          <div style={{ fontSize: 13, fontWeight: 600, color: "var(--muted)", marginBottom: 10, textTransform: "uppercase", letterSpacing: .5, fontSize: 11 }}>Sign in as</div>
-          <div style={{ display: "flex", gap: 8, marginBottom: 20 }}>
-            {[["admin", "🖥️ Admin"], ["surveyor", "📱 Field Surveyor"]].map(([r, label]) => (
-              <button key={r} onClick={() => setRole(r)} style={{
-                flex: 1, padding: "10px 6px", border: "2px solid",
-                borderColor: role === r ? "#2563eb" : "var(--border)",
-                borderRadius: 10, background: role === r ? "#eff6ff" : "var(--surface)",
-                color: role === r ? "#2563eb" : "var(--muted)",
-                fontWeight: 600, fontSize: 13, transition: "all .15s"
-              }}>{label}</button>
-            ))}
-          </div>
-
-          <div style={{ marginBottom: 14 }}>
-            <label style={{ fontSize: 12, fontWeight: 600, color: "var(--muted)", display: "block", marginBottom: 5 }}>Email</label>
-            <input defaultValue={role === "admin" ? "admin@city.gov.il" : "yosef@city.gov.il"} style={{
-              width: "100%", padding: "9px 12px", border: "1px solid var(--border)",
-              borderRadius: 8, fontSize: 13, outline: "none"
-            }} />
-          </div>
-          <div style={{ marginBottom: 20 }}>
-            <label style={{ fontSize: 12, fontWeight: 600, color: "var(--muted)", display: "block", marginBottom: 5 }}>Password</label>
-            <input type="password" defaultValue="••••••••" style={{
-              width: "100%", padding: "9px 12px", border: "1px solid var(--border)",
-              borderRadius: 8, fontSize: 13, outline: "none"
-            }} />
-          </div>
-
-          <button onClick={handleLogin} style={{
-            width: "100%", padding: "12px", background: "#2563eb", color: "#fff",
-            border: "none", borderRadius: 10, fontWeight: 600, fontSize: 15,
-            opacity: loading ? .7 : 1, transition: "opacity .2s"
-          }}>{loading ? "Signing in..." : "Sign In"}</button>
-        </Card>
-
-        <div style={{ textAlign: "center", color: "var(--muted)", fontSize: 12, marginTop: 20 }}>
-          Demo system — LangGraph + Tavily + Supabase + Next.js
         </div>
       </div>
     </div>
-  );
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab(this,'tab-businesses')">Businesses</button>
+      <button class="tab-btn" onclick="switchTab(this,'tab-pipeline')">Pipeline</button>
+      <button class="tab-btn" onclick="switchTab(this,'tab-validation')">Validation</button>
+    </div>
+    <div id="tab-businesses" class="tab-panel active">${bizHtml}</div>
+    <div id="tab-pipeline" class="tab-panel">
+      <div class="card" style="padding:24px">
+        <div style="font-weight:600;margin-bottom:16px">LangGraph Pipeline Execution</div>
+        ${pipeHtml}
+      </div>
+    </div>
+    <div id="tab-validation" class="tab-panel">
+      <div class="card" style="padding:24px">
+        <div style="font-weight:600;margin-bottom:4px">Field Validation</div>
+        <div style="color:var(--muted);font-size:13px;margin-bottom:16px">Submitted by field surveyor after on-site visit.</div>
+        ${valHtml}
+      </div>
+    </div>
+  `;
+  showPage("detail-page");
 }
 
-// ─── App Root ─────────────────────────────────────────────────────────────────
-
-function App() {
-  const [user, setUser] = useState(null);
-  return user
-    ? user === "admin"
-      ? <AdminDashboard onLogout={() => setUser(null)} />
-      : <SurveyorView onLogout={() => setUser(null)} />
-    : <Login onLogin={setUser} />;
+function switchTab(btn, tabId) {
+  btn.closest(".tab-bar").querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  const bar = btn.closest(".tab-bar");
+  let next = bar.nextElementSibling;
+  while (next && next.classList.contains("tab-panel")) {
+    next.classList.remove("active");
+    next = next.nextElementSibling;
+  }
+  document.getElementById(tabId).classList.add("active");
 }
 
-ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+// ── Surveyor ──────────────────────────────────────────────────────────────────
+function renderSurveyorList() {
+  document.getElementById("surveyor-topbar-title").textContent = "My Assignments";
+  const myAddrs = ADDRESSES.filter(a => a.assignedTo === "surveyor1");
+  document.getElementById("surveyor-inner").innerHTML = `
+    <div class="surveyor-list">
+      <div class="surveyor-hint">${myAddrs.length} addresses assigned · tap to inspect</div>
+      ${myAddrs.map(a => `
+        <button class="addr-card-btn" onclick="renderSurveyorDetail('${a.id}')">
+          <div style="text-align:left;flex:1">
+            <div style="font-weight:500;font-size:14px">${a.addressEn}</div>
+            <div style="font-size:12px;color:var(--muted);direction:rtl;text-align:right;margin-top:2px">${a.addressHe}</div>
+            <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
+              ${statusBadge(a.status)}
+              ${a.validated ? badge("Validated","#16a34a","#f0fdf4") : ""}
+            </div>
+          </div>
+          <div style="text-align:center;flex-shrink:0">
+            ${scorePill(a.score)}
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">${a.businesses.length} biz</div>
+          </div>
+        </button>`).join("")}
+    </div>`;
+}
+
+function renderSurveyorDetail(id) {
+  const a = ADDRESSES.find(x => x.id === id);
+  if (!a) return;
+  document.getElementById("surveyor-topbar-title").textContent = "Address Details";
+  const bizHtml = a.businesses.length === 0
+    ? `<div class="card biz-mini" style="color:var(--muted);font-size:13px;font-style:italic;padding:14px">No specific businesses flagged. Inspect for any commercial activity.</div>`
+    : a.businesses.map(b => `
+        <div class="card biz-mini" style="padding:14px;margin-bottom:8px">
+          <div style="font-weight:500;font-size:14px">${b.name}</div>
+          <div style="font-size:12px;color:var(--muted)">${b.cat}</div>
+          <div style="margin-top:6px">${scorePill(b.score)}</div>
+        </div>`).join("");
+
+  const footerHtml = a.validated
+    ? `<div class="already-validated">
+        <div style="font-size:13px;color:#16a34a;font-weight:600">✓ Already validated</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px">Result: ${a.validated==="business_found"?"Business found on-site":"No business found"}</div>
+       </div>`
+    : `<button class="validate-btn" onclick="renderValidationForm('${a.id}')">Submit Field Validation →</button>`;
+
+  document.getElementById("surveyor-inner").innerHTML = `
+    <div class="surveyor-detail">
+      <button class="btn-back" onclick="renderSurveyorList()">← Back</button>
+      <div class="card addr-box" style="padding:16px;margin-bottom:12px">
+        <div style="font-size:12px;color:var(--muted);margin-bottom:4px">SUSPECTED ADDRESS</div>
+        <div style="font-weight:600;font-size:15px">${a.addressEn}</div>
+        <div style="font-size:13px;color:var(--muted);direction:rtl;text-align:right;margin-top:2px">${a.addressHe}</div>
+        <div style="margin-top:12px;display:flex;gap:8px;align-items:center">
+          ${scorePill(a.score)}
+          <span style="font-size:12px;color:var(--muted)">AI suspicion score</span>
+        </div>
+      </div>
+      <div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">Businesses to Verify</div>
+      ${bizHtml}
+      ${footerHtml}
+    </div>`;
+}
+
+function renderValidationForm(id) {
+  const a = ADDRESSES.find(x => x.id === id);
+  if (!a) return;
+  document.getElementById("surveyor-topbar-title").textContent = "Submit Validation";
+  selectedValidation = null;
+
+  document.getElementById("surveyor-inner").innerHTML = `
+    <form class="surveyor-form" onsubmit="submitValidation(event,'${id}')">
+      <div class="warn-box">
+        <div class="warn-title">⚠️ On-site at ${a.addressEn}</div>
+        <div class="warn-sub">Please complete this form while physically present at the address.</div>
+      </div>
+      <div class="form-section">
+        <label class="form-label">What did you find? *</label>
+        <button type="button" class="option-btn" id="opt-found" onclick="selectOpt('found')">
+          <div><div class="option-label" style="color:#dc2626">✓ Business Confirmed</div><div class="option-desc">At least one business is clearly operating here</div></div>
+        </button>
+        <button type="button" class="option-btn" id="opt-possible" onclick="selectOpt('possible')">
+          <div><div class="option-label" style="color:#d97706">⚠ Possible Activity</div><div class="option-desc">Signs of business activity but not confirmed</div></div>
+        </button>
+        <button type="button" class="option-btn" id="opt-none" onclick="selectOpt('none')">
+          <div><div class="option-label" style="color:#16a34a">✗ No Business</div><div class="option-desc">Residential only — no commercial activity found</div></div>
+        </button>
+      </div>
+      <div class="form-section">
+        <label class="form-label">Notes</label>
+        <textarea class="notes" rows="4" placeholder="Describe what you observed (signage, people, equipment, etc.)"></textarea>
+      </div>
+      <div class="photo-zone">
+        📷 Tap to add photos
+        <div class="photo-sub">Photo upload available in production build</div>
+      </div>
+      <button type="submit" class="submit-btn disabled" id="submit-btn">Submit Validation</button>
+    </form>`;
+}
+
+function selectOpt(val) {
+  selectedValidation = val;
+  const map = {found:"selected-red", possible:"selected-yellow", none:"selected-green"};
+  ["found","possible","none"].forEach(k => {
+    const el = document.getElementById("opt-"+k);
+    el.className = "option-btn" + (k===val ? " "+map[k] : "");
+  });
+  const sb = document.getElementById("submit-btn");
+  sb.className = "submit-btn ready";
+}
+
+function submitValidation(e, id) {
+  e.preventDefault();
+  if (!selectedValidation) return;
+  showPage("success-page");
+  setTimeout(() => {
+    renderSurveyorList();
+    showPage("surveyor-page");
+  }, 2200);
+}
 </script>
 </body>
 </html>
