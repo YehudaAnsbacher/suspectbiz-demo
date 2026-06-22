@@ -2,39 +2,106 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>מערכת זיהוי עסקים חשודים — עיריית ירושלים</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Arial Hebrew",Arial,sans-serif;font-size:14px;direction:rtl;background:#f8f9fb;color:#111827}
-button{cursor:pointer;font-family:inherit}
-input,select,textarea{font-family:inherit;font-size:14px;direction:rtl}
-.page{display:none}
-.page.on{display:block}
-.card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
-.topbar{background:#1a3c78;padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:99;box-shadow:0 2px 8px rgba(0,0,0,.2)}
-.topbar-left{display:flex;align-items:center;gap:12px}
+html,body,*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Arial Hebrew",Arial,sans-serif}
+body{background:#f0f2f5;direction:rtl;min-height:100vh}
+button{cursor:pointer}
+input,select,textarea{direction:rtl;font-size:14px}
+
+/* ══ NAVIGATION — exact pattern from mitnadev ══ */
+.screen{display:flex;flex-direction:column;min-height:100vh}
+.hidden{display:none!important}
+
+/* ══ TOPBAR ══ */
+.topbar{background:#1a3c78;padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:64px;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.topbar-brand{display:flex;align-items:center;gap:12px}
 .topbar-title{color:#fff;font-weight:700;font-size:15px;line-height:1.2}
 .topbar-sub{color:rgba(255,255,255,.6);font-size:11px}
 .btn-out{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:6px 14px;font-size:13px;color:#fff}
 .btn-out:hover{background:rgba(255,255,255,.25)}
+
+/* ══ CARDS ══ */
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+
+/* ══ BADGES ══ */
 .pill{display:inline-flex;align-items:center;gap:5px;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:600}
-.dot{width:6px;height:6px;border-radius:50%}
+.dot{width:6px;height:6px;border-radius:50%;display:inline-block}
 .ph{background:#fef2f2;color:#dc2626}.ph .dot{background:#dc2626}
 .pm{background:#fffbeb;color:#d97706}.pm .dot{background:#d97706}
 .pl{background:#f0fdf4;color:#16a34a}.pl .dot{background:#16a34a}
 .bdg{display:inline-flex;align-items:center;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:500;white-space:nowrap}
+
+/* ══ LOGIN SCREEN ══ */
+#s-login{background:linear-gradient(160deg,#0f2557,#1a3c78 55%,#1e4d9b);align-items:center;justify-content:center;padding:24px}
+.login-box{width:100%;max-width:400px}
+.login-card{background:#fff;border-radius:16px;padding:28px;box-shadow:0 8px 40px rgba(0,0,0,.3)}
+.lbl{font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px}
+.ifield{width:100%;padding:10px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:14px;outline:none;background:#fff}
+.ifield:focus{border-color:#1a3c78}
+.role-wrap{display:flex;gap:8px;margin-bottom:20px}
+.rbtn{flex:1;padding:10px;border-radius:10px;font-weight:700;font-size:13px;transition:all .15s}
+.rbtn-off{border:2px solid #e5e7eb;background:#fff;color:#6b7280}
+.rbtn-on{border:2px solid #1a3c78;background:#eef2ff;color:#1a3c78}
+.btn-login{width:100%;padding:13px;background:#1a3c78;color:#fff;border:none;border-radius:10px;font-weight:700;font-size:16px}
+.btn-login:hover{background:#14327a}
+.btn-login:active{transform:scale(.98)}
+
+/* ══ ADMIN SCREEN ══ */
+#s-admin{background:#f8f9fb}
+.wrap{padding:24px;max-width:1200px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:22px}
+.scard{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px 20px}
+.sval{font-size:26px;font-weight:800}
+.slbl{font-size:12px;color:#6b7280;margin-top:2px}
+.ctrls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.sinput{flex:1 1 180px;padding:9px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px;outline:none;background:#fff}
+.sselect{padding:9px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px;background:#fff;outline:none}
+.btn-csv{padding:9px 14px;background:#f3f4f6;border:1px solid #e5e7eb;border-radius:8px;font-size:13px;color:#6b7280}
+table{width:100%;border-collapse:collapse}
+th{padding:10px 14px;text-align:right;font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;border-bottom:1px solid #e5e7eb}
+td{padding:11px 14px;border-bottom:1px solid #e5e7eb;vertical-align:middle;font-size:13px}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#f9fafb}
+.btn-view{padding:5px 14px;border:1.5px solid #1a3c78;border-radius:7px;background:#eef2ff;font-size:12px;font-weight:600;color:#1a3c78}
+.btn-view:hover{background:#1a3c78;color:#fff}
+
+/* ══ DETAIL SCREEN ══ */
+#s-detail{background:#f8f9fb}
+.detail-wrap{padding:24px;max-width:860px;margin:0 auto}
+.tabs{display:flex;gap:2px;background:#fff;border-radius:10px;padding:4px;border:1px solid #e5e7eb;margin-bottom:14px}
+.tab{flex:1;padding:8px 0;border:none;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer;transition:all .15s}
+.tab-off{background:transparent;color:#6b7280}
+.tab-on{background:#1a3c78;color:#fff}
+.tp{display:none}.tp.on{display:block}
+
+/* ══ SURVEYOR SCREEN ══ */
+#s-surv{background:#f8f9fb}
+.surv-inner{max-width:480px;margin:0 auto;padding:16px}
+.acard{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:16px;text-align:right;width:100%;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:10px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.acard:hover{border-color:#1a3c78}
+.vbtn{width:100%;margin-top:14px;padding:15px;background:#1a3c78;color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700}
+.vbtn:hover{opacity:.9}
+.optbtn{display:block;width:100%;padding:13px 16px;border:2px solid #e5e7eb;border-radius:12px;background:#fff;text-align:right;margin-bottom:8px;cursor:pointer}
+.opt-r{border-color:#dc2626!important;background:#fef2f2!important}
+.opt-y{border-color:#d97706!important;background:#fffbeb!important}
+.opt-g{border-color:#16a34a!important;background:#f0fdf4!important}
+.sbtn-off{width:100%;padding:15px;background:#e5e7eb;color:#9ca3af;border:none;border-radius:14px;font-size:15px;font-weight:700}
+.sbtn-on{width:100%;padding:15px;background:#1a3c78;color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer}
+
+/* ══ SUCCESS SCREEN ══ */
+#s-ok{background:#f8f9fb;align-items:center;justify-content:center}
 </style>
 </head>
 <body>
 
-<!-- ══ LOGIN ══════════════════════════════════════════════════════════════════ -->
-<div id="pg-login" class="page on" style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#0f2557,#1a3c78 55%,#1e4d9b);padding:24px">
-  <div style="width:100%;max-width:400px">
+<!-- ══════════════ LOGIN ══════════════════════════════════════════════════════ -->
+<div id="s-login" class="screen">
+  <div class="login-box">
     <div style="text-align:center;margin-bottom:24px">
       <div style="display:flex;justify-content:center">
-        <!-- Jerusalem Emblem -->
-        <svg width="80" height="80" viewBox="0 0 100 100">
+        <svg width="76" height="76" viewBox="0 0 100 100">
           <circle cx="50" cy="50" r="49" fill="#fff"/>
           <path d="M22 22 L78 22 L78 66 Q78 83 50 91 Q22 83 22 66 Z" fill="#eef2ff" stroke="#1a3c78" stroke-width="2"/>
           <rect x="35" y="20" width="30" height="7" rx="1" fill="#c9a227"/>
@@ -43,7 +110,7 @@ input,select,textarea{font-family:inherit;font-size:14px;direction:rtl}
           <polygon points="59,20 62,12 65,20" fill="#c9a227"/>
           <ellipse cx="48" cy="63" rx="17" ry="12" fill="#1a3c78"/>
           <circle cx="62" cy="48" r="11" fill="#1a3c78"/>
-          <circle cx="60" cy="42" r="14" fill="none" stroke="#1a3c78" stroke-width="5" opacity=".3"/>
+          <circle cx="60" cy="42" r="13" fill="none" stroke="#1a3c78" stroke-width="5" opacity=".25"/>
           <circle cx="66" cy="46" r="2.5" fill="#fff"/>
           <path d="M63 53 Q66 56 70 53" stroke="#fff" stroke-width="1.5" fill="none" stroke-linecap="round"/>
           <ellipse cx="67" cy="56" rx="2" ry="3" fill="#dc2626"/>
@@ -58,59 +125,52 @@ input,select,textarea{font-family:inherit;font-size:14px;direction:rtl}
       <div style="color:#fff;font-size:20px;font-weight:800;margin-top:10px">מערכת זיהוי עסקים חשודים</div>
       <div style="color:rgba(255,255,255,.7);font-size:13px;margin-top:3px">עיריית ירושלים</div>
     </div>
-
-    <div class="card" style="padding:28px">
-      <div style="font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">כניסה בתפקיד</div>
-      <div style="display:flex;gap:8px;margin-bottom:20px">
-        <button id="rb-admin" onclick="setRole('admin')" style="flex:1;padding:10px;border:2px solid #1a3c78;border-radius:10px;background:#eef2ff;color:#1a3c78;font-weight:700;font-size:13px">🖥️ מנהל מערכת</button>
-        <button id="rb-surv" onclick="setRole('surv')" style="flex:1;padding:10px;border:2px solid #e5e7eb;border-radius:10px;background:#fff;color:#6b7280;font-weight:600;font-size:13px">📱 סוקר שטח</button>
+    <div class="login-card">
+      <div class="lbl" style="margin-bottom:10px">כניסה בתפקיד</div>
+      <div class="role-wrap">
+        <button class="rbtn rbtn-on" id="rb-admin">🖥️ מנהל מערכת</button>
+        <button class="rbtn rbtn-off" id="rb-surv">📱 סוקר שטח</button>
       </div>
       <div style="margin-bottom:14px">
-        <div style="font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">דוא"ל</div>
-        <input id="em" type="email" value="admin@jerusalem.muni.il" style="width:100%;padding:10px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:14px;outline:none"/>
+        <label class="lbl">דוא"ל</label>
+        <input class="ifield" id="em" value="admin@jerusalem.muni.il"/>
       </div>
       <div style="margin-bottom:22px">
-        <div style="font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">סיסמה</div>
-        <input type="password" value="12345678" style="width:100%;padding:10px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:14px;outline:none"/>
+        <label class="lbl">סיסמה</label>
+        <input class="ifield" type="password" value="12345678"/>
       </div>
-      <button onclick="doLogin()" style="width:100%;padding:13px;background:#1a3c78;color:#fff;border:none;border-radius:10px;font-weight:700;font-size:16px">התחבר למערכת</button>
+      <button class="btn-login" id="login-btn">התחבר למערכת</button>
     </div>
     <div style="text-align:center;color:rgba(255,255,255,.45);font-size:12px;margin-top:14px">מערכת הדגמה · LangGraph + Tavily + Supabase</div>
   </div>
 </div>
 
-<!-- ══ ADMIN ══════════════════════════════════════════════════════════════════ -->
-<div id="pg-admin" class="page">
+<!-- ══════════════ ADMIN ══════════════════════════════════════════════════════ -->
+<div id="s-admin" class="screen hidden">
   <div class="topbar">
-    <div class="topbar-left">
-      <svg width="44" height="44" viewBox="0 0 100 100"><circle cx="50" cy="50" r="49" fill="#fff"/><path d="M22 22 L78 22 L78 66 Q78 83 50 91 Q22 83 22 66 Z" fill="#eef2ff" stroke="#1a3c78" stroke-width="2"/><rect x="35" y="20" width="30" height="7" rx="1" fill="#c9a227"/><polygon points="35,20 38,12 41,20" fill="#c9a227"/><polygon points="47,20 50,11 53,20" fill="#c9a227"/><polygon points="59,20 62,12 65,20" fill="#c9a227"/><ellipse cx="48" cy="63" rx="17" ry="12" fill="#1a3c78"/><circle cx="62" cy="48" r="11" fill="#1a3c78"/><circle cx="66" cy="46" r="2.5" fill="#fff"/><rect x="34" y="65" width="7" height="13" rx="3.5" fill="#1a3c78"/><rect x="44" y="65" width="7" height="13" rx="3.5" fill="#1a3c78"/><rect x="57" y="64" width="7" height="13" rx="3.5" fill="#1a3c78"/><path d="M31 60 Q21 54 23 43 Q25 36 31 43" stroke="#1a3c78" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="23" cy="42" r="4" fill="#1a3c78"/><text x="50" y="98" text-anchor="middle" font-size="9" fill="#1a3c78" font-weight="700" font-family="Arial">ירושלים</text></svg>
+    <div class="topbar-brand">
+      <svg width="44" height="44" viewBox="0 0 100 100"><circle cx="50" cy="50" r="49" fill="#fff"/><path d="M22 22 L78 22 L78 66 Q78 83 50 91 Q22 83 22 66 Z" fill="#eef2ff" stroke="#1a3c78" stroke-width="2"/><rect x="35" y="20" width="30" height="7" rx="1" fill="#c9a227"/><polygon points="47,20 50,11 53,20" fill="#c9a227"/><ellipse cx="48" cy="63" rx="17" ry="12" fill="#1a3c78"/><circle cx="62" cy="48" r="11" fill="#1a3c78"/><circle cx="66" cy="46" r="2.5" fill="#fff"/><rect x="34" y="65" width="7" height="13" rx="3.5" fill="#1a3c78"/><rect x="44" y="65" width="7" height="13" rx="3.5" fill="#1a3c78"/><path d="M31 60 Q21 54 23 43 Q25 36 31 43" stroke="#1a3c78" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="23" cy="42" r="4" fill="#1a3c78"/><text x="50" y="98" text-anchor="middle" font-size="9" fill="#1a3c78" font-weight="700" font-family="Arial">ירושלים</text></svg>
       <div><div class="topbar-title">מערכת זיהוי עסקים חשודים</div><div class="topbar-sub">פורטל מנהל · עיריית ירושלים</div></div>
     </div>
-    <button class="btn-out" onclick="go('pg-login')">יציאה</button>
+    <button class="btn-out" id="admin-out">יציאה</button>
   </div>
-  <div style="padding:24px;max-width:1200px">
-    <div id="stats" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:22px"></div>
-    <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap">
-      <input id="srch" oninput="renderTbl()" placeholder="חיפוש לפי כתובת..." style="flex:1 1 180px;padding:9px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px;outline:none"/>
-      <select id="flt" onchange="renderTbl()" style="padding:9px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px;outline:none">
+  <div class="wrap">
+    <div class="stats" id="stats"></div>
+    <div class="ctrls">
+      <input class="sinput" id="srch" placeholder="חיפוש לפי כתובת..."/>
+      <select class="sselect" id="flt">
         <option value="">כל הסטטוסים</option>
         <option value="verified">מאומת</option>
         <option value="pending">ממתין לבדיקה</option>
         <option value="investigating">בחקירה</option>
         <option value="no_business">אין עסק</option>
       </select>
-      <button style="padding:9px 14px;background:#f3f4f6;border:1px solid #e5e7eb;border-radius:8px;font-size:13px;color:#6b7280">⬇ ייצוא CSV</button>
+      <button class="btn-csv">⬇ ייצוא CSV</button>
     </div>
     <div class="card" style="overflow:hidden"><div style="overflow-x:auto">
-      <table style="width:100%;border-collapse:collapse">
-        <thead><tr style="border-bottom:1px solid #e5e7eb">
-          <th style="padding:10px 14px;text-align:right;font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase">כתובת</th>
-          <th style="padding:10px 14px;text-align:right;font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase">סטטוס</th>
-          <th style="padding:10px 14px;text-align:center;font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase">עסקים</th>
-          <th style="padding:10px 14px;text-align:right;font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase">ציון חשד</th>
-          <th style="padding:10px 14px;text-align:right;font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase">סוקר</th>
-          <th style="padding:10px 14px;text-align:right;font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase">עדכון</th>
-          <th></th>
+      <table>
+        <thead><tr>
+          <th>כתובת</th><th>סטטוס</th><th>עסקים</th><th>ציון חשד</th><th>סוקר</th><th>עדכון</th><th></th>
         </tr></thead>
         <tbody id="tbl"></tbody>
       </table>
@@ -118,39 +178,39 @@ input,select,textarea{font-family:inherit;font-size:14px;direction:rtl}
   </div>
 </div>
 
-<!-- ══ DETAIL ══════════════════════════════════════════════════════════════════ -->
-<div id="pg-detail" class="page">
+<!-- ══════════════ DETAIL ═════════════════════════════════════════════════════ -->
+<div id="s-detail" class="screen hidden">
   <div class="topbar">
-    <div class="topbar-left">
+    <div class="topbar-brand">
       <svg width="44" height="44" viewBox="0 0 100 100"><circle cx="50" cy="50" r="49" fill="#fff"/><path d="M22 22 L78 22 L78 66 Q78 83 50 91 Q22 83 22 66 Z" fill="#eef2ff" stroke="#1a3c78" stroke-width="2"/><rect x="35" y="20" width="30" height="7" rx="1" fill="#c9a227"/><polygon points="47,20 50,11 53,20" fill="#c9a227"/><ellipse cx="48" cy="63" rx="17" ry="12" fill="#1a3c78"/><circle cx="62" cy="48" r="11" fill="#1a3c78"/><rect x="34" y="65" width="7" height="13" rx="3.5" fill="#1a3c78"/><rect x="44" y="65" width="7" height="13" rx="3.5" fill="#1a3c78"/><text x="50" y="98" text-anchor="middle" font-size="9" fill="#1a3c78" font-weight="700" font-family="Arial">ירושלים</text></svg>
-      <div><div class="topbar-title">פרטי כתובת</div><div class="topbar-sub">עיריית ירושלים</div></div>
+      <div><div class="topbar-title" id="detail-title">פרטי כתובת</div><div class="topbar-sub">עיריית ירושלים</div></div>
     </div>
-    <button class="btn-out" onclick="go('pg-login')">יציאה</button>
+    <button class="btn-out" id="detail-out">יציאה</button>
   </div>
-  <div id="detail-body" style="padding:24px;max-width:860px;margin:0 auto"></div>
+  <div class="detail-wrap" id="detail-body"></div>
 </div>
 
-<!-- ══ SURVEYOR ════════════════════════════════════════════════════════════════ -->
-<div id="pg-surv" class="page">
+<!-- ══════════════ SURVEYOR ═══════════════════════════════════════════════════ -->
+<div id="s-surv" class="screen hidden">
   <div class="topbar">
-    <div class="topbar-left">
+    <div class="topbar-brand">
       <svg width="44" height="44" viewBox="0 0 100 100"><circle cx="50" cy="50" r="49" fill="#fff"/><path d="M22 22 L78 22 L78 66 Q78 83 50 91 Q22 83 22 66 Z" fill="#eef2ff" stroke="#1a3c78" stroke-width="2"/><rect x="35" y="20" width="30" height="7" rx="1" fill="#c9a227"/><polygon points="47,20 50,11 53,20" fill="#c9a227"/><ellipse cx="48" cy="63" rx="17" ry="12" fill="#1a3c78"/><circle cx="62" cy="48" r="11" fill="#1a3c78"/><rect x="34" y="65" width="7" height="13" rx="3.5" fill="#1a3c78"/><rect x="44" y="65" width="7" height="13" rx="3.5" fill="#1a3c78"/><text x="50" y="98" text-anchor="middle" font-size="9" fill="#1a3c78" font-weight="700" font-family="Arial">ירושלים</text></svg>
       <div><div class="topbar-title" id="surv-title">המשימות שלי</div><div class="topbar-sub">סוקר שטח · עיריית ירושלים</div></div>
     </div>
-    <button class="btn-out" onclick="go('pg-login')">יציאה</button>
+    <button class="btn-out" id="surv-out">יציאה</button>
   </div>
-  <div id="surv-body" style="max-width:480px;margin:0 auto"></div>
+  <div class="surv-inner" id="surv-body"></div>
 </div>
 
-<!-- ══ SUCCESS ═════════════════════════════════════════════════════════════════ -->
-<div id="pg-ok" class="page">
+<!-- ══════════════ SUCCESS ════════════════════════════════════════════════════ -->
+<div id="s-ok" class="screen hidden">
   <div class="topbar">
-    <div class="topbar-left">
+    <div class="topbar-brand">
       <svg width="44" height="44" viewBox="0 0 100 100"><circle cx="50" cy="50" r="49" fill="#fff"/><path d="M22 22 L78 22 L78 66 Q78 83 50 91 Q22 83 22 66 Z" fill="#eef2ff" stroke="#1a3c78" stroke-width="2"/><text x="50" y="98" text-anchor="middle" font-size="9" fill="#1a3c78" font-weight="700" font-family="Arial">ירושלים</text></svg>
       <div class="topbar-title">עיריית ירושלים</div>
     </div>
   </div>
-  <div style="min-height:80vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px">
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px">
     <div style="font-size:60px;margin-bottom:16px">✅</div>
     <div style="font-size:20px;font-weight:800">הדיווח נשלח בהצלחה!</div>
     <div style="color:#6b7280;font-size:14px;margin-top:8px">חוזר לרשימת המשימות...</div>
@@ -158,15 +218,29 @@ input,select,textarea{font-family:inherit;font-size:14px;direction:rtl}
 </div>
 
 <script>
-// ═══════════════════════ DATA ════════════════════════════════════════════════
-var SURV={s1:{name:"יוסף כהן",ini:"יכ"},s2:{name:"מרים לוי",ini:"מל"}};
-var ST={verified:{l:"מאומת",c:"#dc2626"},pending:{l:"ממתין לבדיקה",c:"#d97706"},investigating:{l:"בחקירה",c:"#1a3c78"},no_business:{l:"אין עסק",c:"#16a34a"}};
-var DATA=[
+// ══ NAVIGATION — same pattern as mitnadev: .hidden with !important ══
+var SCREENS = ['s-login','s-admin','s-detail','s-surv','s-ok'];
+function goTo(id) {
+  SCREENS.forEach(function(s) { document.getElementById(s).classList.add('hidden'); });
+  document.getElementById(id).classList.remove('hidden');
+  window.scrollTo(0, 0);
+}
+
+// ══ DATA ══════════════════════════════════════════════════════════════════════
+var SURV = { s1:{name:"יוסף כהן",ini:"יכ"}, s2:{name:"מרים לוי",ini:"מל"} };
+var ST = {
+  verified:{l:"מאומת",c:"#dc2626"},
+  pending:{l:"ממתין לבדיקה",c:"#d97706"},
+  investigating:{l:"בחקירה",c:"#1a3c78"},
+  no_business:{l:"אין עסק",c:"#16a34a"}
+};
+var DATA = [
   {id:"a1",addr:"רחוב יפו 42, דירה 3, ירושלים",status:"verified",sc:.91,surv:"s1",dt:"15.01.2024",val:"found",
-   biz:[{nm:'שירותי משפט טוב בע"מ',cat:"משפטי",act:true,sc:.91,why:"שלושה מקורות עצמאיים מאשרים פעילות. האתר הרשמי מציין מספר חדר התואם לדירה 3. ביקורת אחרונה לפני 3 חודשים.",src:[{i:"📋",t:"מדריך B2B"},{i:"🗺️",t:"Google Maps"},{i:"🌐",t:"אתר רשמי"}]},{nm:"ייעוץ שחר",cat:"ייעוץ עסקי",act:false,sc:.55,why:"נמצא ב-LinkedIn ללא אתר או פעילות עדכנית. ייתכן שהעסק אינו פעיל.",src:[{i:"💬",t:"LinkedIn"}]}],
+   biz:[{nm:'שירותי משפט טוב בע"מ',cat:"משפטי",act:true,sc:.91,why:"שלושה מקורות עצמאיים מאשרים פעילות. האתר הרשמי תואם לדירה 3. ביקורת אחרונה לפני 3 חודשים.",src:[{i:"📋",t:"מדריך B2B"},{i:"🗺️",t:"Google Maps"},{i:"🌐",t:"אתר רשמי"}]},
+        {nm:"ייעוץ שחר",cat:"ייעוץ עסקי",act:false,sc:.55,why:"נמצא ב-LinkedIn ללא אתר עדכני. ייתכן שאינו פעיל.",src:[{i:"💬",t:"LinkedIn"}]}],
    pipe:[{s:"done",n:"בונה שאילתות",d:"5 שאילתות בעברית"},{s:"done",n:"חיפוש Tavily",d:"28 תוצאות"},{s:"done",n:"חילוץ מידע",d:"3 מועמדים"},{s:"done",n:"חוקר עסקים",d:"2/3 אומתו"},{s:"done",n:"ניקוד סופי",d:"2 עסקים עברו הסף"}]},
   {id:"a2",addr:"רחוב בן יהודה 18, דירה 7, ירושלים",status:"pending",sc:.74,surv:"s2",dt:"14.01.2024",val:null,
-   biz:[{nm:"יועצי מס ירושלים",cat:"פיננסי",act:true,sc:.74,why:"מרשם מקצועי עם רישיון פעיל. עמוד Facebook פעיל עם פוסטים מהחודש שעבר.",src:[{i:"📋",t:"מרשם מקצועי"},{i:"💬",t:"Facebook"}]}],
+   biz:[{nm:"יועצי מס ירושלים",cat:"פיננסי",act:true,sc:.74,why:"מרשם מקצועי עם רישיון פעיל. Facebook פעיל החודש האחרון.",src:[{i:"📋",t:"מרשם מקצועי"},{i:"💬",t:"Facebook"}]}],
    pipe:[{s:"done",n:"בונה שאילתות",d:"4 שאילתות"},{s:"done",n:"חיפוש Tavily",d:"19 תוצאות"},{s:"done",n:"חילוץ מידע",d:"מועמד אחד"},{s:"done",n:"חוקר עסקים",d:"1/1 אומת"},{s:"done",n:"ניקוד סופי",d:"עבר הסף"}]},
   {id:"a3",addr:"רחוב הנביאים 55, דירה 12, ירושלים",status:"investigating",sc:.62,surv:null,dt:"15.01.2024",val:null,
    biz:[],
@@ -175,177 +249,190 @@ var DATA=[
    biz:[],
    pipe:[{s:"done",n:"בונה שאילתות",d:"4 שאילתות"},{s:"done",n:"חיפוש Tavily",d:"11 תוצאות"},{s:"done",n:"חילוץ מידע",d:"אין מועמדים"},{s:"skip",n:"חוקר עסקים",d:"דולג"},{s:"done",n:"ניקוד סופי",d:"ציון 0.18"}]},
   {id:"a5",addr:"רחוב אגריפס 8, דירה 5, ירושלים",status:"pending",sc:.85,surv:"s2",dt:"15.01.2024",val:null,
-   biz:[{nm:"מחנה יהודה יבוא ויצוא",cat:"יבוא/יצוא",act:true,sc:.88,why:"רשם החברות: חברה פעילה מ-2019, דוח שנתי אחרון 2023.",src:[{i:"🏛️",t:"רשם החברות"}]},{nm:"מסעדת גן התבלינים",cat:"מזון",act:true,sc:.82,why:"מדריך מסעדות ו-Google Maps מאשרים. 47 ביקורות, אחרונה לפני שבועיים.",src:[{i:"📋",t:"Rest.co.il"},{i:"🗺️",t:"Google Maps"}]},{nm:"פתרונות IT רונן",cat:"טכנולוגיה",act:true,sc:.76,why:"אתר ו-LinkedIn מציינים כתובת מגורים. קבלן עצמאי מהבית.",src:[{i:"💬",t:"LinkedIn"},{i:"🌐",t:"אתר רשמי"}]}],
+   biz:[{nm:"מחנה יהודה יבוא ויצוא",cat:"יבוא/יצוא",act:true,sc:.88,why:"רשם החברות: חברה פעילה מ-2019, דוח שנתי אחרון 2023.",src:[{i:"🏛️",t:"רשם החברות"}]},
+        {nm:"מסעדת גן התבלינים",cat:"מזון",act:true,sc:.82,why:"מדריך מסעדות ו-Google Maps מאשרים. 47 ביקורות, אחרונה לפני שבועיים.",src:[{i:"📋",t:"Rest.co.il"},{i:"🗺️",t:"Google Maps"}]},
+        {nm:"פתרונות IT רונן",cat:"טכנולוגיה",act:true,sc:.76,why:"אתר ו-LinkedIn מציינים כתובת מגורים. קבלן עצמאי מהבית.",src:[{i:"💬",t:"LinkedIn"},{i:"🌐",t:"אתר רשמי"}]}],
    pipe:[{s:"done",n:"בונה שאילתות",d:"6 שאילתות"},{s:"done",n:"חיפוש Tavily",d:"44 תוצאות"},{s:"done",n:"חילוץ מידע",d:"4 מועמדים"},{s:"done",n:"חוקר עסקים",d:"3/4 אומתו"},{s:"done",n:"ניקוד סופי",d:"3 חשודים"}]}
 ];
 
-// ═══════════════════════ HELPERS ═════════════════════════════════════════════
+// ══ HELPERS ════════════════════════════════════════════════════════════════════
 function pill(s){var c=s>=.8?"ph":s>=.5?"pm":"pl";return'<span class="pill '+c+'"><span class="dot"></span>'+Math.round(s*100)+'%</span>';}
 function bdg(t,c,bg){return'<span class="bdg" style="color:'+c+';background:'+bg+'">'+t+'</span>';}
 function stb(s){var m=ST[s];return bdg(m.l,m.c,m.c+'22');}
-function go(id){document.querySelectorAll(".page").forEach(function(p){p.classList.remove("on");});document.getElementById(id).classList.add("on");window.scrollTo(0,0);}
+function find(id){for(var i=0;i<DATA.length;i++){if(DATA[i].id===id)return DATA[i];}return null;}
 
-// ═══════════════════════ STATE ════════════════════════════════════════════════
-var role="admin";
-var selOpt=null;
-var prevPage="pg-admin";
+// ══ STATE ══════════════════════════════════════════════════════════════════════
+var role = 'admin';
+var prevPage = 's-admin';
+var selOpt = null;
 
-// ═══════════════════════ LOGIN ════════════════════════════════════════════════
-function setRole(r){
-  role=r;
-  var isAdmin=(r==="admin");
-  document.getElementById("rb-admin").style.borderColor=isAdmin?"#1a3c78":"#e5e7eb";
-  document.getElementById("rb-admin").style.background=isAdmin?"#eef2ff":"#fff";
-  document.getElementById("rb-admin").style.color=isAdmin?"#1a3c78":"#6b7280";
-  document.getElementById("rb-surv").style.borderColor=isAdmin?"#e5e7eb":"#1a3c78";
-  document.getElementById("rb-surv").style.background=isAdmin?"#fff":"#eef2ff";
-  document.getElementById("rb-surv").style.color=isAdmin?"#6b7280":"#1a3c78";
-  document.getElementById("em").value=isAdmin?"admin@jerusalem.muni.il":"yosef@jerusalem.muni.il";
-}
-function doLogin(){
-  if(role==="admin"){buildAdmin();go("pg-admin");}
-  else{buildSurvList();go("pg-surv");}
-}
+// ══ LOGIN ══════════════════════════════════════════════════════════════════════
+document.getElementById('rb-admin').addEventListener('click', function(){
+  role='admin';
+  this.className='rbtn rbtn-on';
+  document.getElementById('rb-surv').className='rbtn rbtn-off';
+  document.getElementById('em').value='admin@jerusalem.muni.il';
+});
+document.getElementById('rb-surv').addEventListener('click', function(){
+  role='surv';
+  this.className='rbtn rbtn-on';
+  document.getElementById('rb-admin').className='rbtn rbtn-off';
+  document.getElementById('em').value='yosef@jerusalem.muni.il';
+});
+document.getElementById('login-btn').addEventListener('click', function(){
+  if(role==='admin'){ buildAdmin(); goTo('s-admin'); }
+  else { buildSurvList(); goTo('s-surv'); }
+});
+document.getElementById('admin-out').addEventListener('click',function(){ goTo('s-login'); });
+document.getElementById('detail-out').addEventListener('click',function(){ goTo('s-login'); });
+document.getElementById('surv-out').addEventListener('click',function(){ goTo('s-login'); });
 
-// ═══════════════════════ ADMIN ════════════════════════════════════════════════
+// ══ ADMIN ══════════════════════════════════════════════════════════════════════
 function buildAdmin(){
   var total=DATA.length,ver=0,pend=0,biz=0;
-  DATA.forEach(function(a){if(a.status==="verified")ver++;if(a.status==="pending")pend++;biz+=a.biz.length;});
-  document.getElementById("stats").innerHTML=[
-    {l:'סה"כ כתובות',v:total,c:"#1a3c78"},{l:"מאושרות חשודות",v:ver,c:"#dc2626"},
-    {l:"ממתינות לבדיקה",v:pend,c:"#d97706"},{l:"עסקים שנמצאו",v:biz,c:"#7c3aed"}
-  ].map(function(s){return'<div class="card" style="padding:16px 20px"><div style="font-size:26px;font-weight:800;color:'+s.c+'">'+s.v+'</div><div style="font-size:12px;color:#6b7280;margin-top:2px">'+s.l+'</div></div>';}).join("");
+  DATA.forEach(function(a){if(a.status==='verified')ver++;if(a.status==='pending')pend++;biz+=a.biz.length;});
+  document.getElementById('stats').innerHTML=[
+    {l:'סה"כ כתובות',v:total,c:'#1a3c78'},{l:'מאושרות חשודות',v:ver,c:'#dc2626'},
+    {l:'ממתינות לבדיקה',v:pend,c:'#d97706'},{l:'עסקים שנמצאו',v:biz,c:'#7c3aed'}
+  ].map(function(s){return'<div class="scard"><div class="sval" style="color:'+s.c+'">'+s.v+'</div><div class="slbl">'+s.l+'</div></div>';}).join('');
+  document.getElementById('srch').oninput = renderTbl;
+  document.getElementById('flt').onchange = renderTbl;
   renderTbl();
 }
 function renderTbl(){
-  var q=document.getElementById("srch").value||"";
-  var f=document.getElementById("flt").value||"";
+  var q=document.getElementById('srch').value||'';
+  var f=document.getElementById('flt').value||'';
   var rows=DATA.filter(function(a){return(!q||a.addr.indexOf(q)>=0)&&(!f||a.status===f);});
-  document.getElementById("tbl").innerHTML=rows.map(function(a){
+  document.getElementById('tbl').innerHTML=rows.map(function(a){
     var sv=a.surv?SURV[a.surv]:null;
     var svH=sv?'<div style="display:flex;align-items:center;gap:8px"><div style="width:26px;height:26px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700">'+sv.ini+'</div>'+sv.name+'</div>':'<span style="color:#9ca3af">לא שויך</span>';
-    return'<tr style="border-bottom:1px solid #e5e7eb" onmouseover="this.style.background=\'#f9fafb\'" onmouseout="this.style.background=\'\'">'
-      +'<td style="padding:11px 14px;font-weight:600">'+a.addr+'</td>'
-      +'<td style="padding:11px 14px">'+stb(a.status)+'</td>'
-      +'<td style="padding:11px 14px;text-align:center;font-weight:700">'+(a.biz.length||"—")+'</td>'
-      +'<td style="padding:11px 14px">'+pill(a.sc)+'</td>'
-      +'<td style="padding:11px 14px">'+svH+'</td>'
-      +'<td style="padding:11px 14px;color:#9ca3af;font-size:12px">'+a.dt+'</td>'
-      +'<td style="padding:11px 14px"><button onclick="showDetail(\''+a.id+'\',\'pg-admin\')" style="padding:5px 14px;border:1.5px solid #1a3c78;border-radius:7px;background:#eef2ff;font-size:12px;font-weight:600;color:#1a3c78;cursor:pointer">פרטים ←</button></td>'
-      +'</tr>';
-  }).join("");
+    return'<tr><td style="font-weight:600">'+a.addr+'</td><td>'+stb(a.status)+'</td>'
+      +'<td style="text-align:center;font-weight:700">'+(a.biz.length||'—')+'</td>'
+      +'<td>'+pill(a.sc)+'</td><td>'+svH+'</td>'
+      +'<td style="color:#9ca3af;font-size:12px">'+a.dt+'</td>'
+      +'<td><button class="btn-view" data-id="'+a.id+'">פרטים ←</button></td></tr>';
+  }).join('');
+  document.querySelectorAll('.btn-view').forEach(function(b){
+    b.addEventListener('click',function(){ prevPage='s-admin'; showDetail(this.getAttribute('data-id')); });
+  });
 }
 
-// ═══════════════════════ DETAIL ══════════════════════════════════════════════
-var SC={done:"#16a34a",run:"#1a3c78",wait:"#9ca3af",skip:"#d1d5db"};
-var SI={done:"✓",run:"↻",wait:"○",skip:"—"};
-function showDetail(id,from){
-  prevPage=from||"pg-admin";
-  var a=null;
-  for(var i=0;i<DATA.length;i++){if(DATA[i].id===id){a=DATA[i];break;}}
-  if(!a)return;
+// ══ DETAIL ══════════════════════════════════════════════════════════════════════
+var SC={done:'#16a34a',run:'#1a3c78',wait:'#9ca3af',skip:'#d1d5db'};
+var SI={done:'✓',run:'↻',wait:'○',skip:'—'};
+function showDetail(id){
+  var a=find(id); if(!a)return;
   var bizH=a.biz.length===0?'<div class="card" style="padding:24px;text-align:center;color:#9ca3af;font-style:italic">לא נמצאו עסקים בכתובת זו.</div>'
     :a.biz.map(function(b){
       return'<div class="card" style="padding:20px;margin-bottom:12px">'
         +'<div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px">'
         +'<div><div style="font-weight:700;font-size:15px">'+b.nm+'</div><div style="font-size:12px;color:#6b7280">'+b.cat+'</div></div>'
-        +'<div style="display:flex;gap:6px">'+bdg(b.act?"פעיל":"לא פעיל",b.act?"#16a34a":"#9ca3af",b.act?"#f0fdf4":"#f9fafb")+pill(b.sc)+'</div>'
-        +'</div>'
+        +'<div style="display:flex;gap:6px">'+bdg(b.act?'פעיל':'לא פעיל',b.act?'#16a34a':'#9ca3af',b.act?'#f0fdf4':'#f9fafb')+pill(b.sc)+'</div></div>'
         +'<div style="font-size:13px;background:#f9fafb;border-radius:8px;padding:10px 14px;margin-bottom:12px;line-height:1.65"><strong>נימוק AI: </strong>'+b.why+'</div>'
-        +'<div style="display:flex;flex-wrap:wrap;gap:6px">'+b.src.map(function(s){return'<span style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:6px;border:1px solid #e5e7eb;font-size:12px;color:#1a3c78;background:#eef2ff">'+s.i+' '+s.t+'</span>';}).join("")+'</div>'
-        +'</div>';
-    }).join("");
-  var pipeH=a.pipe.map(function(s){return'<div style="display:flex;gap:10px;margin-bottom:10px"><div style="width:24px;height:24px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;background:'+SC[s.s]+'22;color:'+SC[s.s]+'">'+SI[s.s]+'</div><div><div style="font-weight:600;font-size:13px">'+s.n+'</div><div style="color:#6b7280;font-size:12px">'+s.d+'</div></div></div>';}).join("");
-  var valH=a.val?bdg(a.val==="found"?"✓ עסק נמצא בשטח":"✗ לא נמצא עסק",a.val==="found"?"#dc2626":"#16a34a",a.val==="found"?"#fef2f2":"#f0fdf4")+'<div style="margin-top:10px;font-size:13px;color:#6b7280">אומת ב-'+a.dt+'</div>'
+        +'<div style="display:flex;flex-wrap:wrap;gap:6px">'+b.src.map(function(s){return'<span style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:6px;border:1px solid #e5e7eb;font-size:12px;color:#1a3c78;background:#eef2ff">'+s.i+' '+s.t+'</span>';}).join('')+'</div></div>';
+    }).join('');
+  var pipeH=a.pipe.map(function(s){
+    return'<div style="display:flex;gap:10px;margin-bottom:10px">'
+      +'<div style="width:24px;height:24px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;background:'+SC[s.s]+'22;color:'+SC[s.s]+'">'+SI[s.s]+'</div>'
+      +'<div><div style="font-weight:600;font-size:13px">'+s.n+'</div><div style="color:#6b7280;font-size:12px">'+s.d+'</div></div></div>';
+  }).join('');
+  var valH=a.val?bdg(a.val==='found'?'✓ עסק נמצא בשטח':'✗ לא נמצא עסק',a.val==='found'?'#dc2626':'#16a34a',a.val==='found'?'#fef2f2':'#f0fdf4')+'<div style="margin-top:10px;font-size:13px;color:#6b7280">אומת ב-'+a.dt+'</div>'
     :'<div style="color:#9ca3af;font-size:13px;font-style:italic">טרם אומת על ידי סוקר שטח.</div>';
-  document.getElementById("detail-body").innerHTML=
-    '<button onclick="go(\''+prevPage+'\')" style="background:none;border:none;color:#1a3c78;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:18px;padding:0">→ חזרה לרשימה</button>'
-    +'<div class="card" style="padding:24px;margin-bottom:14px"><div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px"><div><div style="font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">כתובת חשודה</div><div style="font-size:17px;font-weight:700">'+a.addr+'</div></div><div style="display:flex;gap:10px;align-items:center">'+stb(a.status)+'<div style="text-align:center"><div style="font-size:11px;color:#6b7280;margin-bottom:2px">ציון חשד</div>'+pill(a.sc)+'</div></div></div></div>'
-    +'<div id="tabs" style="display:flex;gap:2px;margin-bottom:14px;background:#fff;border-radius:10px;padding:4px;border:1px solid #e5e7eb">'
-    +'<button onclick="switchTab(\'tb-biz\')" id="t-biz" style="flex:1;padding:8px 0;border:none;border-radius:8px;background:#1a3c78;color:#fff;font-weight:700;font-size:13px;cursor:pointer">עסקים</button>'
-    +'<button onclick="switchTab(\'tb-pipe\')" id="t-pipe" style="flex:1;padding:8px 0;border:none;border-radius:8px;background:transparent;color:#6b7280;font-weight:600;font-size:13px;cursor:pointer">צינור LangGraph</button>'
-    +'<button onclick="switchTab(\'tb-val\')" id="t-val" style="flex:1;padding:8px 0;border:none;border-radius:8px;background:transparent;color:#6b7280;font-weight:600;font-size:13px;cursor:pointer">אימות שטח</button>'
+
+  document.getElementById('detail-body').innerHTML=
+    '<button id="detail-back" style="background:none;border:none;color:#1a3c78;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:18px;padding:0">→ חזרה לרשימה</button>'
+    +'<div class="card" style="padding:24px;margin-bottom:14px"><div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px">'
+    +'<div><div style="font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">כתובת חשודה</div><div style="font-size:17px;font-weight:700">'+a.addr+'</div></div>'
+    +'<div style="display:flex;gap:10px;align-items:center">'+stb(a.status)+'<div style="text-align:center"><div style="font-size:11px;color:#6b7280;margin-bottom:2px">ציון חשד</div>'+pill(a.sc)+'</div></div></div></div>'
+    +'<div class="tabs">'
+    +'<button class="tab tab-on" data-t="tb-biz">עסקים</button>'
+    +'<button class="tab tab-off" data-t="tb-pipe">צינור LangGraph</button>'
+    +'<button class="tab tab-off" data-t="tb-val">אימות שטח</button>'
     +'</div>'
-    +'<div id="tb-biz">'+bizH+'</div>'
-    +'<div id="tb-pipe" style="display:none"><div class="card" style="padding:24px"><div style="font-weight:700;margin-bottom:14px">ביצוע צינור LangGraph</div>'+pipeH+'</div></div>'
-    +'<div id="tb-val" style="display:none"><div class="card" style="padding:24px"><div style="font-weight:700;margin-bottom:4px">אימות שטח</div><div style="color:#6b7280;font-size:13px;margin-bottom:14px">נשלח לאחר ביקור פיזי.</div>'+valH+'</div></div>';
-  go("pg-detail");
+    +'<div id="tb-biz" class="tp on">'+bizH+'</div>'
+    +'<div id="tb-pipe" class="tp"><div class="card" style="padding:24px"><div style="font-weight:700;margin-bottom:14px">ביצוע צינור LangGraph</div>'+pipeH+'</div></div>'
+    +'<div id="tb-val" class="tp"><div class="card" style="padding:24px"><div style="font-weight:700;margin-bottom:4px">אימות שטח</div><div style="color:#6b7280;font-size:13px;margin-bottom:14px">נשלח לאחר ביקור פיזי.</div>'+valH+'</div></div>';
+
+  document.getElementById('detail-back').addEventListener('click',function(){ goTo(prevPage); });
+  document.querySelectorAll('.tab').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var t=this.getAttribute('data-t');
+      document.querySelectorAll('.tab').forEach(function(b){b.className='tab tab-off';});
+      this.className='tab tab-on';
+      document.querySelectorAll('.tp').forEach(function(p){p.classList.remove('on');});
+      document.getElementById(t).classList.add('on');
+    });
+  });
+  goTo('s-detail');
 }
-function switchTab(tid){
-  var tabs=["tb-biz","tb-pipe","tb-val"];
-  var btns={"tb-biz":"t-biz","tb-pipe":"t-pipe","tb-val":"t-val"};
-  tabs.forEach(function(t){
-    var el=document.getElementById(t);if(el)el.style.display=(t===tid?"block":"none");
-    var b=document.getElementById(btns[t]);if(b){b.style.background=t===tid?"#1a3c78":"transparent";b.style.color=t===tid?"#fff":"#6b7280";}
+
+// ══ SURVEYOR ════════════════════════════════════════════════════════════════════
+function buildSurvList(){
+  document.getElementById('surv-title').textContent='המשימות שלי';
+  var my=DATA.filter(function(a){return a.surv==='s1';});
+  document.getElementById('surv-body').innerHTML=
+    '<div style="font-size:13px;color:#6b7280;margin-bottom:12px">'+my.length+' כתובות מוקצות</div>'
+    +my.map(function(a){
+      return'<button class="acard" data-id="'+a.id+'">'
+        +'<div style="text-align:right;flex:1"><div style="font-weight:600;font-size:14px">'+a.addr+'</div>'
+        +'<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">'+stb(a.status)+(a.val?bdg('מאומת','#16a34a','#f0fdf4'):'')+'</div></div>'
+        +'<div style="text-align:center;flex-shrink:0">'+pill(a.sc)+'<div style="font-size:11px;color:#9ca3af;margin-top:4px">'+a.biz.length+' עסקים</div></div>'
+        +'</button>';
+    }).join('');
+  document.querySelectorAll('.acard').forEach(function(b){
+    b.addEventListener('click',function(){ buildSurvDetail(this.getAttribute('data-id')); });
+  });
+}
+function buildSurvDetail(id){
+  var a=find(id); if(!a)return;
+  document.getElementById('surv-title').textContent='פרטי כתובת';
+  var bizH=a.biz.length===0?'<div class="card" style="padding:14px;font-style:italic;color:#9ca3af">לא צוינו עסקים ספציפיים.</div>'
+    :a.biz.map(function(b){return'<div class="card" style="padding:14px;margin-bottom:8px"><div style="font-weight:600;font-size:14px">'+b.nm+'</div><div style="font-size:12px;color:#6b7280">'+b.cat+'</div><div style="margin-top:6px">'+pill(b.sc)+'</div></div>';}).join('');
+  var footer=a.val?'<div style="padding:14px;margin-top:12px;border:1px solid #bbf7d0;background:#f0fdf4;border-radius:12px"><div style="color:#16a34a;font-weight:700">✓ כבר אומת</div><div style="font-size:12px;color:#6b7280;margin-top:2px">'+(a.val==='found'?'עסק נמצא':'לא נמצא עסק')+'</div></div>'
+    :'<button class="vbtn" id="to-form-btn" data-id="'+a.id+'">← שלח דיווח שטח</button>';
+  document.getElementById('surv-body').innerHTML=
+    '<button id="surv-back" style="background:none;border:none;color:#1a3c78;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:18px;padding:0">→ חזרה לרשימה</button>'
+    +'<div class="card" style="padding:16px;margin-bottom:12px"><div style="font-size:12px;color:#6b7280;margin-bottom:4px">כתובת חשודה</div><div style="font-weight:700;font-size:15px">'+a.addr+'</div><div style="margin-top:10px;display:flex;gap:8px;align-items:center">'+pill(a.sc)+'<span style="font-size:12px;color:#6b7280">ציון חשד AI</span></div></div>'
+    +'<div style="font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;margin-bottom:8px">עסקים לאימות</div>'
+    +bizH+footer;
+  document.getElementById('surv-back').addEventListener('click', buildSurvList);
+  var tf=document.getElementById('to-form-btn');
+  if(tf) tf.addEventListener('click',function(){ buildSurvForm(this.getAttribute('data-id')); });
+}
+function buildSurvForm(id){
+  var a=find(id); if(!a)return;
+  document.getElementById('surv-title').textContent='שלח דיווח שטח';
+  selOpt=null;
+  document.getElementById('surv-body').innerHTML=
+    '<button id="surv-back2" style="background:none;border:none;color:#1a3c78;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:14px;padding:0">→ חזרה</button>'
+    +'<div style="padding:14px;border:2px solid #fcd34d;background:#fffbeb;border-radius:12px;margin-bottom:16px"><div style="font-weight:600;font-size:13px">⚠️ '+a.addr+'</div><div style="font-size:12px;color:#6b7280;margin-top:2px">מלא את הטופס בזמן נוכחות פיזית בכתובת.</div></div>'
+    +'<div style="font-weight:700;font-size:13px;margin-bottom:10px">מה מצאת? *</div>'
+    +'<button type="button" id="o1" class="optbtn" data-v="found"><div style="font-weight:700;font-size:14px;color:#dc2626">✓ עסק אושר</div><div style="font-size:12px;color:#6b7280">לפחות עסק אחד פועל בבירור</div></button>'
+    +'<button type="button" id="o2" class="optbtn" data-v="poss"><div style="font-weight:700;font-size:14px;color:#d97706">⚠ פעילות אפשרית</div><div style="font-size:12px;color:#6b7280">סימנים אך לא ודאי</div></button>'
+    +'<button type="button" id="o3" class="optbtn" data-v="none"><div style="font-weight:700;font-size:14px;color:#16a34a">✗ אין עסק</div><div style="font-size:12px;color:#6b7280">מגורים בלבד</div></button>'
+    +'<div style="margin:14px 0"><label style="font-weight:700;font-size:13px;display:block;margin-bottom:6px">הערות</label><textarea style="width:100%;padding:10px 12px;border:1.5px solid #e5e7eb;border-radius:10px;font-size:13px;resize:none;outline:none;direction:rtl" rows="4" placeholder="תאר מה ראית..."></textarea></div>'
+    +'<div style="padding:14px;border:2px dashed #e5e7eb;border-radius:12px;text-align:center;color:#9ca3af;font-size:13px;margin-bottom:14px">📷 לחץ להוספת תמונות<div style="font-size:11px;margin-top:3px">זמין בגרסת הייצור</div></div>'
+    +'<button id="sub-btn" class="sbtn-off">שלח דיווח</button>';
+
+  document.getElementById('surv-back2').addEventListener('click',function(){ buildSurvDetail(id); });
+  ['o1','o2','o3'].forEach(function(oid){
+    document.getElementById(oid).addEventListener('click',function(){
+      selOpt=this.getAttribute('data-v');
+      document.getElementById('o1').className='optbtn'+(selOpt==='found'?' opt-r':'');
+      document.getElementById('o2').className='optbtn'+(selOpt==='poss'?' opt-y':'');
+      document.getElementById('o3').className='optbtn'+(selOpt==='none'?' opt-g':'');
+      document.getElementById('sub-btn').className='sbtn-on';
+    });
+  });
+  document.getElementById('sub-btn').addEventListener('click',function(){
+    if(!selOpt)return;
+    goTo('s-ok');
+    setTimeout(function(){ buildSurvList(); goTo('s-surv'); },2200);
   });
 }
 
-// ═══════════════════════ SURVEYOR ═════════════════════════════════════════════
-function buildSurvList(){
-  document.getElementById("surv-title").textContent="המשימות שלי";
-  var my=DATA.filter(function(a){return a.surv==="s1";});
-  document.getElementById("surv-body").innerHTML='<div style="padding:16px">'
-    +'<div style="font-size:13px;color:#6b7280;margin-bottom:12px">'+my.length+' כתובות מוקצות</div>'
-    +my.map(function(a){
-      return'<button onclick="buildSurvDetail(\''+a.id+'\')" style="background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:16px;text-align:right;width:100%;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:10px;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.05)">'
-        +'<div style="text-align:right;flex:1"><div style="font-weight:600;font-size:14px">'+a.addr+'</div>'
-        +'<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">'+stb(a.status)+(a.val?bdg("מאומת","#16a34a","#f0fdf4"):"")+'</div></div>'
-        +'<div style="text-align:center;flex-shrink:0">'+pill(a.sc)+'<div style="font-size:11px;color:#9ca3af;margin-top:4px">'+a.biz.length+' עסקים</div></div>'
-        +'</button>';
-    }).join("")+'</div>';
-}
-function buildSurvDetail(id){
-  var a=null;
-  for(var i=0;i<DATA.length;i++){if(DATA[i].id===id){a=DATA[i];break;}}
-  if(!a)return;
-  document.getElementById("surv-title").textContent="פרטי כתובת";
-  var bizH=a.biz.length===0?'<div class="card" style="padding:14px;font-style:italic;color:#9ca3af">לא צוינו עסקים ספציפיים.</div>'
-    :a.biz.map(function(b){return'<div class="card" style="padding:14px;margin-bottom:8px"><div style="font-weight:600;font-size:14px">'+b.nm+'</div><div style="font-size:12px;color:#6b7280">'+b.cat+'</div><div style="margin-top:6px">'+pill(b.sc)+'</div></div>';}).join("");
-  var footer=a.val?'<div style="padding:14px;margin-top:12px;border:1px solid #bbf7d0;background:#f0fdf4;border-radius:12px"><div style="color:#16a34a;font-weight:700">✓ כבר אומת</div><div style="font-size:12px;color:#6b7280;margin-top:2px">'+(a.val==="found"?"עסק נמצא":"לא נמצא עסק")+'</div></div>'
-    :'<button onclick="buildSurvForm(\''+a.id+'\')" style="width:100%;margin-top:14px;padding:15px;background:#1a3c78;color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer">← שלח דיווח שטח</button>';
-  document.getElementById("surv-body").innerHTML='<div style="padding:16px">'
-    +'<button onclick="buildSurvList()" style="background:none;border:none;color:#1a3c78;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:18px;padding:0">→ חזרה לרשימה</button>'
-    +'<div class="card" style="padding:16px;margin-bottom:12px"><div style="font-size:12px;color:#6b7280;margin-bottom:4px">כתובת חשודה</div><div style="font-weight:700;font-size:15px">'+a.addr+'</div><div style="margin-top:10px;display:flex;gap:8px;align-items:center">'+pill(a.sc)+'<span style="font-size:12px;color:#6b7280">ציון חשד AI</span></div></div>'
-    +'<div style="font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;margin-bottom:8px">עסקים לאימות</div>'
-    +bizH+footer+'</div>';
-}
-function buildSurvForm(id){
-  var a=null;
-  for(var i=0;i<DATA.length;i++){if(DATA[i].id===id){a=DATA[i];break;}}
-  if(!a)return;
-  document.getElementById("surv-title").textContent="שלח דיווח שטח";
-  selOpt=null;
-  document.getElementById("surv-body").innerHTML='<div style="padding:16px">'
-    +'<button onclick="buildSurvDetail(\''+a.id+'\')" style="background:none;border:none;color:#1a3c78;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:14px;padding:0">→ חזרה</button>'
-    +'<div style="padding:14px;border:2px solid #fcd34d;background:#fffbeb;border-radius:12px;margin-bottom:16px"><div style="font-weight:600;font-size:13px">⚠️ '+a.addr+'</div><div style="font-size:12px;color:#6b7280;margin-top:2px">מלא את הטופס תוך כדי נוכחות פיזית בכתובת.</div></div>'
-    +'<div style="font-weight:700;font-size:13px;margin-bottom:10px">מה מצאת? *</div>'
-    +'<button type="button" id="o1" onclick="pickOpt(\'found\')" style="display:flex;width:100%;padding:13px 16px;border:2px solid #e5e7eb;border-radius:12px;background:#fff;text-align:right;margin-bottom:8px;cursor:pointer"><div><div style="font-weight:700;font-size:14px;color:#dc2626">✓ עסק אושר</div><div style="font-size:12px;color:#6b7280">לפחות עסק אחד פועל בבירור</div></div></button>'
-    +'<button type="button" id="o2" onclick="pickOpt(\'poss\')" style="display:flex;width:100%;padding:13px 16px;border:2px solid #e5e7eb;border-radius:12px;background:#fff;text-align:right;margin-bottom:8px;cursor:pointer"><div><div style="font-weight:700;font-size:14px;color:#d97706">⚠ פעילות אפשרית</div><div style="font-size:12px;color:#6b7280">סימנים אך לא ודאי</div></div></button>'
-    +'<button type="button" id="o3" onclick="pickOpt(\'none\')" style="display:flex;width:100%;padding:13px 16px;border:2px solid #e5e7eb;border-radius:12px;background:#fff;text-align:right;margin-bottom:16px;cursor:pointer"><div><div style="font-weight:700;font-size:14px;color:#16a34a">✗ אין עסק</div><div style="font-size:12px;color:#6b7280">מגורים בלבד</div></div></button>'
-    +'<div style="margin-bottom:14px"><label style="font-weight:700;font-size:13px;display:block;margin-bottom:6px">הערות</label><textarea style="width:100%;padding:10px 12px;border:1.5px solid #e5e7eb;border-radius:10px;font-size:13px;resize:none;outline:none;font-family:inherit;direction:rtl" rows="4" placeholder="תאר מה ראית..."></textarea></div>'
-    +'<div style="padding:14px;border:2px dashed #e5e7eb;border-radius:12px;text-align:center;color:#9ca3af;font-size:13px;margin-bottom:14px">📷 לחץ להוספת תמונות<div style="font-size:11px;margin-top:3px">זמין בגרסת הייצור</div></div>'
-    +'<button type="button" id="sub-btn" onclick="submitForm()" style="width:100%;padding:15px;background:#e5e7eb;color:#9ca3af;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer">שלח דיווח</button>'
-    +'</div>';
-}
-function pickOpt(v){
-  selOpt=v;
-  var opts=["o1","o2","o3"];
-  var cls={o1:{border:"#dc2626",bg:"#fef2f2"},o2:{border:"#d97706",bg:"#fffbeb"},o3:{border:"#16a34a",bg:"#f0fdf4"}};
-  var map={found:"o1",poss:"o2",none:"o3"};
-  opts.forEach(function(k){
-    var el=document.getElementById(k);
-    if(!el)return;
-    if(k===map[v]){el.style.borderColor=cls[k].border;el.style.background=cls[k].bg;}
-    else{el.style.borderColor="#e5e7eb";el.style.background="#fff";}
-  });
-  var sb=document.getElementById("sub-btn");
-  if(sb){sb.style.background="#1a3c78";sb.style.color="#fff";}
-}
-function submitForm(){
-  if(!selOpt)return;
-  go("pg-ok");
-  setTimeout(function(){buildSurvList();go("pg-surv");},2200);
-}
+// ══ INIT — אמת שה-JS רץ ══
+document.getElementById('login-btn').style.opacity='1';
 </script>
 </body>
 </html>
